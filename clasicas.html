@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clásicas - BurgerCraft</title>
+    <link rel="icon" href="img/Logoburger-.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #FF4D00;
+            --primary-glow: rgba(255, 77, 0, 0.4);
+            --secondary: #FF8C00;
+            --dark: #0a0a0a;
+            --darker: #050505;
+            --light: #fafafa;
+            --gray: #1a1a1a;
+            --gray-light: #2a2a2a;
+            --text-muted: #888;
+            --accent: #ff0040;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Noise Texture */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+        }
+        /* Category Header */
+.category-header {
+    padding: 10rem 5% 5rem;
+    background: linear-gradient(135deg, rgba(255,77,0,0.15) 0%, transparent 60%),
+                var(--dark);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+
+.category-header-content h1 {
+    font-family: 'Bebas Neue', cursive;
+    font-size: clamp(4rem, 10vw, 8rem);
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 5px;
+    margin-bottom: 1rem;
+}
+
+.category-header-content p {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.breadcrumb {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.breadcrumb a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1400px;
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        nav.scrolled {
+            width: 95%;
+            background: rgba(10, 10, 10, 0.9);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            filter: drop-shadow(0 0 20px var(--primary-glow));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+
+        .logo-main {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+        }
+
+        .logo-sub {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: -1;
+            border-radius: 25px;
+        }
+
+        .nav-links a:hover {
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a:hover::before {
+            opacity: 1;
+        }
+
+        .nav-links a.active {
+            color: white;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .order-btn {
+            background: transparent;
+            color: var(--primary);
+            padding: 0.6rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 700;
+            border: 2px solid var(--primary);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .order-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--primary);
+            transition: left 0.3s;
+            z-index: -1;
+        }
+
+        .order-btn:hover {
+            color: white;
+            box-shadow: 0 0 30px var(--primary-glow);
+        }
+
+        .order-btn:hover::before {
+            left: 0;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+            z-index: 1001;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 2px;
+            background: white;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+      /* Other Categories - Estilo Premium Dorado Brillante */
+.other-categories {
+    padding: 6rem 5%;
+    background: var(--darker);
+    position: relative;
+}
+
+.other-categories::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,215,0,0.5), transparent);
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.section-header h2 {
+    font-family: 'Bebas Neue', cursive;
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    color: white;
+    margin-bottom: 0.5rem;
+    letter-spacing: 3px;
+}
+
+.section-header p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
+
+.other-categories-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.other-category-card {
+    position: relative;
+    height: 320px;
+    border-radius: 20px;
+    overflow: hidden;
+    text-decoration: none;
+    display: block;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.other-category-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 40%, transparent 100%);
+    z-index: 1;
+    transition: opacity 0.3s;
+}
+
+.other-category-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.other-category-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(255, 215, 0, 0.5);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+}
+
+.other-category-card:hover img {
+    transform: scale(1.05);
+}
+
+/* NÚMEROS DORADOS BRILLANTES - ESTILO PREMIUM */
+.category-number {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    font-family: 'Bebas Neue', cursive;
+    font-size: 3.5rem;
+    color: #FFD700;
+    z-index: 2;
+    line-height: 1;
+    pointer-events: none;
+    
+    /* Efectos de iluminación dorada */
+    text-shadow: 
+        0 0 10px rgba(255, 215, 0, 0.8),
+        0 0 20px rgba(255, 215, 0, 0.6),
+        0 0 30px rgba(255, 215, 0, 0.4),
+        0 0 40px rgba(255, 193, 7, 0.3);
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.5));
+    
+    /* Animación de brillo sutil */
+    animation: goldGlow 3s ease-in-out infinite;
+}
+
+@keyframes goldGlow {
+    0%, 100% {
+        text-shadow: 
+            0 0 10px rgba(255, 215, 0, 0.8),
+            0 0 20px rgba(255, 215, 0, 0.6),
+            0 0 30px rgba(255, 215, 0, 0.4),
+            0 0 40px rgba(255, 193, 7, 0.3);
+        filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.5));
+    }
+    50% {
+        text-shadow: 
+            0 0 20px rgba(255, 215, 0, 1),
+            0 0 40px rgba(255, 215, 0, 0.9),
+            0 0 60px rgba(255, 215, 0, 0.7),
+            0 0 80px rgba(255, 193, 7, 0.5);
+        filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.8));
+    }
+}
+
+.other-category-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem;
+    color: white;
+    z-index: 2;
+}
+
+.other-category-overlay h3 {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+    .other-categories-grid {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+    }
+    
+    .other-category-card {
+        height: 280px;
+    }
+}
+
+@media (max-width: 768px) {
+    .category-number {
+        font-size: 3rem;
+    }
+    
+    .other-category-overlay h3 {
+        font-size: 1.4rem;
+    }
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+    .other-categories-grid {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+    }
+    
+    .other-category-card {
+        height: 280px;
+    }
+}
+
+@media (max-width: 768px) {
+    .category-number {
+        font-size: 3rem;
+    }
+    
+    .other-category-overlay h3 {
+        font-size: 1.4rem;
+    }
+}
+
+        /* Filter Bar */
+        .filter-bar {
+            background: rgba(10, 10, 10, 0.8);
+            padding: 2rem 5%;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            position: sticky;
+            top: 90px;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .filter-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .filter-tags {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tag {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.7);
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .filter-tag:hover,
+        .filter-tag.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            box-shadow: 0 5px 20px rgba(255, 77, 0, 0.3);
+        }
+
+        .results-count {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Products Section */
+        .products-section {
+            padding: 4rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: var(--gray);
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 77, 0, 0.3);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        }
+
+        .product-card.featured {
+            border-color: rgba(255, 77, 0, 0.3);
+            box-shadow: 0 0 40px rgba(255, 77, 0, 0.1);
+        }
+
+        .product-image {
+            height: 250px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(to top, var(--gray), transparent);
+            pointer-events: none;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.1);
+        }
+
+        .product-badges {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 2;
+        }
+
+        .product-badge {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(255, 77, 0, 0.3);
+            animation: pulse-badge 2s infinite;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .product-badge.secondary {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            animation: none;
+        }
+
+        .product-info {
+            padding: 2rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-info h3 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.8rem;
+            margin-bottom: 0.8rem;
+            color: white;
+            letter-spacing: 1px;
+        }
+
+        .product-description {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        .product-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgba(255,255,255,0.6);
+            font-size: 0.85rem;
+        }
+
+        .meta-item span {
+            font-size: 1rem;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .product-price {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2rem;
+            color: var(--primary);
+            letter-spacing: 1px;
+        }
+
+        .product-price .currency {
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        .add-to-cart {
+            background: rgba(255,255,255,0.05);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .add-to-cart:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(255, 77, 0, 0.3);
+        }
+
+        /* Other Categories - Estilo Único y Corregido */
+.other-categories {
+    padding: 6rem 5%;
+    background: var(--darker);
+    position: relative;
+}
+
+.other-categories::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,215,0,0.5), transparent);
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.section-header h2 {
+    font-family: 'Bebas Neue', cursive;
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    color: white;
+    margin-bottom: 0.5rem;
+    letter-spacing: 3px;
+}
+
+.section-header p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
+
+.other-categories-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.other-category-card {
+    position: relative;
+    height: 320px;
+    border-radius: 20px;
+    overflow: hidden;
+    text-decoration: none;
+    display: block;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.other-category-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 40%, transparent 100%);
+    z-index: 1;
+}
+
+.other-category-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.other-category-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(255, 215, 0, 0.5);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+}
+
+.other-category-card:hover img {
+    transform: scale(1.05);
+}
+
+/* NÚMEROS DORADOS BRILLANTES - DEFINICIÓN ÚNICA */
+.category-number {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    font-family: 'Bebas Neue', cursive;
+    font-size: 3.5rem;
+    color: #FFD700 !important; /* Forzar color dorado */
+    z-index: 2;
+    line-height: 1;
+    pointer-events: none;
+    opacity: 1 !important; /* Forzar opacidad completa */
+    
+    /* Efectos de iluminación dorada */
+    text-shadow: 
+        0 0 10px rgba(255, 215, 0, 0.9),
+        0 0 20px rgba(255, 215, 0, 0.7),
+        0 0 30px rgba(255, 215, 0, 0.5),
+        0 0 40px rgba(255, 193, 7, 0.4) !important;
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6)) !important;
+    
+    /* Animación de brillo */
+    animation: goldGlow 3s ease-in-out infinite;
+    
+    /* Reset de cualquier otro estilo */
+    transform: none !important;
+    transition: none !important;
+}
+
+@keyframes goldGlow {
+    0%, 100% {
+        text-shadow: 
+            0 0 10px rgba(255, 215, 0, 0.9),
+            0 0 20px rgba(255, 215, 0, 0.7),
+            0 0 30px rgba(255, 215, 0, 0.5),
+            0 0 40px rgba(255, 193, 7, 0.4);
+        filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6));
+    }
+    50% {
+        text-shadow: 
+            0 0 20px rgba(255, 215, 0, 1),
+            0 0 40px rgba(255, 215, 0, 0.9),
+            0 0 60px rgba(255, 215, 0, 0.7),
+            0 0 80px rgba(255, 193, 7, 0.5);
+        filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.9));
+    }
+}
+
+/* Eliminar cualquier hover que cambie el número */
+.other-category-card:hover .category-number {
+    opacity: 1 !important;
+    transform: none !important;
+    color: #FFD700 !important;
+}
+
+.other-category-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem;
+    color: white;
+    z-index: 2;
+}
+
+.other-category-overlay h3 {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+    .other-categories-grid {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+    }
+    
+    .other-category-card {
+        height: 280px;
+    }
+}
+
+@media (max-width: 768px) {
+    .category-number {
+        font-size: 3rem;
+    }
+    
+    .other-category-overlay h3 {
+        font-size: 1.4rem;
+    }
+}
+        /* Footer - ESTILO POLLO CRISPY (DARK PREMIUM) */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 5rem 5% 2rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            margin-bottom: 4rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-logo svg {
+            width: 60px;
+            height: 60px;
+            filter: drop-shadow(0 0 10px var(--primary-glow));
+        }
+
+        .footer-logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .footer-logo-text .main {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.5rem;
+            color: var(--primary);
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .footer-logo-text .sub {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .footer-section h3 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            letter-spacing: 2px;
+        }
+
+        .footer-section p, .footer-section a {
+            color: var(--text-muted);
+            text-decoration: none;
+            line-height: 2;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary-glow);
+            transform: translateX(5px);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            width: 45px;
+            height: 45px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px var(--primary-glow);
+        }
+
+        .social-links a img {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Loading Animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--darker);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-burger {
+            width: 60px;
+            height: 60px;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .other-categories-grid {
+                grid-template-columns: 1fr;
+            }
+            .filter-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                width: 95%;
+                padding: 0.8rem 1.5rem;
+            }
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                max-width: 400px;
+                height: 100vh;
+                background: rgba(10, 10, 10, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 6rem 2rem 2rem;
+                transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                border-left: 1px solid rgba(255,255,255,0.1);
+            }
+            .nav-links.active {
+                right: 0;
+            }
+            .menu-toggle {
+                display: flex;
+            }
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            .filter-bar {
+                top: 80px;
+            }
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <svg class="loader-burger" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" fill="none" stroke="#FF4D00" stroke-width="2"/>
+            <path d="M 20 40 Q 50 20 80 40" fill="#F7931E" stroke="#FF4D00" stroke-width="2"/>
+            <rect x="22" y="48" width="56" height="10" rx="2" fill="#5D4037"/>
+            <path d="M 20 58 L 25 65 L 30 58 L 35 68 L 40 58 L 45 65 L 50 58 L 55 68 L 60 58 L 65 65 L 70 58 L 75 68 L 80 58" fill="#FFC107" stroke="#FF8F00" stroke-width="1"/>
+            <path d="M 20 62 Q 50 70 80 62" fill="#4CAF50"/>
+            <rect x="25" y="66" width="50" height="6" rx="2" fill="#D32F2F"/>
+            <path d="M 20 75 Q 50 85 80 75" fill="#F7931E" stroke="#FF4D00" stroke-width="2"/>
+        </svg>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <a href="index.html" class="logo-container">
+            <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="48" fill="#FF4D00" opacity="0.1"/>
+                <circle cx="50" cy="50" r="45" fill="none" stroke="#FF4D00" stroke-width="2"/>
+                <path d="M 20 40 Q 50 20 80 40 Q 75 50 50 50 Q 25 50 20 40" fill="#F7931E" stroke="#D32F2F" stroke-width="1.5"/>
+                <path d="M 25 38 Q 50 25 75 38" fill="none" stroke="#FFD54F" stroke-width="2" opacity="0.6"/>
+                <rect x="22" y="48" width="56" height="12" rx="3" fill="#5D4037"/>
+                <path d="M 20 58 L 25 65 L 30 58 L 35 68 L 40 58 L 45 65 L 50 58 L 55 68 L 60 58 L 65 65 L 70 58 L 75 68 L 80 58 L 80 55 L 20 55 Z" fill="#FFC107"/>
+                <path d="M 18 62 Q 25 58 32 62 Q 40 66 48 62 Q 56 58 64 62 Q 72 66 82 62 L 82 65 Q 72 69 64 65 Q 56 61 48 65 Q 40 69 32 65 Q 25 61 18 65 Z" fill="#4CAF50"/>
+                <rect x="25" y="66" width="50" height="6" rx="2" fill="#D32F2F"/>
+                <path d="M 20 75 Q 50 85 80 75 L 80 72 Q 50 82 20 72 Z" fill="#F7931E" stroke="#D32F2F" stroke-width="1.5"/>
+            </svg>
+            <div class="logo-text">
+                <span class="logo-main">BurgerCraft</span>
+                <span class="logo-sub">Artesanal</span>
+            </div>
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="clasicas.html" class="active">Clásicas</a></li>
+            <li><a href="premium.html">Premium</a></li>
+            <li><a href="pollo.html">Pollo</a></li>
+            <li><a href="combos.html">Combos</a></li>
+            <li><a href="Compras.html">Compras</a></li>
+            <li><a href="Ordenar.html" class="order-btn">🛒 Ordenar</a></li>
+        </ul>
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- Category Header -->
+    <header class="category-header">
+        <div class="category-header-content">
+            <h1>CLÁSICAS</h1>
+            <p>Las tradicionales que nunca fallan. Recetas atemporales preparadas con pasión y los mejores ingredientes.</p>
+        </div>
+        <div class="breadcrumb">
+            <a href="index.html">Inicio</a> / <span>Clásicas</span>
+        </div>
+    </header>
+
+    <!-- Products Section -->
+    <section class="products-section">
+        <div class="products-grid">
+            <!-- Product 1 -->
+            <div class="product-card featured fade-in">
+                <div class="product-image">
+                    <div class="product-badges">
+                        <span class="product-badge">Más Vendida</span>
+                    </div>
+                    <img src="img/clasica1.jpg" alt="Clásica Simple">
+                </div>
+                <div class="product-info">
+                    <h3>Clásica Simple</h3>
+                    <p class="product-description">Carne de res 150g, queso cheddar americano, lechuga fresca, tomate maduro y nuestra salsa especial secreta.</p>
+                    <div class="product-meta">
+                        <div class="meta-item">
+                            <span>🥩</span>
+                            <span>150g</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>🔥</span>
+                            <span>650 cal</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>⏱️</span>
+                            <span>15 min</span>
+                        </div>
+                    </div>
+                    <div class="product-footer">
+                        <div class="product-price">
+                            <span class="currency">$</span>9.99
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 2 -->
+            <div class="product-card fade-in">
+                <div class="product-image">
+                    <img src="img/Hdoblequeso2.jpg" alt="Doble Queso">
+                </div>
+                <div class="product-info">
+                    <h3>Doble Queso</h3>
+                    <p class="product-description">Doble carne de res jugosa, doble capa de queso cheddar, pepinillos crujientes, cebolla caramelizada y salsa de tomate casera.</p>
+                    <div class="product-meta">
+                        <div class="meta-item">
+                            <span>🥩</span>
+                            <span>300g</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>🔥</span>
+                            <span>980 cal</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>⏱️</span>
+                            <span>18 min</span>
+                        </div>
+                    </div>
+                    <div class="product-footer">
+                        <div class="product-price">
+                            <span class="currency">$</span>12.99
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 3 -->
+            <div class="product-card featured fade-in">
+                <div class="product-image">
+                    <div class="product-badges">
+                        <span class="product-badge">Chef Recomienda</span>
+                    </div>
+                    <img src="img/Doblecarne2.jpg" alt="Smash Burger">
+                </div>
+                <div class="product-info">
+                    <h3>Smash Burger</h3>
+                    <p class="product-description">Carne smash sellada al momento, queso americano derretido, cebolla asada en la plancha y nuestra salsa especial.</p>
+                    <div class="product-meta">
+                        <div class="meta-item">
+                            <span>🥩</span>
+                            <span>200g</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>🔥</span>
+                            <span>720 cal</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>⏱️</span>
+                            <span>12 min</span>
+                        </div>
+                    </div>
+                    <div class="product-footer">
+                        <div class="product-price">
+                            <span class="currency">$</span>11.99
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 4 -->
+            <div class="product-card fade-in">
+                <div class="product-image">
+                    <img src="img/tocinoplus2.png" alt="Bacon Lovers">
+                </div>
+                <div class="product-info">
+                    <h3>Bacon Lovers</h3>
+                    <p class="product-description">Carne de res premium, bacon crispy premium importado, queso suizo derretido, cebolla crujiente y salsa BBQ ahumada.</p>
+                    <div class="product-meta">
+                        <div class="meta-item">
+                            <span>🥩</span>
+                            <span>180g</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>🔥</span>
+                            <span>850 cal</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>⏱️</span>
+                            <span>16 min</span>
+                        </div>
+                    </div>
+                    <div class="product-footer">
+                        <div class="product-price">
+                            <span class="currency">$</span>13.99
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 5 -->
+            <div class="product-card fade-in">
+                <div class="product-image">
+                    <img src="img/Mushroom.jpg" alt="Mushroom Swiss">
+                </div>
+                <div class="product-info">
+                    <h3>Mushroom Swiss</h3>
+                    <p class="product-description">Carne de res, champiñones salteados en mantequilla, queso suizo derretido, cebolla caramelizada y mayonesa trufada.</p>
+                    <div class="product-meta">
+                        <div class="meta-item">
+                            <span>🥩</span>
+                            <span>170g</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>🔥</span>
+                            <span>780 cal</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>⏱️</span>
+                            <span>17 min</span>
+                        </div>
+                    </div>
+                    <div class="product-footer">
+                        <div class="product-price">
+                            <span class="currency">$</span>14.49
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 6 -->
+            <div class="product-card fade-in">
+                <div class="product-image">
+                    <img src="img/Western.jpg" alt="Western BBQ">
+                </div>
+                <div class="product-info">
+                    <h3>Western BBQ</h3>
+                    <p class="product-description">Carne de res 200g, queso cheddar fuerte, bacon crispy, aros de cebolla empanizados y salsa BBQ casera ahumada.</p>
+                    <div class="product-meta">
+                        <div class="meta-item">
+                            <span>🥩</span>
+                            <span>200g</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>🔥</span>
+                            <span>920 cal</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>⏱️</span>
+                            <span>19 min</span>
+                        </div>
+                    </div>
+                    <div class="product-footer">
+                        <div class="product-price">
+                            <span class="currency">$</span>13.49
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- Other Categories -->
+<section class="other-categories">
+    <div class="section-header fade-in">
+        <h2>Explora Más Sabores</h2>
+        <p>¿No te decides? Mira nuestras otras especialidades</p>
+    </div>
+    <div class="other-categories-grid">
+        <a href="premium.html" class="other-category-card fade-in">
+            <span class="category-number">02</span>
+            <img src="img/horno.jpg" alt="Premium">
+            <div class="other-category-overlay">
+                <h3>PREMIUM</h3>
+            </div>
+        </a>
+        <a href="pollo.html" class="other-category-card fade-in">
+            <span class="category-number">03</span>
+            <img src="img/Pollo.2.jpg" alt="Pollo">
+            <div class="other-category-overlay">
+                <h3>POLLO</h3>
+            </div>
+        </a>
+        <a href="combos.html" class="other-category-card fade-in">
+            <span class="category-number">04</span>
+            <img src="img/combo.jpg" alt="Combos">
+            <div class="other-category-overlay">
+                <h3>COMBOS</h3>
+            </div>
+        </a>
+    </div>
+</section>
+
+    <!-- Footer - ESTILO POLLO CRISPY -->
+    <footer id="contacto">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="48" fill="#FF4D00" opacity="0.1"/>
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#FF4D00" stroke-width="2"/>
+                        <path d="M 20 40 Q 50 20 80 40 Q 75 50 50 50 Q 25 50 20 40" fill="#F7931E" stroke="#FF4D00" stroke-width="1.5"/>
+                        <rect x="22" y="48" width="56" height="12" rx="3" fill="#5D4037"/>
+                        <path d="M 20 58 L 25 65 L 30 58 L 35 68 L 40 58 L 45 65 L 50 58 L 55 68 L 60 58 L 65 65 L 70 58 L 75 68 L 80 58 L 80 55 L 20 55 Z" fill="#FFC107"/>
+                        <path d="M 18 62 Q 25 58 32 62 Q 40 66 48 62 Q 56 58 64 62 Q 72 66 82 62 L 82 65 Q 72 69 64 65 Q 56 61 48 65 Q 40 69 32 65 Q 25 61 18 65 Z" fill="#4CAF50"/>
+                        <rect x="25" y="66" width="50" height="6" rx="2" fill="#D32F2F"/>
+                        <path d="M 20 75 Q 50 85 80 75 L 80 72 Q 50 82 20 72 Z" fill="#F7931E" stroke="#FF4D00" stroke-width="1.5"/>
+                        <g fill="#FFF8E1">
+                            <ellipse cx="35" cy="35" rx="2" ry="1"/>
+                            <ellipse cx="50" cy="32" rx="2" ry="1"/>
+                            <ellipse cx="65" cy="35" rx="2" ry="1"/>
+                        </g>
+                    </svg>
+                    <div class="footer-logo-text">
+                        <span class="main">BurgerCraft</span>
+                        <span class="sub">Est. 2018</span>
+                    </div>
+                </div>
+                <p style="color: var(--text-muted); line-height: 1.8;">Las mejores hamburguesas artesanales de la ciudad. Hechas con amor y los mejores ingredientes.</p>
+                <div class="social-links">
+                    <a href="#"><img src="img/Whatsap-.png" alt="WhatsApp" width="20" height="20"></a>
+                    <a href="#"><img src="img/Facebook-.png" alt="Facebook" width="20" height="20"></a>
+                    <a href="#"><img src="img/Instagram-.png" alt="Instagram" width="20" height="20"></a>
+                    <a href="#"><img src="img/Twitter.jpg" alt="Twitter" width="20" height="20" style="border-radius: 50%;"></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Horario</h3>
+                <ul>
+                    <li>Lunes - Martes: 7:00 - 5:00</li>
+                    <li>Jueves - Sabado: 7:00 - 5:00</li>
+                    <li>Domingo: 8:00 - 3:30</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <p><img src="img/Ubicacion-.png" alt="Ubicación" width="16" style="margin-right: 8px;"> Plaza, Jucuapa</p>
+                <p><img src="img/Whatsap-.png" alt="Teléfono" width="16" style="margin-right: 8px;"> 7067-1505</p>
+                <p><img src="img/gmail-.png" alt="Email" width="16" style="margin-right: 8px;"> @burgercraft.com</p>
+            </div>
+            <div class="footer-section">
+                <h3>Links Rápidos</h3>
+                <ul>
+                    <li><a href="clasicas.html">Clásicas</a></li>
+                    <li><a href="premium.html">Premium</a></li>
+                    <li><a href="pollo.html">Pollo</a></li>
+                    <li><a href="combos.html">Combos</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 BurgerCraft. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Loader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 1000);
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Filter tags functionality
+        document.querySelectorAll('.filter-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Add to cart animation
+        document.querySelectorAll('.add-to-cart').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1.05)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 150);
+                }, 100);
+            });
+        });
+    </script>
+</body>
+</html>

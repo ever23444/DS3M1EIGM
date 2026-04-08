@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hamburguesas Premium - BurgerCraft</title>
+    <link rel="icon" href="img/Logoburger-.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #FF4D00;
+            --primary-glow: rgba(255, 77, 0, 0.4);
+            --secondary: #FF6B35;
+            --dark: #050505;
+            --dark-secondary: #0a0a0a;
+            --dark-tertiary: #111111;
+            --light: #ffffff;
+            --gray: #888888;
+            --gray-dark: #333333;
+            --accent: #FF4D00;
+            --gold: #FFD700;
+            --gold-glow: rgba(255, 215, 0, 0.3);
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Noise Texture Overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.4;
+        }
+
+        /* Loader */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-burger {
+            width: 80px;
+            height: 80px;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* LOGO SVG ESTILO */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px var(--primary-glow));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+
+        .logo-main {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2rem;
+            color: var(--primary);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .logo-sub {
+            font-size: 0.7rem;
+            color: var(--gray);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        /* Navegación - Glassmorphism */
+        nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1400px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            z-index: 1000;
+            padding: 0.8rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 50px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,77,0,0.1);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .order-btn {
+            background: var(--primary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            border: 2px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .order-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 30px var(--primary-glow);
+            background: transparent;
+            color: var(--primary);
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+            z-index: 1001;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        /* Main Content Area con iframe */
+        main {
+            flex: 1;
+            margin-top: 100px;
+            min-height: calc(100vh - 100px);
+        }
+
+        .iframe-section {
+            width: 100%;
+            height: calc(100vh - 100px);
+            min-height: 800px;
+        }
+
+        .iframe-section iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* Footer - Dark Premium */
+        footer {
+            background: var(--dark-secondary);
+            color: white;
+            padding: 5rem 5% 2rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-logo svg {
+            width: 60px;
+            height: 60px;
+            filter: drop-shadow(0 0 10px var(--primary-glow));
+        }
+
+        .footer-logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .footer-logo-text .main {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.5rem;
+            color: var(--primary);
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .footer-logo-text .sub {
+            font-size: 0.8rem;
+            color: var(--gray);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            margin-bottom: 4rem;
+        }
+
+        .footer-section h3 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            letter-spacing: 2px;
+        }
+
+        .footer-section p, .footer-section a {
+            color: var(--gray);
+            text-decoration: none;
+            line-height: 2;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary-glow);
+            transform: translateX(5px);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            width: 45px;
+            height: 45px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px var(--primary-glow);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 3rem;
+            border-top: 1px solid var(--glass-border);
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .nav-links {
+                gap: 1.5rem;
+            }
+            
+            .iframe-section {
+                height: calc(100vh - 90px);
+                min-height: 600px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                width: 95%;
+                padding: 0.8rem 1.5rem;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                max-width: 400px;
+                height: 100vh;
+                background: rgba(5, 5, 5, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 6rem 2rem 2rem;
+                transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                border-left: 1px solid var(--glass-border);
+                gap: 1.5rem;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .menu-toggle.active span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 5px);
+            }
+
+            .menu-toggle.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .menu-toggle.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(7px, -6px);
+            }
+
+            main {
+                margin-top: 90px;
+            }
+            
+            .iframe-section {
+                height: calc(100vh - 90px);
+                min-height: 500px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-main {
+                font-size: 1.5rem;
+            }
+            
+            .footer-logo-text .main {
+                font-size: 1.8rem;
+            }
+            
+            .iframe-section {
+                min-height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <svg class="loader-burger" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="48" fill="#FF4D00" opacity="0.1"/>
+            <circle cx="50" cy="50" r="45" fill="none" stroke="#FF4D00" stroke-width="2"/>
+            <path d="M 20 40 Q 50 20 80 40 Q 75 50 50 50 Q 25 50 20 40" fill="#F7931E" stroke="#FF4D00" stroke-width="1.5"/>
+            <rect x="22" y="48" width="56" height="12" rx="3" fill="#5D4037"/>
+            <path d="M 20 58 L 25 65 L 30 58 L 35 68 L 40 58 L 45 65 L 50 58 L 55 68 L 60 58 L 65 65 L 70 58 L 75 68 L 80 58 L 80 55 L 20 55 Z" fill="#FFC107"/>
+            <path d="M 18 62 Q 25 58 32 62 Q 40 66 48 62 Q 56 58 64 62 Q 72 66 82 62 L 82 65 Q 72 69 64 65 Q 56 61 48 65 Q 40 69 32 65 Q 25 61 18 65 Z" fill="#4CAF50"/>
+            <rect x="25" y="66" width="50" height="6" rx="2" fill="#D32F2F"/>
+            <path d="M 20 75 Q 50 85 80 75 L 80 72 Q 50 82 20 72 Z" fill="#F7931E" stroke="#FF4D00" stroke-width="1.5"/>
+            <g fill="#FFF8E1">
+                <ellipse cx="35" cy="35" rx="2" ry="1"/>
+                <ellipse cx="50" cy="32" rx="2" ry="1"/>
+                <ellipse cx="65" cy="35" rx="2" ry="1"/>
+            </g>
+        </svg>
+    </div>
+
+    <!-- Navegación - Glassmorphism -->
+    <nav>
+        <a href="index.html" class="logo-container">
+            <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="48" fill="#FF4D00" opacity="0.1"/>
+                <circle cx="50" cy="50" r="45" fill="none" stroke="#FF4D00" stroke-width="2"/>
+                <path d="M 20 40 Q 50 20 80 40 Q 75 50 50 50 Q 25 50 20 40" fill="#F7931E" stroke="#FF4D00" stroke-width="1.5"/>
+                <path d="M 25 38 Q 50 25 75 38" fill="none" stroke="#FFD54F" stroke-width="2" opacity="0.6"/>
+                <rect x="22" y="48" width="56" height="12" rx="3" fill="#5D4037"/>
+                <path d="M 25 52 Q 35 48 45 52 Q 55 56 65 52 Q 75 48 78 52" fill="none" stroke="#3E2723" stroke-width="1.5" opacity="0.5"/>
+                <path d="M 20 58 L 25 65 L 30 58 L 35 68 L 40 58 L 45 65 L 50 58 L 55 68 L 60 58 L 65 65 L 70 58 L 75 68 L 80 58 L 80 55 L 20 55 Z" fill="#FFC107"/>
+                <path d="M 18 62 Q 25 58 32 62 Q 40 66 48 62 Q 56 58 64 62 Q 72 66 82 62 L 82 65 Q 72 69 64 65 Q 56 61 48 65 Q 40 69 32 65 Q 25 61 18 65 Z" fill="#4CAF50"/>
+                <rect x="25" y="66" width="50" height="6" rx="2" fill="#D32F2F"/>
+                <path d="M 20 75 Q 50 85 80 75 L 80 72 Q 50 82 20 72 Z" fill="#F7931E" stroke="#FF4D00" stroke-width="1.5"/>
+                <g fill="#FFF8E1">
+                    <ellipse cx="35" cy="35" rx="2" ry="1"/>
+                    <ellipse cx="50" cy="32" rx="2" ry="1"/>
+                    <ellipse cx="65" cy="35" rx="2" ry="1"/>
+                    <ellipse cx="42" cy="38" rx="2" ry="1"/>
+                    <ellipse cx="58" cy="38" rx="2" ry="1"/>
+                </g>
+                <path d="M 30 15 Q 35 5 40 15 Q 45 0 50 15 Q 55 5 60 15" fill="none" stroke="#FF4D00" stroke-width="2" opacity="0.8">
+                    <animate attributeName="d" values="M 30 15 Q 35 5 40 15 Q 45 0 50 15 Q 55 5 60 15;M 30 15 Q 35 0 40 15 Q 45 5 50 15 Q 55 0 60 15;M 30 15 Q 35 5 40 15 Q 45 0 50 15 Q 55 5 60 15" dur="1s" repeatCount="indefinite"/>
+                </path>
+            </svg>
+            <div class="logo-text">
+                <span class="logo-main">BurgerCraft</span>
+                <span class="logo-sub">Artesanal</span>
+            </div>
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="clasicas.html">Clásicas</a></li>
+            <li><a href="premium.html" >Premium</a></li>
+            <li><a href="pollo.html">Pollo</a></li>
+            <li><a href="combos.html">Combos</a></li>
+            <li><a href="Compras.html" class="active">Compras</a></li>
+            <li><a href="ordenar.html" class="order-btn">🛒 Ordenar</a></li>
+        </ul>
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal con iframe -->
+    <main>
+        <section class="iframe-section">
+            <iframe src="https://burgercraft57985.store.link" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+        </section>
+    </main>
+
+    <!-- Footer - Dark Premium -->
+    <footer id="contacto">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="48" fill="#FF4D00" opacity="0.1"/>
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#FF4D00" stroke-width="2"/>
+                        <path d="M 20 40 Q 50 20 80 40 Q 75 50 50 50 Q 25 50 20 40" fill="#F7931E" stroke="#FF4D00" stroke-width="1.5"/>
+                        <rect x="22" y="48" width="56" height="12" rx="3" fill="#5D4037"/>
+                        <path d="M 20 58 L 25 65 L 30 58 L 35 68 L 40 58 L 45 65 L 50 58 L 55 68 L 60 58 L 65 65 L 70 58 L 75 68 L 80 58 L 80 55 L 20 55 Z" fill="#FFC107"/>
+                        <path d="M 18 62 Q 25 58 32 62 Q 40 66 48 62 Q 56 58 64 62 Q 72 66 82 62 L 82 65 Q 72 69 64 65 Q 56 61 48 65 Q 40 69 32 65 Q 25 61 18 65 Z" fill="#4CAF50"/>
+                        <rect x="25" y="66" width="50" height="6" rx="2" fill="#D32F2F"/>
+                        <path d="M 20 75 Q 50 85 80 75 L 80 72 Q 50 82 20 72 Z" fill="#F7931E" stroke="#FF4D00" stroke-width="1.5"/>
+                        <g fill="#FFF8E1">
+                            <ellipse cx="35" cy="35" rx="2" ry="1"/>
+                            <ellipse cx="50" cy="32" rx="2" ry="1"/>
+                            <ellipse cx="65" cy="35" rx="2" ry="1"/>
+                        </g>
+                    </svg>
+                    <div class="footer-logo-text">
+                        <span class="main">BurgerCraft</span>
+                        <span class="sub">Est. 2018</span>
+                    </div>
+                </div>
+                <p style="color: var(--gray); line-height: 1.8;">Las mejores hamburguesas artesanales de la ciudad. Hechas con amor y los mejores ingredientes.</p>
+                <div class="social-links">
+                    <a href="#"><img src="img/Whatsap-.png" width="20" height="20"></a>
+                    <a href="#"><img src="img/Facebook-.png" width="20" height="20"></a>
+                    <a href="#"><img src="img/Instagram-.png" width="20" height="20"></a>
+                    <a href="#"><img src="img/Twitter.jpg" width="20" height="20" style="border-radius: 50%;"></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Horario</h3>
+                <ul>
+                    <li style="color: var(--gray); margin-bottom: 0.8rem;">Lunes - Martes: 7:00 - 5:00</li>
+                    <li style="color: var(--gray); margin-bottom: 0.8rem;">Jueves - Sabado: 7:00 - 5:00</li>
+                    <li style="color: var(--gray);">Domingo: 8:00 - 3:30</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <p><img src="img/Ubicacion-.png" width="16"> Plaza, Jucuapa</p>
+                <p><img src="img/Whatsap-.png" width="16"> 7067-1505</p>
+                <p><img src="img/gmail-.png" width="16"> @burgercraft.com</p>
+            </div>
+            <div class="footer-section">
+                <h3>Links Rápidos</h3>
+                <ul>
+                    <li><a href="clasicas.html">Clásicas</a></li>
+                    <li><a href="premium.html">Premium</a></li>
+                    <li><a href="pollo.html">Pollo</a></li>
+                    <li><a href="combos.html">Combos</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 BurgerCraft. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Loader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 1500);
+        });
+
+        // Toggle menú móvil
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            const menuToggle = document.querySelector('.menu-toggle');
+            navLinks.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+        }
+
+        // Cerrar menú al hacer click en un link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navLinks').classList.remove('active');
+                document.querySelector('.menu-toggle').classList.remove('active');
+            });
+        });
+    </script>
+
+</body>
+</html>
