@@ -1,0 +1,1666 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLAMA'S | Menú - The Best Burgers in Jucuapa</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%23d93025' opacity='0.9'/><text x='50' y='70' font-size='60' font-weight='bold' text-anchor='middle' fill='white' font-family='Arial'>F</text></svg>" type="image/svg+xml">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #f5a623;
+            --primary-glow: rgba(245, 166, 35, 0.5);
+            --secondary: #e6951a;
+            --red: #d93025;
+            --red-glow: rgba(217, 48, 37, 0.3);
+            --dark: #0a0a0a;
+            --darker: #050505;
+            --light: #fafafa;
+            --gray: #1a1a1a;
+            --gray-light: #2a2a2a;
+            --gray-mid: #333;
+            --text-muted: #b8a88a;
+            --gold: #f5a623;
+            --surface: #111;
+            --surface-hover: #161616;
+            --border: #2a2218;
+            --border-light: #3a2e1e;
+            --radius: 14px;
+            --radius-sm: 8px;
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+            --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.7);
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; scroll-padding-top: 120px; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+            background-image:
+                radial-gradient(ellipse at 50% 0%, rgba(245, 166, 35, 0.05) 0%, transparent 70%),
+                radial-gradient(ellipse at 80% 20%, rgba(217, 48, 37, 0.03) 0%, transparent 60%);
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--dark); }
+        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+        /* ═══════════════ LOADER ═══════════════ */
+        .loader {
+            position: fixed;
+            inset: 0;
+            background: var(--darker);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        .loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .loader-ring {
+            width: 56px; height: 56px;
+            border: 3px solid rgba(245,166,35,0.15);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+        }
+        .loader-text {
+            margin-top: 16px;
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.2rem;
+            color: var(--gold);
+            letter-spacing: 4px;
+            animation: pulse-text 1.5s ease infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse-text { 0%,100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+        /* ═══════════════ NAVEGACIÓN ═══════════════ */
+        nav {
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 92%;
+            max-width: 1400px;
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 60px;
+            z-index: 1000;
+            padding: 0.7rem 1.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+        nav.scrolled {
+            width: 96%;
+            top: 10px;
+            background: rgba(10, 10, 10, 0.92);
+            border-color: rgba(245,166,35,0.1);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.6);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+        .logo-icon {
+            width: 42px; height: 42px;
+            background: linear-gradient(135deg, var(--red), #b71c1c);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 900;
+            color: #fff;
+            box-shadow: 0 0 0 2.5px var(--gold), 0 0 18px rgba(245, 166, 35, 0.3);
+            position: relative;
+        }
+        .logo-icon::after {
+            content: '🔥';
+            position: absolute;
+            top: -10px; right: -6px;
+            font-size: 14px;
+            animation: flicker 1.5s infinite alternate;
+        }
+        @keyframes flicker { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2) rotate(-5deg)} }
+
+        .logo-text { display: flex; flex-direction: column; line-height: 1; }
+        .logo-main {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.6rem;
+            letter-spacing: 2px;
+            color: #fff;
+        }
+        .logo-main span { color: var(--gold); }
+        .logo-sub {
+            font-size: 0.55rem;
+            color: var(--text-muted);
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .nav-center { display: flex; align-items: center; gap: 0.3rem; }
+        .nav-link {
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.45rem 0.9rem;
+            border-radius: 30px;
+            transition: var(--transition);
+            white-space: nowrap;
+            letter-spacing: 0.3px;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: var(--gold);
+            background: rgba(245,166,35,0.08);
+        }
+        .nav-link.active { color: var(--gold); }
+
+        .nav-right { display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0; }
+
+        /* Dropdown Menú Categorías */
+        .dropdown { position: relative; }
+        .dropdown-btn {
+            background: linear-gradient(135deg, var(--gold), var(--secondary));
+            color: #1a1a1a;
+            border: none;
+            padding: 0.55rem 1.4rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: var(--transition);
+            box-shadow: 0 3px 14px rgba(245, 166, 35, 0.25);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .dropdown-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px rgba(245, 166, 35, 0.4);
+        }
+        .dropdown-btn .arrow {
+            font-size: 0.65rem;
+            transition: transform 0.3s ease;
+        }
+        .dropdown.open .dropdown-btn .arrow { transform: rotate(180deg); }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 12px);
+            right: 0;
+            background: rgba(17,17,17,0.98);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            min-width: 320px;
+            max-height: 70vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(8px) scale(0.98);
+            transition: all 0.25s ease;
+            z-index: 200;
+            padding: 6px 0;
+        }
+        .dropdown.open .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .dm-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 10px 18px 6px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        .dm-label:not(:first-child) {
+            margin-top: 4px;
+            border-top: 1px solid rgba(255,255,255,0.04);
+        }
+        .dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 18px;
+            color: #ccc;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+        }
+        .dropdown-menu a:hover {
+            background: rgba(245,166,35,0.06);
+            border-left-color: var(--gold);
+            color: var(--gold);
+            padding-left: 22px;
+        }
+        .dropdown-menu a.current {
+            color: var(--gold);
+            background: rgba(245,166,35,0.08);
+            border-left-color: var(--gold);
+        }
+        .dropdown-menu a .cat-emoji {
+            font-size: 1.1rem;
+            width: 26px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .dm-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.04);
+            margin: 4px 0;
+        }
+
+        .btn-ordenar-nav {
+            background: transparent;
+            border: 1.5px solid var(--red);
+            color: var(--red);
+            padding: 0.5rem 1.2rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: 'Space Grotesk', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-ordenar-nav:hover {
+            background: var(--red);
+            color: #fff;
+            box-shadow: 0 4px 20px var(--red-glow);
+            transform: translateY(-1px);
+        }
+
+        /* Hamburger */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+            z-index: 1001;
+            padding: 4px;
+        }
+        .menu-toggle span {
+            width: 22px; height: 2px;
+            background: white;
+            transition: 0.3s;
+            border-radius: 2px;
+            transform-origin: center;
+        }
+        .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .menu-toggle.active span:nth-child(2) { opacity: 0; }
+        .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+        /* ═══════════════ MOBILE PANEL ═══════════════ */
+        .mobile-panel {
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            pointer-events: none;
+            visibility: hidden;
+        }
+        .mobile-panel.open {
+            pointer-events: auto;
+            visibility: visible;
+        }
+        .mobile-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+        .mobile-panel.open .mobile-overlay { opacity: 1; }
+
+        .mobile-drawer {
+            position: absolute;
+            top: 0; right: 0;
+            width: 300px;
+            max-width: 85vw;
+            height: 100%;
+            background: var(--surface);
+            border-left: 1px solid var(--border);
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        .mobile-panel.open .mobile-drawer { transform: translateX(0); }
+
+        .drawer-header {
+            padding: 24px 20px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .drawer-header .logo-main {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.4rem;
+            color: var(--gold);
+            letter-spacing: 2px;
+        }
+
+        .drawer-nav { padding: 12px 0; flex: 1; }
+        .drawer-nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 20px;
+            color: #ccc;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+        }
+        .drawer-nav a:hover, .drawer-nav a.active {
+            color: var(--gold);
+            background: rgba(245,166,35,0.06);
+            border-left-color: var(--gold);
+        }
+        .drawer-nav a .d-emoji { font-size: 1.2rem; width: 28px; text-align: center; }
+        .drawer-label {
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 16px 20px 6px;
+        }
+        .drawer-divider { height: 1px; background: var(--border); margin: 6px 20px; }
+
+        .drawer-footer {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+        }
+        .drawer-footer a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            background: var(--red);
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+        }
+        .drawer-footer a:hover { background: #e63e33; box-shadow: 0 4px 20px var(--red-glow); }
+
+        /* ═══════════════ HERO ═══════════════ */
+        .category-header {
+            padding: 9rem 5% 3.5rem;
+            background:
+                linear-gradient(180deg, rgba(245,166,35,0.1) 0%, transparent 50%),
+                linear-gradient(135deg, rgba(217,48,37,0.06) 0%, transparent 40%),
+                var(--dark);
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .category-header::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle at 30% 50%, rgba(245,166,35,0.04) 0%, transparent 50%);
+            animation: slow-rotate 30s linear infinite;
+        }
+        @keyframes slow-rotate { to { transform: rotate(360deg); } }
+
+        .category-header-content { position: relative; z-index: 1; }
+        .cat-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(245,166,35,0.1);
+            border: 1px solid rgba(245,166,35,0.2);
+            color: var(--gold);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 6px 18px;
+            border-radius: 50px;
+            margin-bottom: 1.2rem;
+        }
+        .category-header-content h1 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: clamp(3.5rem, 10vw, 7rem);
+            background: linear-gradient(135deg, var(--gold) 0%, #ffcc70 40%, var(--gold) 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 6px;
+            margin-bottom: 0.6rem;
+            text-transform: uppercase;
+            line-height: 1;
+        }
+        .category-header-content p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 500px;
+            margin: 0 auto;
+            font-weight: 400;
+        }
+        .breadcrumb {
+            margin-top: 1.5rem;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+        .breadcrumb a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .breadcrumb a:hover { color: var(--gold); }
+        .breadcrumb .sep { opacity: 0.3; }
+        .breadcrumb .current { color: var(--gold); font-weight: 600; }
+
+        /* Tabs de categoría */
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1.2rem 5%;
+            background: var(--dark);
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            flex-wrap: wrap;
+            position: sticky;
+            top: 78px;
+            z-index: 99;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .cat-tab {
+            padding: 0.5rem 1.2rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.06);
+            transition: var(--transition);
+            white-space: nowrap;
+            letter-spacing: 0.3px;
+        }
+        .cat-tab:hover {
+            color: var(--gold);
+            border-color: rgba(245,166,35,0.2);
+            background: rgba(245,166,35,0.05);
+        }
+        .cat-tab.active {
+            color: #1a1a1a;
+            background: var(--gold);
+            border-color: var(--gold);
+            font-weight: 700;
+        }
+
+        /* ═══════════════ CONTENIDO PRINCIPAL ═══════════════ */
+        main {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 32px 16px 80px;
+        }
+
+        .menu-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px 20px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            scroll-margin-top: 140px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        .menu-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .menu-section:hover {
+            border-color: var(--border-light);
+            box-shadow: var(--shadow-lg);
+        }
+        .menu-section:hover::before { opacity: 1; }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed rgba(255,255,255,0.06);
+        }
+        .section-header .s-emoji { font-size: 2rem; }
+        .section-header h3 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            color: var(--gold);
+            text-transform: uppercase;
+            flex: 1;
+        }
+        .section-count {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            background: rgba(255,255,255,0.04);
+            padding: 4px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 11px 0;
+            border-bottom: 1px dotted rgba(255,255,255,0.04);
+            transition: var(--transition);
+            flex-wrap: wrap;
+        }
+        .menu-item:last-child { border-bottom: none; }
+        .menu-item:hover { padding-left: 6px; }
+
+        .item-info { flex: 1; min-width: 180px; }
+        .item-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #fff;
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .item-name .popular {
+            font-size: 0.55rem;
+            background: var(--red);
+            color: #fff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            line-height: 1;
+        }
+        .item-desc {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 3px;
+            line-height: 1.5;
+        }
+
+        .item-price {
+            font-weight: 800;
+            font-size: 1rem;
+            color: var(--gold);
+            white-space: nowrap;
+            background: rgba(245,166,35,0.08);
+            border: 1px solid rgba(245,166,35,0.12);
+            padding: 5px 14px;
+            border-radius: 30px;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+            align-self: center;
+            transition: var(--transition);
+        }
+        .menu-item:hover .item-price {
+            background: rgba(245,166,35,0.14);
+            border-color: rgba(245,166,35,0.25);
+        }
+
+        .note {
+            font-size: 0.72rem;
+            color: var(--red);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-top: 10px;
+            text-align: center;
+            text-transform: uppercase;
+            padding: 6px 12px;
+            background: rgba(217,48,37,0.06);
+            border-radius: 6px;
+        }
+        .sub-category {
+            font-weight: 800;
+            font-size: 0.88rem;
+            color: #e8d5a3;
+            margin: 14px 0 6px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding-bottom: 4px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .combo-highlight {
+            background: rgba(245,166,35,0.04);
+            border-radius: 10px;
+            padding: 14px;
+            margin: 4px 0;
+            border-left: 3px solid var(--gold);
+            transition: var(--transition);
+        }
+        .combo-highlight:hover {
+            background: rgba(245,166,35,0.08);
+            transform: translateX(4px);
+        }
+
+        .section-note {
+            color: var(--gold);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 12px;
+            font-size: 0.82rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .section-note::before, .section-note::after {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: rgba(245,166,35,0.3);
+        }
+
+        /* ═══════════════ FLOATING ACTIONS ═══════════════ */
+        .floating-actions {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 998;
+        }
+        .fab {
+            width: 52px; height: 52px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            transition: var(--transition);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            text-decoration: none;
+        }
+        .fab:hover { transform: translateY(-3px) scale(1.05); }
+        .fab-whatsapp {
+            background: #25D366;
+            color: #fff;
+        }
+        .fab-whatsapp:hover { box-shadow: 0 6px 28px rgba(37,211,102,0.4); }
+        .fab-top {
+            background: var(--gray-light);
+            color: var(--gold);
+            border: 1px solid var(--border);
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+        }
+        .fab-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        .fab-top:hover { background: var(--gold); color: #1a1a1a; }
+
+        /* ═══════════════ FOOTER ═══════════════ */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 3.5rem 5% 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.04);
+        }
+        .footer-grid {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .footer-brand .f-logo {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2rem;
+            color: var(--gold);
+            letter-spacing: 3px;
+        }
+        .footer-brand .f-sub {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .footer-brand p {
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            margin-top: 10px;
+            line-height: 1.7;
+        }
+        .footer-col h4 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.1rem;
+            color: var(--gold);
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+        .footer-col a {
+            display: block;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.82rem;
+            padding: 4px 0;
+            transition: var(--transition);
+        }
+        .footer-col a:hover { color: var(--gold); padding-left: 4px; }
+
+        .social-links {
+            display: flex;
+            gap: 0.6rem;
+            margin-top: 14px;
+        }
+        .social-links a {
+            width: 36px; height: 36px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+        .social-links a:hover {
+            background: var(--gold);
+            color: #1a1a1a;
+            border-color: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.04);
+            padding-top: 1.5rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* ═══════════════ ANIMACIONES ═══════════════ */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .fade-up:nth-child(2) { transition-delay: 0.05s; }
+        .fade-up:nth-child(3) { transition-delay: 0.1s; }
+        .fade-up:nth-child(4) { transition-delay: 0.15s; }
+
+        /* ═══════════════ RESPONSIVE ═══════════════ */
+        @media (max-width: 900px) {
+            .nav-center { display: none; }
+            .menu-toggle { display: flex; }
+            .btn-ordenar-nav span { display: none; }
+            .btn-ordenar-nav { padding: 0.5rem 0.8rem; }
+            .category-header { padding: 8rem 5% 3rem; }
+            .category-tabs { top: 72px; gap: 0.4rem; padding: 0.8rem 3%; }
+            .cat-tab { font-size: 0.7rem; padding: 0.4rem 0.9rem; }
+            .footer-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+        }
+        @media (max-width: 500px) {
+            nav { padding: 0.6rem 1rem; }
+            .logo-main { font-size: 1.3rem; }
+            .logo-icon { width: 36px; height: 36px; font-size: 18px; }
+            .dropdown-btn { padding: 0.45rem 1rem; font-size: 0.75rem; }
+            .category-header-content h1 { letter-spacing: 3px; }
+            .menu-section { padding: 16px 12px; }
+            .item-name { font-size: 0.88rem; }
+            .item-desc { font-size: 0.73rem; }
+            .item-price { font-size: 0.88rem; padding: 4px 10px; }
+            .floating-actions { bottom: 16px; right: 16px; }
+            .fab { width: 46px; height: 46px; font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-ring"></div>
+        <div class="loader-text">FLAMA'S</div>
+    </div>
+
+    <!-- Navegación -->
+    <nav id="navbar">
+        <a href="index.html" class="logo-container">
+            <div class="logo-icon">F</div>
+            <div class="logo-text">
+                <span class="logo-main">FLA<span>MA</span>'S</span>
+                <span class="logo-sub">Since 2024</span>
+            </div>
+        </a>
+
+        <div class="nav-center">
+            <a href="index.html" class="nav-link">Inicio</a>
+            <a href="Menú.html" class="nav-link active">Menú</a>
+            <a href="pollo.html" class="nav-link">Pollo</a>
+            <a href="premium.html" class="nav-link">Premium</a>
+            <a href="combos.html" class="nav-link">Combos</a>
+        </div>
+
+        <div class="nav-right">
+            <li class="dropdown" id="menuDropdown" style="list-style:none;">
+                <button class="dropdown-btn" id="dropdownBtn">
+                    🔥 Menú <span class="arrow">▼</span>
+                </button>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <div class="dm-label">Páginas del Menú</div>
+                    <a href="Menú.html" class="current"><span class="cat-emoji">🍔</span> Menú</a>
+                    <a href="pollo.html"><span class="cat-emoji">🍗</span> Pollo</a>
+                    <a href="premium.html"><span class="cat-emoji">💎</span> Premium</a>
+                    <a href="combos.html"><span class="cat-emoji">🎉</span> Combos</a>
+                    <div class="dm-divider"></div>
+                    <div class="dm-label">Secciones de esta página</div>
+                    <a href="#calentar-motores"><span class="cat-emoji">🥖</span> Pa' Calentar Motores</a>
+                    <a href="#pechugonas"><span class="cat-emoji">🍗</span> Las Pechugonas</a>
+                    <a href="#carnudas"><span class="cat-emoji">🥩</span> Las Carnudas</a>
+                    <a href="#carnudas2"><span class="cat-emoji">🍳</span> Carnudas (Parte 2)</a>
+                    <a href="#joyitas"><span class="cat-emoji">💎</span> Las Joyitas</a>
+                    <a href="#bestias"><span class="cat-emoji">👑</span> Las Bestias</a>
+                    <a href="#paponas"><span class="cat-emoji">🍟</span> Las Paponas</a>
+                    <a href="#crujientes"><span class="cat-emoji">🔥</span> Las Crujientes</a>
+                    <a href="#bendi"><span class="cat-emoji">👶</span> Para Tu Bendi</a>
+                    <a href="#algo-leve"><span class="cat-emoji">🌭</span> Algo Leve</a>
+                    <a href="#compartir"><span class="cat-emoji">🎉</span> Para Compartir</a>
+                    <a href="#bebidas"><span class="cat-emoji">🥤</span> Bebidas</a>
+                    <a href="#extras"><span class="cat-emoji">➕</span> Extras</a>
+                </div>
+            </li>
+            <a href="Ordenar.html" class="btn-ordenar-nav">🛒 <span>Ordenar</span></a>
+            <div class="menu-toggle" id="mobileToggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Panel Móvil -->
+    <div class="mobile-panel" id="mobilePanel">
+        <div class="mobile-overlay" id="mobileOverlay"></div>
+        <div class="mobile-drawer">
+            <div class="drawer-header">
+                <span class="logo-main">FLAMA'S</span>
+            </div>
+            <nav class="drawer-nav">
+                <div class="drawer-label">Navegación</div>
+                <a href="index.html"><span class="d-emoji">🏠</span> Inicio</a>
+                <a href="Menú.html" class="active"><span class="d-emoji">🍔</span> Menú</a>
+                <a href="pollo.html"><span class="d-emoji">🍗</span> Pollo</a>
+                <a href="premium.html"><span class="d-emoji">💎</span> Premium</a>
+                <a href="combos.html"><span class="d-emoji">🎉</span> Combos</a>
+                <div class="drawer-divider"></div>
+                <div class="drawer-label">Secciones</div>
+                <a href="#calentar-motores"><span class="d-emoji">🥖</span> Pa' Calentar Motores</a>
+                <a href="#pechugonas"><span class="d-emoji">🍗</span> Las Pechugonas</a>
+                <a href="#carnudas"><span class="d-emoji">🥩</span> Las Carnudas</a>
+                <a href="#carnudas2"><span class="d-emoji">🍳</span> Carnudas (Parte 2)</a>
+                <a href="#joyitas"><span class="d-emoji">💎</span> Las Joyitas</a>
+                <a href="#bestias"><span class="d-emoji">👑</span> Las Bestias</a>
+                <a href="#paponas"><span class="d-emoji">🍟</span> Las Paponas</a>
+                <a href="#crujientes"><span class="d-emoji">🔥</span> Las Crujientes</a>
+                <a href="#bendi"><span class="d-emoji">👶</span> Para Tu Bendi</a>
+                <a href="#algo-leve"><span class="d-emoji">🌭</span> Algo Leve</a>
+                <a href="#compartir"><span class="d-emoji">🎉</span> Para Compartir</a>
+                <a href="#bebidas"><span class="d-emoji">🥤</span> Bebidas</a>
+                <a href="#extras"><span class="d-emoji">➕</span> Extras</a>
+                <div class="drawer-divider"></div>
+                <a href="Compras.html"><span class="d-emoji">🛒</span> Mis Compras</a>
+            </nav>
+            <div class="drawer-footer">
+                <a href="Ordenar.html">🔥 Ordenar Ahora</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero -->
+    <header class="category-header">
+        <div class="category-header-content">
+            <div class="cat-badge">🍔 Nuestro Menú</div>
+            <h1>MENÚ</h1>
+            <p>Hamburguesas, pollo, paponas y todo lo que ya conoces de Flama's</p>
+        </div>
+        <div class="breadcrumb">
+            <a href="index.html">Inicio</a>
+            <span class="sep">›</span>
+            <span class="current">Menú</span>
+        </div>
+    </header>
+
+    <!-- Tabs de categorías -->
+    <div class="category-tabs">
+        <a href="Menú.html" class="cat-tab active">Menú</a>
+        <a href="pollo.html" class="cat-tab">Pollo</a>
+        <a href="premium.html" class="cat-tab">Premium</a>
+        <a href="combos.html" class="cat-tab">Combos</a>
+        <a href="Ordenar.html" class="cat-tab">🛒 Ordenar</a>
+    </div>
+
+    <main>
+        <!-- Pa' Calentar Motores -->
+        <section class="menu-section fade-up" id="calentar-motores">
+            <div class="section-header">
+                <span class="s-emoji">🥖</span>
+                <h3>Pa' Calentar Motores</h3>
+                <span class="section-count">4 items</span>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">Pan con Ajo <span class="popular">Popular</span></div>
+                    <div class="item-desc">Delicioso Pan Artesanal Tostado, Con Una Mezcla de Mantequilla y Ajo Fresco, Sazonado Con Hierbas. (La Orden Incluye 4)</div>
+                </div>
+                <div class="item-price">$2.50</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">Papas Sazonadas</div>
+                    <div class="item-desc">Crujientes Papas Fritas, Sazonadas a la Perfección Con Una Mezcla Especial</div>
+                </div>
+                <div class="item-price">$2.50</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">Dedos de Queso</div>
+                    <div class="item-desc">Irresistibles Dedos de Queso Empanizados y Crujientes (La Orden Incluye 5)</div>
+                </div>
+                <div class="item-price">$3.00</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">Aros de Cebolla</div>
+                    <div class="item-desc">Deliciosos Aros de Cebolla Empanizados. Crujientes Por Fuerza y Tiernos Por Dentro (La Orden Incluye 8)</div>
+                </div>
+                <div class="item-price">$2.50</div>
+            </div>
+        </section>
+
+        <!-- Las Pechugonas -->
+        <section class="menu-section fade-up" id="pechugonas">
+            <div class="section-header">
+                <span class="s-emoji">🍗</span>
+                <h3>Las Pechugonas</h3>
+                <span class="section-count">3 items</span>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">La Pió</div>
+                    <div class="item-desc">Pan artesanal, Pollo Crujiente, Queso, Cebolla Caramelizada, lechuga y tomate</div>
+                </div>
+                <div class="item-price">$5.00</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">La Chipotle</div>
+                    <div class="item-desc">Pan Artesanal, Pollo Crujiente Bañado en Salsa Chipotle, Queso, Cebolla Caramelizada, Lechuga y Tomate</div>
+                </div>
+                <div class="item-price">$6.00</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">La Barbie</div>
+                    <div class="item-desc">Pan Artesanal, Pollo Crujiente Bañado en Salsa Barbacoa, Queso, Cebolla Caramelizada, Lechuga y Tomate</div>
+                </div>
+                <div class="item-price">$6.00</div>
+            </div>
+            <p class="note">Todas las hamburguesas incluyen papas</p>
+        </section>
+
+        <!-- Las Carnudas (Parte 1) -->
+        <section class="menu-section fade-up" id="carnudas">
+            <div class="section-header">
+                <span class="s-emoji">🥩</span>
+                <h3>Las Carnudas</h3>
+                <span class="section-count">5 items</span>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">La Facilota</div>
+                    <div class="item-desc">Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate y Cebolla Caramelizada</div>
+                </div>
+                <div class="item-price">$5.00</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">La Cheese</div>
+                    <div class="item-desc">Pan Artesanal, Carne de Res, Queso Americano y Queso Cheddar</div>
+                </div>
+                <div class="item-price">$5.00</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">La Honguito</div>
+                    <div class="item-desc">Pan Artesanal, Carne de Res, Lechuga, Tomate, Queso, Cebolla Caramelizada y Hongos Preparados en Salsa de la Casa</div>
+                </div>
+                <div class="item-price">$6.00</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">La Tropical <span class="popular">Nuevo</span></div>
+                    <div class="item-desc">Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada, Piña y Tocino</div>
+                </div>
+                <div class="item-price">$6.00</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">La Bacon Cheese</div>
+                    <div class="item-desc">Pan Artesanal, Carne de Res, Queso Americano, Queso Cheddar, Pepinillos y Tocino</div>
+                </div>
+                <div class="item-price">$6.00</div>
+            </div>
+            <p class="note">Todas las hamburguesas incluyen papas</p>
+        </section>
+
+        <!-- Las Carnudas (Parte 2) -->
+        <section class="menu-section fade-up" id="carnudas2">
+            <div class="section-header">
+                <span class="s-emoji">🍳</span>
+                <h3>Las Carnudas (Parte 2)</h3>
+                <span class="section-count">4 items</span>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">La Ahuevada</div>
+                    <div class="item-desc">Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada, Huevo Estrellado y Tocino</div>
+                </div>
+                <div class="item-price">$6.00</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">La Guacamole</div>
+                    <div class="item-desc">Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Morada, Aguacate y Tocino</div>
+                </div>
+                <div class="item-price">$6.00</div>
+            </div>
+            <div class="sub-category">🌊 Del Mar y La Granja</div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">La Camarón</div>
+                    <div class="item-desc">Pan Artesanal, Camarones Empanizados, Queso, Cebolla Caramelizada, Lechuga y Tomate</div>
+                </div>
+                <div class="item-price">$6.00</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">La Porky</div>
+                    <div class="item-desc">Pan Artesanal, Chicharrones de Cerdo, Queso, Cebolla Caramelizada, Lechuga, Tomate y Tocino</div>
+                </div>
+                <div class="item-price">$6.00</div>
+            </div>
+            <p class="note">Todas las hamburguesas incluyen papas</p>
+        </section>
+
+        <!-- Las Joyitas Flama's -->
+        <section class="menu-section fade-up" id="joyitas">
+            <div class="section-header">
+                <span class="s-emoji">💎</span>
+                <h3>Las Joyitas Flama's</h3>
+                <span class="section-count">4 items</span>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">La Bañada <span class="popular">Top</span></div>
+                    <div class="item-desc">Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada, Bañada en Queso Cheddar y Tocino</div>
+                </div>
+                <div class="item-price">$7.50</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">La Engañosa</div>
+                    <div class="item-desc">Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada, Servida en Una Cama de Queso Cheddar</div>
+                </div>
+                <div class="item-price">$7.50</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">La Doble Carne</div>
+                    <div class="item-desc">Pan Artesanal, Doble Carne de Res, Lechuga, Queso, Tomate y Cebolla Caramelizada y Tocino</div>
+                </div>
+                <div class="item-price">$7.50</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">La Vacunada</div>
+                    <div class="item-desc">Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada y Una Inyección de Queso Cheddar</div>
+                </div>
+                <div class="item-price">$7.50</div>
+            </div>
+            <p class="note">Todas las hamburguesas incluyen papas</p>
+        </section>
+
+        <!-- Las Bestias -->
+        <section class="menu-section fade-up" id="bestias">
+            <div class="section-header">
+                <span class="s-emoji">👑</span>
+                <h3>Las Bestias</h3>
+                <span class="section-count">6 items</span>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">La Mar y Tierra</div>
+                    <div class="item-desc">Pan Artesanal, Carne de Res, Camarones Empanizados, Lechuga, Queso, Tomate, Cebolla y Tocino</div>
+                </div>
+                <div class="item-price">$8.00</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">La Castrosa</div>
+                    <div class="item-desc">Pan Artesanal, Doble Carne de Res, Queso Americano, Tocino, Cubierta de Costa de Queso</div>
+                </div>
+                <div class="item-price">$8.00</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">La Bacon Cheese Doble</div>
+                    <div class="item-desc">Pan Artesanal, Doble Carne de Res, Queso Americano, Queso Cheddar, Pepinillos y Tocino</div>
+                </div>
+                <div class="item-price">$8.00</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">La Argentina <span class="popular">Top</span></div>
+                    <div class="item-desc">Pan artesanal, carne de res, tomate, cebolla, pepinillos, aderezo de la casa, aguacate y tocino, coronada con un chorizo argentino</div>
+                </div>
+                <div class="item-price">$8.00</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">La Atascada</div>
+                    <div class="item-desc">Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla, Dedos de Queso, Tocino, Coronada con Aros de Cebolla</div>
+                </div>
+                <div class="item-price">$8.50</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">La Triple Carne</div>
+                    <div class="item-desc">Pan Artesanal, Triple Carne de Res, Lechuga, Queso, Tomate y Cebolla Caramelizada y Tocino</div>
+                </div>
+                <div class="item-price">$8.50</div>
+            </div>
+            <p class="note">Todas las hamburguesas incluyen papas</p>
+        </section>
+
+        <!-- Las Paponas -->
+        <section class="menu-section fade-up" id="paponas">
+            <div class="section-header">
+                <span class="s-emoji">🍟</span>
+                <h3>Las Paponas</h3>
+                <span class="section-count">5 items</span>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">Papas Mexicanas <span class="popular">Top</span></div>
+                    <div class="item-desc">Papas Fritas con Carne de Res Asada, Chirmol, Aguacate, Jalapeños, Aderezo, Queso y Salsa de la Casa</div>
+                </div>
+                <div class="item-price">$6.00</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">Salchipapa</div>
+                    <div class="item-desc">Papas Fritas con Salchicha, Queso y Aderezo</div>
+                </div>
+                <div class="item-price">$5.50</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">Papas Bacon</div>
+                    <div class="item-desc">Papas fritas con queso y tocino</div>
+                </div>
+                <div class="item-price">$5.50</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">Papas Chicken</div>
+                    <div class="item-desc">Papas Fritas con Pechuga de Pollo Empanizado con Queso y Aderezo de la Casa</div>
+                </div>
+                <div class="item-price">$5.50</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">Papas Chili</div>
+                    <div class="item-desc">Papas Fritas con Chili de la Casa, Queso y Jalapeños</div>
+                </div>
+                <div class="item-price">$5.50</div>
+            </div>
+        </section>
+
+        <!-- Las Crujientes -->
+        <section class="menu-section fade-up" id="crujientes">
+            <div class="section-header">
+                <span class="s-emoji">🔥</span>
+                <h3>Las Crujientes</h3>
+                <span class="section-count">7 items</span>
+            </div>
+            <div class="sub-category">🍗 Wings</div>
+            <div class="menu-item">
+                <div class="item-info"><div class="item-name">5 Alitas + Papas</div></div>
+                <div class="item-price">$6.00</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info"><div class="item-name">10 Alitas + Papas</div></div>
+                <div class="item-price">$8.00</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info"><div class="item-name">15 Alitas + Papas</div></div>
+                <div class="item-price">$12.00</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info"><div class="item-name">20 Alitas + Papas</div></div>
+                <div class="item-price">$18.00</div>
+            </div>
+            <div class="sub-category">🍗 Chunks</div>
+            <div class="menu-item">
+                <div class="item-info"><div class="item-name">8 Chunks + Papas</div></div>
+                <div class="item-price">$5.00</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info"><div class="item-name">16 Chunks + Papas</div></div>
+                <div class="item-price">$8.00</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info"><div class="item-name">25 Chunks + Papas</div></div>
+                <div class="item-price">$15.00</div>
+            </div>
+            <p style="color:var(--text-muted); font-size:0.78rem; margin-top:8px; text-align:center;">🧴 Aderezos disponibles</p>
+        </section>
+
+        <!-- Para Tu Bendi -->
+        <section class="menu-section fade-up" id="bendi">
+            <div class="section-header">
+                <span class="s-emoji">👶</span>
+                <h3>Para Tu Bendi</h3>
+                <span class="section-count">1 item</span>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">Nuggets</div>
+                    <div class="item-desc">6 Nuggets bañados en tu salsa preferida acompañados de papas fritas</div>
+                </div>
+                <div class="item-price">$4.50</div>
+            </div>
+        </section>
+
+        <!-- Algo Leve -->
+        <section class="menu-section fade-up" id="algo-leve">
+            <div class="section-header">
+                <span class="s-emoji">🌭</span>
+                <h3>Algo Leve</h3>
+                <span class="section-count">3 items</span>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">Chili Dog</div>
+                    <div class="item-desc">Pan Artesanal, Salchicha, Chili de la Casa, Queso y Jalapeños</div>
+                </div>
+                <div class="item-price">$4.00</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">Bacon Dog</div>
+                    <div class="item-desc">Pan Artesanal, Salchicha, Aderezo, Queso y Baño de Tocino</div>
+                </div>
+                <div class="item-price">$4.00</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <div class="item-name">Mexican Dog</div>
+                    <div class="item-desc">Pan Artesanal, Salchicha Envuelta en Tocino, Aderezo, Cebolla Morada, Aguacate y Jalapeños</div>
+                </div>
+                <div class="item-price">$4.50</div>
+            </div>
+        </section>
+
+        <!-- Para Compartir -->
+        <section class="menu-section fade-up" id="compartir">
+            <div class="section-header">
+                <span class="s-emoji">🎉</span>
+                <h3>Para Compartir</h3>
+                <span class="section-count">3 combos</span>
+            </div>
+            <div class="section-note">📅 Válido Únicamente de Lunes a Jueves</div>
+            <div class="combo-highlight menu-item">
+                <div class="item-info">
+                    <div class="item-name">🧑 Pa' Uno</div>
+                    <div class="item-desc">1 Hamburguesa (Facilota, Cheese o Pío) + 1 Soda</div>
+                </div>
+                <div class="item-price">$5.50</div>
+            </div>
+            <div class="combo-highlight menu-item">
+                <div class="item-info">
+                    <div class="item-name">👫 Pa' Dos</div>
+                    <div class="item-desc">2 Hamburguesas (Facilota, Cheese o Pío) + Papas preparadas + 2 Sodas</div>
+                </div>
+                <div class="item-price">$15.00</div>
+            </div>
+            <div class="combo-highlight menu-item">
+                <div class="item-info">
+                    <div class="item-name">👨‍👩‍👧‍👦 Pa' Todos</div>
+                    <div class="item-desc">4 Hamburguesas (Facilota, Cheese o Pío) + 4 Papas + 1 Chunks + 1 Dedos de queso + 1 Coca 1.5 Lts</div>
+                </div>
+                <div class="item-price">$25.00</div>
+            </div>
+        </section>
+
+        <!-- Bebidas -->
+        <section class="menu-section fade-up" id="bebidas">
+            <div class="section-header">
+                <span class="s-emoji">🥤</span>
+                <h3>Bebidas Flama's</h3>
+                <span class="section-count">6 categorías</span>
+            </div>
+            <div class="sub-category">🍧 Frozen</div>
+            <div class="menu-item">
+                <div class="item-info"><div class="item-name">Fresa / Piña / Maracuyá / Limón</div></div>
+                <div class="item-price">$2.50</div>
+            </div>
+            <div class="sub-category">🥤 Malteadas</div>
+            <div class="menu-item">
+                <div class="item-info"><div class="item-name">Fresa / Oreo / Chocolate / Café / Coco</div></div>
+                <div class="item-price">$3.50</div>
+            </div>
+            <div class="sub-category">🍋 Limonadas (Incluyen Boba)</div>
+            <div class="menu-item">
+                <div class="item-info"><div class="item-name">Fresa / Hierbabuena / Piña / Cherry / Azul / Maracuyá</div></div>
+                <div class="item-price">$3.50</div>
+            </div>
+            <div class="sub-category">🧃 Refrescantes</div>
+            <div class="menu-item">
+                <div class="item-info"><div class="item-name">Horchata de Maní / Limonada Normal</div></div>
+                <div class="item-price">—</div>
+            </div>
+            <div class="sub-category">🥤 Sodas</div>
+            <div class="menu-item">
+                <div class="item-info"><div class="item-name">Coca Cola / Coca Cola 0 / Uva / Fanta / Sprite / Té de Frambuesa / Té de Durazno</div></div>
+                <div class="item-price">—</div>
+            </div>
+            <div class="sub-category">☕ Café</div>
+            <div class="menu-item">
+                <div class="item-info"><div class="item-name">Café Caliente</div></div>
+                <div class="item-price">$1.00</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info"><div class="item-name">Café con Leche</div></div>
+                <div class="item-price">$1.25</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info"><div class="item-name">Iced Coffee (Incluye Jellys de Café)</div></div>
+                <div class="item-price">$2.50</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info"><div class="item-name">Botella con Agua</div></div>
+                <div class="item-price">$1.00</div>
+            </div>
+        </section>
+
+        <!-- Extras -->
+        <section class="menu-section fade-up" id="extras">
+            <div class="section-header">
+                <span class="s-emoji">➕</span>
+                <h3>Extras</h3>
+                <span class="section-count">6 items</span>
+            </div>
+            <div class="menu-item">
+                <div class="item-info"><div class="item-name">Carne Extra</div></div>
+                <div class="item-price">$1.50</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info"><div class="item-name">Aderezo Extra</div></div>
+                <div class="item-price">$0.50</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info"><div class="item-name">Queso Cheddar Extra</div></div>
+                <div class="item-price">$1.50</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info"><div class="item-name">Agrandado de Papas</div></div>
+                <div class="item-price">$1.50</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info"><div class="item-name">Cambio de Papas a Preparadas</div></div>
+                <div class="item-price">Desde $1.50</div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info"><div class="item-name">Tocino Extra</div></div>
+                <div class="item-price">$0.50</div>
+            </div>
+        </section>
+
+        <!-- CTA Final -->
+        <section class="fade-up" style="text-align:center; padding: 40px 20px;">
+            <p style="font-family:'Bebas Neue',cursive; font-size:2rem; color:var(--gold); letter-spacing:2px; margin-bottom:0.5rem;">¿LISTO PARA PEDIR?</p>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:1.5rem;">Haz tu pedido ahora o llámanos directamente</p>
+            <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+                <a href="Ordenar.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 32px;background:var(--red);color:#fff;text-decoration:none;font-weight:700;font-size:0.9rem;border-radius:50px;transition:var(--transition);text-transform:uppercase;letter-spacing:0.5px;" onmouseover="this.style.boxShadow='0 6px 28px rgba(217,48,37,0.4)';this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='none';this.style.transform='none'">🛒 Ordenar Online</a>
+                <a href="Compras.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 32px;background:transparent;color:var(--gold);border:1.5px solid var(--gold);text-decoration:none;font-weight:700;font-size:0.9rem;border-radius:50px;transition:var(--transition);text-transform:uppercase;letter-spacing:0.5px;" onmouseover="this.style.background='var(--gold)';this.style.color='#1a1a1a';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='transparent';this.style.color='var(--gold)';this.style.transform='none'">📦 Ver Compras</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="f-logo">FLAMA'S</div>
+                <div class="f-sub">The Best Burgers in Jucuapa</div>
+                <p>Desde 2024 llevando las mejores hamburguesas a Jucuapa. Cada bocado es una experiencia Flama's.</p>
+                <div class="social-links">
+                    <a href="#" title="WhatsApp">📱</a>
+                    <a href="#" title="Facebook">📘</a>
+                    <a href="#" title="Instagram">📸</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Menú</h4>
+                <a href="Menú.html">Menú</a>
+                <a href="pollo.html">Pollo</a>
+                <a href="premium.html">Premium</a>
+                <a href="combos.html">Combos</a>
+            </div>
+            <div class="footer-col">
+                <h4>Enlaces</h4>
+                <a href="index.html">Inicio</a>
+                <a href="Ordenar.html">Ordenar</a>
+                <a href="Compras.html">Mis Compras</a>
+                <a href="#">📞 5972-9855</a>
+                <a href="#">📞 5474-111</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Flama's. Todos los derechos reservados. · Jucuapa, El Salvador</p>
+        </div>
+    </footer>
+
+    <!-- Floating Actions -->
+    <div class="floating-actions">
+        <a href="https://wa.me/50359729855?text=Hola%20Flama's!%20Quiero%20hacer%20un%20pedido" target="_blank" class="fab fab-whatsapp" title="WhatsApp">💬</a>
+        <button class="fab fab-top" id="fabTop" title="Volver arriba">↑</button>
+    </div>
+
+    <script>
+        // ─── Loader ───
+        window.addEventListener('load', () => {
+            setTimeout(() => document.getElementById('loader').classList.add('hidden'), 600);
+        });
+
+        // ─── Navbar scroll ───
+        const navbar = document.getElementById('navbar');
+        const fabTop = document.getElementById('fabTop');
+        window.addEventListener('scroll', () => {
+            const y = window.scrollY;
+            navbar.classList.toggle('scrolled', y > 50);
+            fabTop.classList.toggle('visible', y > 500);
+        }, { passive: true });
+
+        // ─── Scroll to top ───
+        fabTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ─── Dropdown ───
+        const dropdown = document.getElementById('menuDropdown');
+        const dropdownBtn = document.getElementById('dropdownBtn');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+
+        dropdownBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdown.classList.toggle('open');
+        });
+        dropdownMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => dropdown.classList.remove('open'));
+        });
+        document.addEventListener('click', (e) => {
+            if (!dropdown.contains(e.target)) dropdown.classList.remove('open');
+        });
+
+        // ─── Mobile Panel ───
+        const mobileToggle = document.getElementById('mobileToggle');
+        const mobilePanel = document.getElementById('mobilePanel');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+
+        function openMobile() {
+            mobilePanel.classList.add('open');
+            mobileToggle.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeMobile() {
+            mobilePanel.classList.remove('open');
+            mobileToggle.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        mobileToggle.addEventListener('click', () => {
+            mobilePanel.classList.contains('open') ? closeMobile() : openMobile();
+        });
+        mobileOverlay.addEventListener('click', closeMobile);
+
+        // Cerrar drawer al hacer clic en un enlace
+        mobilePanel.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', () => {
+                closeMobile();
+                dropdown.classList.remove('open');
+            });
+        });
+
+        // ─── Intersection Observer: fade-up ───
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        // ─── Tabs activos al hacer scroll ───
+        const sections = document.querySelectorAll('.menu-section[id]');
+        const tabLinks = document.querySelectorAll('.cat-tab');
+        // No cambiamos tabs por scroll porque son links a otras páginas, 
+        // pero destacamos la sección activa en el dropdown
+        const dmSectionLinks = dropdownMenu.querySelectorAll('a[href^="#"]');
+        
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.id;
+                    dmSectionLinks.forEach(l => {
+                        l.classList.toggle('current', l.getAttribute('href') === '#' + id);
+                    });
+                }
+            });
+        }, { threshold: 0.2, rootMargin: '-120px 0px -60% 0px' });
+        sections.forEach(s => sectionObserver.observe(s));
+
+        // ─── Cerrar dropdown con Escape ───
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                dropdown.classList.remove('open');
+                closeMobile();
+            }
+        });
+    </script>
+</body>
+</html>
