@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BurgerCraft | Menú - Las Mejores Hamburguesas Artesanales</title>
+    <title>FLAMA'S | Nuestra Historia - The Best Burgers in Jucuapa</title>
     <link rel="icon" href="img/Logoburger-.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -46,6 +46,18 @@
             border-radius: 4px;
         }
 
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+        }
+
         /* ==========================================
            LOADER (AGREGADO DESDE INDEX.HTML)
            ========================================== */
@@ -80,7 +92,7 @@
         }
 
         /* ==========================================
-           NAVBAR (IGUAL A INDEX.HTML)
+           NAVBAR (IGUAL A MENÚ.HTML)
            ========================================== */
         nav {
             position: fixed;
@@ -264,15 +276,27 @@
         }
 
         /* ==========================================
-           HERO MENÚ
+           HERO HISTORIA
            ========================================== */
-        .hero-menu {
-            padding: 140px 5% 60px;
+        .hero-historia {
+            padding: 140px 5% 80px;
             text-align: center;
-            background: linear-gradient(180deg, rgba(255,77,0,0.1) 0%, transparent 50%);
+            background: linear-gradient(180deg, rgba(255,77,0,0.15) 0%, transparent 50%);
+            position: relative;
+            overflow: hidden;
         }
 
-        .hero-menu h1 {
+        .hero-historia::before {
+            content: '🔥';
+            position: absolute;
+            font-size: 300px;
+            opacity: 0.03;
+            bottom: -50px;
+            right: -50px;
+            pointer-events: none;
+        }
+
+        .hero-historia h1 {
             font-family: 'Bebas Neue', cursive;
             font-size: clamp(3rem, 8vw, 6rem);
             background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -280,139 +304,302 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             letter-spacing: 4px;
+            margin-bottom: 16px;
         }
 
-        .hero-menu p {
+        .hero-historia p {
             color: var(--text-muted);
-            margin-top: 16px;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 77, 0, 0.1);
+            border: 1px solid rgba(255, 77, 0, 0.3);
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         /* ==========================================
-           CONTENIDO DEL MENÚ
+           CONTENIDO PRINCIPAL
            ========================================== */
         main {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 20px 20px 80px;
+            padding: 40px 20px 80px;
         }
 
-        .menu-section {
+        /* Historia Section */
+        .historia-section {
+            background: var(--gray);
+            border-radius: 30px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .historia-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .historia-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .historia-text h2 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .historia-text p {
+            color: rgba(255,255,255,0.7);
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        .historia-text .fecha-destacada {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .historia-image {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+        }
+
+        .historia-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s;
+        }
+
+        .historia-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .historia-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,77,0,0.2), transparent);
+            pointer-events: none;
+        }
+
+        /* Misión, Visión, Valores */
+        .mvv-section {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .mvv-card {
             background: var(--gray);
             border-radius: 24px;
-            padding: 24px;
-            margin-bottom: 30px;
+            padding: 30px;
             border: 1px solid var(--glass-border);
             transition: all 0.3s;
+            text-align: center;
         }
 
-        .menu-section:hover {
+        .mvv-card:hover {
+            transform: translateY(-8px);
             border-color: rgba(255, 77, 0, 0.3);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
 
-        .section-header {
+        .mvv-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, rgba(255,77,0,0.1), rgba(255,140,0,0.05));
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 12px;
-            border-bottom: 1px solid var(--glass-border);
-            padding-bottom: 12px;
-            margin-bottom: 20px;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            border: 1px solid rgba(255,77,0,0.3);
         }
 
-        .section-header .emoji {
-            font-size: 28px;
-        }
-
-        .section-header h2 {
+        .mvv-card h3 {
             font-family: 'Bebas Neue', cursive;
             font-size: 1.8rem;
             color: var(--primary);
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+        }
+
+        .mvv-card p {
+            color: rgba(255,255,255,0.7);
+            line-height: 1.7;
+            font-size: 0.9rem;
+        }
+
+        /* Valores Grid */
+        .valores-section {
+            background: var(--gray);
+            border-radius: 30px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .valores-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .valores-header h2 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.2rem;
+            color: var(--primary);
             letter-spacing: 2px;
-            flex: 1;
+            margin-bottom: 10px;
         }
 
-        .section-count {
-            font-size: 0.7rem;
+        .valores-header p {
             color: var(--text-muted);
-            background: rgba(255,255,255,0.05);
-            padding: 4px 12px;
-            border-radius: 20px;
         }
 
-        .menu-item {
+        .valores-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+        }
+
+        .valor-item {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .valor-item:hover {
+            border-color: rgba(255,77,0,0.3);
+            transform: translateY(-5px);
+            background: rgba(255,77,0,0.05);
+        }
+
+        .valor-icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        .valor-item h4 {
+            color: var(--primary);
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .valor-item p {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            line-height: 1.4;
+        }
+
+        /* Timeline */
+        .timeline-section {
+            background: var(--gray);
+            border-radius: 30px;
+            padding: 40px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .timeline-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .timeline-header h2 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.2rem;
+            color: var(--primary);
+            letter-spacing: 2px;
+        }
+
+        .timeline {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            gap: 16px;
-            padding: 12px 0;
-            border-bottom: 1px dotted rgba(255,255,255,0.05);
-        }
-
-        .menu-item:last-child {
-            border-bottom: none;
-        }
-
-        .item-info {
-            flex: 1;
-        }
-
-        .item-name {
-            font-weight: 700;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            position: relative;
             flex-wrap: wrap;
         }
 
-        .popular {
-            font-size: 0.55rem;
-            background: var(--primary);
-            color: #fff;
-            padding: 2px 8px;
-            border-radius: 4px;
-            text-transform: uppercase;
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            opacity: 0.3;
         }
 
-        .item-desc {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-top: 4px;
-        }
-
-        .item-price {
-            font-weight: 800;
-            font-size: 1rem;
-            color: var(--primary);
-            background: rgba(255, 77, 0, 0.1);
-            border: 1px solid rgba(255, 77, 0, 0.2);
-            padding: 6px 16px;
-            border-radius: 30px;
-            white-space: nowrap;
-        }
-
-        .note {
-            font-size: 0.7rem;
-            color: var(--primary);
+        .timeline-item {
             text-align: center;
-            margin-top: 16px;
-            padding: 8px;
-            background: rgba(255, 77, 0, 0.05);
-            border-radius: 8px;
+            flex: 1;
+            min-width: 100px;
+            position: relative;
+            z-index: 1;
         }
 
-        .sub-category {
-            font-weight: 800;
-            font-size: 0.85rem;
-            color: #e8d5a3;
-            margin: 16px 0 8px;
-            padding-bottom: 4px;
-            border-bottom: 1px solid var(--glass-border);
+        .timeline-year {
+            width: 60px;
+            height: 60px;
+            background: var(--dark);
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.3rem;
+            color: var(--primary);
+            font-weight: 700;
         }
 
-        /* ==========================================
-           FOOTER
-           ========================================== */
+        .timeline-text {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Footer */
         footer {
             background: var(--dark);
             padding: 60px 5% 30px;
@@ -553,10 +740,39 @@
             color: var(--primary);
         }
 
-        /* ==========================================
-           RESPONSIVE
-           ========================================== */
-        @media (max-width: 900px) {
+        /* Responsive */
+        @media (max-width: 968px) {
+            .historia-grid {
+                grid-template-columns: 1fr;
+            }
+            .mvv-section {
+                grid-template-columns: 1fr;
+            }
+            .valores-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .timeline::before {
+                display: none;
+            }
+            .timeline {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                width: 95%;
+                padding: 0.8rem 1.5rem;
+            }
             .nav-links {
                 position: fixed;
                 top: 0;
@@ -577,33 +793,15 @@
             .menu-toggle {
                 display: flex;
             }
-            .footer-content {
+            .valores-grid {
                 grid-template-columns: 1fr;
-                gap: 30px;
             }
-            .footer-bottom {
-                flex-direction: column;
-                gap: 16px;
+            .historia-section {
+                padding: 24px;
             }
         }
 
-        @media (max-width: 600px) {
-            nav {
-                padding: 0.8rem 1.5rem;
-            }
-            .logo-main {
-                font-size: 1.5rem;
-            }
-            .menu-section {
-                padding: 16px;
-            }
-            .item-price {
-                font-size: 0.85rem;
-                padding: 4px 12px;
-            }
-        }
-
-        /* Animaciones */
+        /* Animations */
         .fade-up {
             opacity: 0;
             transform: translateY(30px);
@@ -631,7 +829,7 @@
         </svg>
     </div>
 
-    <!-- Navigation (EXACTAMENTE IGUAL A INDEX.HTML) -->
+    <!-- Navigation (IGUAL A MENÚ.HTML) -->
     <nav id="navbar">
         <a href="index.html" class="logo-container">
             <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -645,15 +843,15 @@
                 <path d="M 20 75 Q 50 85 80 75 L 80 72 Q 50 82 20 72 Z" fill="#F7931E" stroke="#FF4D00" stroke-width="1.5"/>
             </svg>
             <div class="logo-text">
-                <span class="logo-main">Flama's</span>
+                <span class="logo-main">FLAMA'S</span>
                 <span class="logo-sub">Desde 2024</span>
             </div>
         </a>
 
         <ul class="nav-links" id="navLinks">
             <li><a href="index.html">Inicio</a></li>
-            <li><a href="Menú.html" class="active">Menú</a></li>
-            <li><a href="historia.html">Historia</a></li>
+            <li><a href="Menú.html">Menú</a></li>
+            <li><a href="historia.html" class="active">Historia</a></li>
             <li><a href="premium.html">Premium</a></li>
             <li><a href="combos.html">Combos</a></li>
             <li><a href="Compras.html">Compras</a></li>
@@ -668,235 +866,126 @@
     </nav>
 
     <!-- Hero -->
-    <section class="hero-menu">
-        <h1>NUESTRO MENÚ</h1>
-        <p>Descubre todas nuestras especialidades artesanales</p>
+    <section class="hero-historia">
+        <div class="hero-badge">🔥 Desde 2024</div>
+        <h1>NUESTRA HISTORIA</h1>
+        <p>El origen de la llama que encendió la pasión por las mejores hamburguesas de Jucuapa</p>
     </section>
 
     <main>
-        <!-- Entradas -->
-        <section class="menu-section fade-up">
-            <div class="section-header">
-                <span class="emoji">🥖</span>
-                <h2>Para Empezar</h2>
-                <span class="section-count">4 items</span>
-            </div>
-            <div class="menu-item">
-                <div class="item-info">
-                    <div class="item-name">Pan con Ajo <span class="popular">Popular</span></div>
-                    <div class="item-desc">Pan artesanal tostado con mantequilla y ajo fresco (4 unidades)</div>
+        <!-- Historia Principal -->
+        <div class="historia-section fade-up">
+            <div class="historia-grid">
+                <div class="historia-text">
+                    <h2>El Nacimiento de FLAMA'S</h2>
+                    <p>Corría el año 2024 en la tranquila ciudad de Jucuapa, cuando un joven emprendedor llamado Alejandro "Alex" Flores decidió seguir su sueño más grande: crear la mejor hamburguesa que su ciudad natal hubiera probado jamás.</p>
+                    <p>Después de años trabajando en restaurantes de renombre y perfeccionando recetas secretas en su pequeña cocina, Alex descubrió que el verdadero secreto no estaba solo en los ingredientes, sino en la <strong>pasión</strong> con la que se preparaba cada platillo. Así nació FLAMA'S, un nombre que representa el fuego interior que impulsa a su equipo a dar lo mejor cada día.</p>
+                    <p>Lo que comenzó como un pequeño local de 4 mesas en el corazón de Jucuapa, rápidamente se convirtió en el punto de encuentro favorito de los amantes de las buenas hamburguesas. El boca a boca y la calidad inigualable hicieron que FLAMA'S creciera, pero nunca perdió su esencia: <strong>sabor auténtico, ingredientes frescos y atención personalizada</strong>.</p>
+                    <div class="fecha-destacada">
+                        📍 Jucuapa, El Salvador | Fundado: 15 de marzo de 2024
+                    </div>
                 </div>
-                <div class="item-price">$2.50</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info">
-                    <div class="item-name">Papas Sazonadas</div>
-                    <div class="item-desc">Crujientes papas fritas con especias especiales</div>
+                <div class="historia-image">
+                    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600" alt="Nuestro primer local">
                 </div>
-                <div class="item-price">$2.50</div>
             </div>
-            <div class="menu-item">
-                <div class="item-info">
-                    <div class="item-name">Dedos de Queso</div>
-                    <div class="item-desc">Empanizados y crujientes (5 unidades)</div>
+        </div>
+
+        <!-- Misión, Visión, Valores -->
+        <div class="mvv-section">
+            <div class="mvv-card fade-up">
+                <div class="mvv-icon">🎯</div>
+                <h3>Misión</h3>
+                <p>Brindar una experiencia única a través de nuestras alitas, hamburguesas y bebidas, ofreciendo sabor, calidad y un ambiente auténtico donde cada cliente disfrute momentos especiales con atención cercana y productos preparados con pasión.</p>
+            </div>
+            <div class="mvv-card fade-up">
+                <div class="mvv-icon">👁️</div>
+                <h3>Visión</h3>
+                <p>Ser una de las marcas de comida rápida más reconocidas y queridas en El Salvador, destacándonos por nuestra creatividad, sabor inigualable y conexión con nuestros clientes, llevando la esencia de Flama's a más personas cada día.</p>
+            </div>
+            <div class="mvv-card fade-up">
+                <div class="mvv-icon">💎</div>
+                <h3>Propósito</h3>
+                <p>Transformar cada hamburguesa en una experiencia única, donde la calidad, el sabor y el servicio se unen para crear momentos especiales que nuestros clientes atesorarán para siempre.</p>
+            </div>
+        </div>
+
+        <!-- Valores -->
+        <div class="valores-section fade-up">
+            <div class="valores-header">
+                <h2>Nuestros Valores</h2>
+                <p>Los principios que guían cada hamburguesa que sale de nuestra cocina</p>
+            </div>
+            <div class="valores-grid">
+                <div class="valor-item">
+                    <div class="valor-icon">🔥</div>
+                    <h4>Calidad</h4>
+                    <p>Usamos ingredientes y procesos que garanticen el mejor sabor.</p>
                 </div>
-                <div class="item-price">$3.00</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info">
-                    <div class="item-name">Aros de Cebolla</div>
-                    <div class="item-desc">Crujientes por fuera, tiernos por dentro (8 unidades)</div>
+                <div class="valor-item">
+                    <div class="valor-icon">🥩</div>
+                    <h4>Pasión</h4>
+                    <p>Cocinamos y atendemos con dedicación y energía.</p>
                 </div>
-                <div class="item-price">$2.50</div>
-            </div>
-        </section>
-
-        <!-- Hamburguesas de Pollo -->
-        <section class="menu-section fade-up">
-            <div class="section-header">
-                <span class="emoji">🍗</span>
-                <h2>Hamburguesas de Pollo</h2>
-                <span class="section-count">3 items</span>
-            </div>
-            <div class="menu-item">
-                <div class="item-info">
-                    <div class="item-name">La Pió</div>
-                    <div class="item-desc">Pollo crujiente, queso, cebolla caramelizada, lechuga y tomate</div>
+                <div class="valor-item">
+                    <div class="valor-icon">🤝</div>
+                    <h4>Creatividad</h4>
+                    <p>Innovamos constantemente en productos y contenido.</p>
                 </div>
-                <div class="item-price">$5.00</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info">
-                    <div class="item-name">La Chipotle</div>
-                    <div class="item-desc">Pollo crujiente bañado en salsa chipotle, queso, cebolla caramelizada</div>
+                <div class="valor-item">
+                    <div class="valor-icon">⭐</div>
+                    <h4>Compromiso</h4>
+                    <p>Damos lo mejor en cada pedido y experiencia</p>
                 </div>
-                <div class="item-price">$6.00</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info">
-                    <div class="item-name">La Barbie</div>
-                    <div class="item-desc">Pollo crujiente bañado en salsa barbacoa, queso, cebolla caramelizada</div>
+                <div class="valor-item">
+                    <div class="valor-icon">💡</div>
+                    <h4>Responsabilidad</h4>
+                    <p>Cumplimos con nuestros clientes y cuidamos cada detalle.</p>
                 </div>
-                <div class="item-price">$6.00</div>
+                <div class="valor-item">
+                    <div class="valor-icon">👥</div>
+                    <h4>Trabajo en Equipo</h4>
+                    <p>Crecemos juntos para hacer de Flama's algo grande.</p>
+                </div>
+                <div class="valor-item">
+                    <div class="valor-icon">✨</div>
+                    <h4>Autenticidad</h4>
+                    <p>Mantenemos una esencia única, juvenil y sin filtro.</p>
+                </div>
             </div>
-            <div class="note">🍟 Todas incluyen papas fritas</div>
-        </section>
-
-        <!-- Hamburguesas de Res -->
-        <section class="menu-section fade-up">
-            <div class="section-header">
-                <span class="emoji">🥩</span>
-                <h2>Hamburguesas de Res</h2>
-                <span class="section-count">9 items</span>
+        </div>
+        <!-- Línea de Tiempo -->
+        <div class="timeline-section fade-up">
+            <div class="timeline-header">
+                <h2>Línea de Tiempo</h2>
+                <p>Los momentos más importantes de nuestra historia</p>
             </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Facilota</div><div class="item-desc">Carne de res, lechuga, queso, tomate, cebolla caramelizada</div></div>
-                <div class="item-price">$5.00</div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-year">2024</div>
+                    <div class="timeline-text">Fundación de FLAMA'S en Jucuapa</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2024</div>
+                    <div class="timeline-text">Apertura del primer local</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2025</div>
+                    <div class="timeline-text">Lanzamiento del menú Premium</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2025</div>
+                    <div class="timeline-text">+10,000 clientes felices</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2026</div>
+                    <div class="timeline-text">Expansión y nuevo concepto</div>
+                </div>
             </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Cheese</div><div class="item-desc">Carne de res, queso americano y queso cheddar</div></div>
-                <div class="item-price">$5.00</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Honguito</div><div class="item-desc">Carne, hongos en salsa de la casa, queso, cebolla caramelizada</div></div>
-                <div class="item-price">$6.00</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Tropical <span class="popular">Nuevo</span></div><div class="item-desc">Carne, piña, tocino, lechuga, queso, tomate, cebolla caramelizada</div></div>
-                <div class="item-price">$6.00</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Bacon Cheese</div><div class="item-desc">Carne, queso americano, queso cheddar, pepinillos, tocino</div></div>
-                <div class="item-price">$6.00</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Ahuevada</div><div class="item-desc">Carne, huevo estrellado, tocino, lechuga, queso, tomate</div></div>
-                <div class="item-price">$6.00</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Guacamole</div><div class="item-desc">Carne, aguacate, tocino, lechuga, queso, tomate, cebolla morada</div></div>
-                <div class="item-price">$6.00</div>
-            </div>
-            <div class="note">🍟 Todas incluyen papas fritas</div>
-        </section>
-
-        <!-- Premium -->
-        <section class="menu-section fade-up">
-            <div class="section-header">
-                <span class="emoji">💎</span>
-                <h2>Premium</h2>
-                <span class="section-count">4 items</span>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Bañada <span class="popular">Top</span></div><div class="item-desc">Bañada en queso cheddar, carne, tocino, lechuga, tomate</div></div>
-                <div class="item-price">$7.50</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Engañosa</div><div class="item-desc">Servida en cama de queso cheddar, carne, lechuga, tomate</div></div>
-                <div class="item-price">$7.50</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Doble Carne</div><div class="item-desc">Doble carne, tocino, lechuga, queso, tomate, cebolla caramelizada</div></div>
-                <div class="item-price">$7.50</div>
-            </div>
-            <div class="note">🍟 Todas incluyen papas fritas</div>
-        </section>
-
-        <!-- Especialidades -->
-        <section class="menu-section fade-up">
-            <div class="section-header">
-                <span class="emoji">👑</span>
-                <h2>Especialidades</h2>
-                <span class="section-count">5 items</span>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Mar y Tierra</div><div class="item-desc">Carne, camarones empanizados, queso, tocino, lechuga, tomate</div></div>
-                <div class="item-price">$8.00</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Castrosa</div><div class="item-desc">Doble carne, queso americano, tocino, costa de queso</div></div>
-                <div class="item-price">$8.00</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Argentina <span class="popular">Top</span></div><div class="item-desc">Carne, chorizo argentino, aguacate, tocino, aderezo especial</div></div>
-                <div class="item-price">$8.00</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Triple Carne</div><div class="item-desc">Triple carne, tocino, lechuga, queso, tomate, cebolla caramelizada</div></div>
-                <div class="item-price">$8.50</div>
-            </div>
-            <div class="note">🍟 Todas incluyen papas fritas</div>
-        </section>
-
-        <!-- Papas Preparadas -->
-        <section class="menu-section fade-up">
-            <div class="section-header">
-                <span class="emoji">🍟</span>
-                <h2>Papas Preparadas</h2>
-                <span class="section-count">5 items</span>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">Papas Mexicanas <span class="popular">Top</span></div><div class="item-desc">Carne asada, chirmol, aguacate, jalapeños, queso</div></div>
-                <div class="item-price">$6.00</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">Salchipapa</div><div class="item-desc">Salchicha, queso y aderezo</div></div>
-                <div class="item-price">$5.50</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">Papas Bacon</div><div class="item-desc">Queso y tocino</div></div>
-                <div class="item-price">$5.50</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">Papas Chicken</div><div class="item-desc">Pechuga empanizada, queso y aderezo</div></div>
-                <div class="item-price">$5.50</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">Papas Chili</div><div class="item-desc">Chili de la casa, queso y jalapeños</div></div>
-                <div class="item-price">$5.50</div>
-            </div>
-        </section>
-
-        <!-- Alitas y Chunks -->
-        <section class="menu-section fade-up">
-            <div class="section-header">
-                <span class="emoji">🔥</span>
-                <h2>Alitas y Chunks</h2>
-                <span class="section-count">7 items</span>
-            </div>
-            <div class="sub-category">🍗 Alitas</div>
-            <div class="menu-item"><div class="item-info"><div class="item-name">5 Alitas + Papas</div></div><div class="item-price">$6.00</div></div>
-            <div class="menu-item"><div class="item-info"><div class="item-name">10 Alitas + Papas</div></div><div class="item-price">$8.00</div></div>
-            <div class="menu-item"><div class="item-info"><div class="item-name">15 Alitas + Papas</div></div><div class="item-price">$12.00</div></div>
-            <div class="sub-category">🍗 Chunks</div>
-            <div class="menu-item"><div class="item-info"><div class="item-name">8 Chunks + Papas</div></div><div class="item-price">$5.00</div></div>
-            <div class="menu-item"><div class="item-info"><div class="item-name">16 Chunks + Papas</div></div><div class="item-price">$8.00</div></div>
-            <div class="menu-item"><div class="item-info"><div class="item-name">25 Chunks + Papas</div></div><div class="item-price">$15.00</div></div>
-        </section>
-
-        <!-- Bebidas -->
-        <section class="menu-section fade-up">
-            <div class="section-header">
-                <span class="emoji">🥤</span>
-                <h2>Bebidas</h2>
-                <span class="section-count">Variedad</span>
-            </div>
-            <div class="sub-category">🍧 Frozen</div>
-            <div class="menu-item"><div class="item-info"><div class="item-name">Fresa / Piña / Maracuyá / Limón</div></div><div class="item-price">$2.50</div></div>
-            <div class="sub-category">🥤 Malteadas</div>
-            <div class="menu-item"><div class="item-info"><div class="item-name">Fresa / Oreo / Chocolate / Café / Coco</div></div><div class="item-price">$3.50</div></div>
-            <div class="sub-category">🍋 Limonadas</div>
-            <div class="menu-item"><div class="item-info"><div class="item-name">Fresa / Hierbabuena / Piña / Cherry / Azul / Maracuyá</div></div><div class="item-price">$3.50</div></div>
-            <div class="sub-category">🥤 Sodas</div>
-            <div class="menu-item"><div class="item-info"><div class="item-name">Coca Cola / Coca 0 / Uva / Fanta / Sprite</div></div><div class="item-price">$1.50</div></div>
-            <div class="sub-category">☕ Café</div>
-            <div class="menu-item"><div class="item-info"><div class="item-name">Café Caliente</div></div><div class="item-price">$1.00</div></div>
-            <div class="menu-item"><div class="item-info"><div class="item-name">Café con Leche</div></div><div class="item-price">$1.25</div></div>
-            <div class="menu-item"><div class="item-info"><div class="item-name">Iced Coffee</div></div><div class="item-price">$2.50</div></div>
-        </section>
+        </div>
     </main>
 
-    <!-- Footer (IGUAL A INDEX.HTML) -->
+    <!-- Footer (IGUAL A MENÚ.HTML) -->
     <footer>
         <div class="footer-content">
             <div class="footer-brand">
@@ -912,8 +1001,8 @@
                         <path d="M 20 75 Q 50 85 80 75 L 80 72 Q 50 82 20 72 Z" fill="#F7931E" stroke="#FF4D00" stroke-width="1.5"/>
                     </svg>
                     <div class="footer-logo-text">
-                        <span class="main">BurgerCraft</span>
-                        <span class="sub">Est. 2018</span>
+                        <span class="main">FLAMA'S</span>
+                        <span class="sub">Since 2024</span>
                     </div>
                 </div>
                 <p>Las mejores hamburguesas artesanales de Jucuapa. Hechas con amor, pasión y los mejores ingredientes locales.</p>
@@ -926,28 +1015,30 @@
             <div class="footer-section">
                 <h3>Horario</h3>
                 <ul>
-                    <li><a href="#">Lun - Vie: 11:00 - 22:00</a></li>
-                    <li><a href="#">Sáb - Dom: 12:00 - 23:00</a></li>
+                    <li><a href="#">Lun - Jue: 11:00 - 21:00</a></li>
+                    <li><a href="#">Vie - Sáb: 11:00 - 22:00</a></li>
+                    <li><a href="#">Domingo: 11:00 - 20:00</a></li>
                 </ul>
             </div>
             <div class="footer-section footer-contact">
                 <h3>Contacto</h3>
-                <p>📍 Plaza, Jucuapa</p>
-                <p>📞 7067-1505</p>
-                <p>✉️ hola@burgercraft.com</p>
+                <p>📍 Jucuapa, El Salvador</p>
+                <p>📞 5972-9855</p>
+                <p>📞 5474-1111</p>
+                <p>✉️ hola@flamas.com</p>
             </div>
             <div class="footer-section">
                 <h3>Enlaces</h3>
                 <ul>
                     <li><a href="Menú.html">→ Menú</a></li>
                     <li><a href="premium.html">→ Premium</a></li>
-                    <li><a href="historia.html">→ Historia</a></li>
                     <li><a href="combos.html">→ Combos</a></li>
+                    <li><a href="historia.html">→ Historia</a></li>
                 </ul>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2026 BurgerCraft. Todos los derechos reservados.</p>
+            <p>&copy; 2026 FLAMA'S. Todos los derechos reservados. Jucuapa, El Salvador</p>
             <div class="footer-bottom-links">
                 <a href="#">Privacidad</a>
                 <a href="#">Términos</a>
