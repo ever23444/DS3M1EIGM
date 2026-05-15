@@ -267,9 +267,23 @@
            HERO MENÚ
            ========================================== */
         .hero-menu {
+            min-height: 100vh;
             padding: 140px 5% 60px;
             text-align: center;
-            background: linear-gradient(180deg, rgba(255,77,0,0.1) 0%, transparent 50%);
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(255, 77, 0, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(255, 140, 0, 0.1) 0%, transparent 50%),
+                linear-gradient(to bottom, rgba(5,5,5,0.3), rgba(5,5,5,0.9)),
+                url('https://drive.google.com/thumbnail?id=1a4WQvnHV9xE8NTnc4zL9IrZNNatlPGYH&sz=w1920');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
         }
 
         .hero-menu h1 {
@@ -615,6 +629,7 @@
             transform: translateY(0);
         }
     </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -669,8 +684,11 @@
 
     <!-- Hero -->
     <section class="hero-menu">
-        <h1>NUESTRO MENÚ</h1>
-        <p>Descubre todas nuestras especialidades artesanales</p>
+        <div class="hero-grid"></div>
+        <div class="hero-content">
+            <h1>NUESTRO MENÚ</h1>
+            <p>Descubre todas nuestras especialidades artesanales</p>
+        </div>
     </section>
 
     <main>
@@ -912,8 +930,8 @@
                         <path d="M 20 75 Q 50 85 80 75 L 80 72 Q 50 82 20 72 Z" fill="#F7931E" stroke="#FF4D00" stroke-width="1.5"/>
                     </svg>
                     <div class="footer-logo-text">
-                        <span class="main">BurgerCraft</span>
-                        <span class="sub">Est. 2018</span>
+                        <span class="main">Flama's</span>
+                        <span class="sub">Est. 2024</span>
                     </div>
                 </div>
                 <p>Las mejores hamburguesas artesanales de Jucuapa. Hechas con amor, pasión y los mejores ingredientes locales.</p>
@@ -934,7 +952,7 @@
                 <h3>Contacto</h3>
                 <p>📍 Plaza, Jucuapa</p>
                 <p>📞 7067-1505</p>
-                <p>✉️ hola@burgercraft.com</p>
+                <p>✉️ hola@flamas.com</p>
             </div>
             <div class="footer-section">
                 <h3>Enlaces</h3>
@@ -946,8 +964,8 @@
                 </ul>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 BurgerCraft. Todos los derechos reservados.</p>
+        <div class="footer-bottom">gt
+            <p>&copy; 2026 Flama's. Todos los derechos reservados.</p>
             <div class="footer-bottom-links">
                 <a href="#">Privacidad</a>
                 <a href="#">Términos</a>
