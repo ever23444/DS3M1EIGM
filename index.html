@@ -1549,7 +1549,7 @@
         }
 
     </style>
-<base target="_blank">
+    <!-- ✅ SE ELIMINÓ <base target="_blank"> QUE CAUSABA EL ERROR -->
 </head>
 <body>
 
@@ -1831,25 +1831,21 @@
 
         // Tab switching
         function switchTab(tabName) {
-            // Hide all tabs
             document.getElementById('tab-mision').style.display = 'none';
             document.getElementById('tab-vision').style.display = 'none';
             document.getElementById('tab-historia').style.display = 'none';
             document.getElementById('tab-valores').style.display = 'none';
             
-            // Remove active class from all buttons
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             
-            // Show selected tab
             if (tabName === 'valores') {
                 document.getElementById('tab-valores').style.display = 'grid';
             } else {
                 document.getElementById('tab-' + tabName).style.display = 'block';
             }
             
-            // Add active class to clicked button
             event.target.classList.add('active');
         }
 
