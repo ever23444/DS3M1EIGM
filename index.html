@@ -1441,7 +1441,115 @@
                 height: 40px;
             }
         }
+
+        /* ==========================================
+           PROMOS LISTADO ESTÉTICO
+           ========================================== */
+        .promos-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+
+        .promo-item {
+            background: linear-gradient(135deg, rgba(255, 77, 0, 0.08), rgba(255, 140, 0, 0.05));
+            border: 1px solid rgba(255, 77, 0, 0.2);
+            border-radius: 24px;
+            padding: 2rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1.2rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .promo-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            transition: width 0.3s;
+        }
+
+        .promo-item:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 77, 0, 0.5);
+            box-shadow: 0 20px 40px rgba(255, 77, 0, 0.15);
+            background: linear-gradient(135deg, rgba(255, 77, 0, 0.12), rgba(255, 140, 0, 0.08));
+        }
+
+        .promo-item:hover::before {
+            width: 6px;
+        }
+
+        .promo-icon {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+            box-shadow: 0 10px 25px rgba(255, 77, 0, 0.3);
+            transition: transform 0.3s;
+        }
+
+        .promo-item:hover .promo-icon {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .promo-info h3 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.6rem;
+            color: white;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        .promo-info p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .promo-tag {
+            display: inline-block;
+            background: rgba(255, 77, 0, 0.15);
+            color: var(--primary);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: 1px solid rgba(255, 77, 0, 0.3);
+        }
+
+        @media (max-width: 968px) {
+            .promos-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .promos-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
     </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -1533,34 +1641,34 @@
         <div class="categories-grid">
             <a href="Menú.html" class="category-card fade-in">
                 <span class="category-number">01</span>
-                <img src="img/clasica.jpg" alt="Clásicas">
+                <img src="img/facilota.jpg" alt="La Facilota">
                 <div class="category-overlay">
-                    <h3>CLÁSICAS</h3>
-                    <p>Las tradicionales que nunca fallan, con ese sabor casero inigualable</p>
+                    <h3>LA FACILOTA</h3>
+                    <p>La clásica que nunca falla. Carne jugosa, queso derretido y el sabor casero que te conquista.</p>
                 </div>
             </a>
-            <a href="premium.html" class="category-card fade-in">
+            <a href="Menú.html" class="category-card fade-in">
                 <span class="category-number">02</span>
-                <img src="img/horno.jpg" alt="Premium">
+                <img src="img/ahuevada.jpg" alt="La Ahuevada">
                 <div class="category-overlay">
-                    <h3>PREMIUM</h3>
-                    <p>Ediciones especiales gourmet con ingredientes selectos</p>
+                    <h3>LA AHUEVADA</h3>
+                    <p>Huevo frito coronando una hamburguesa de res con tocino crujiente. ¡Pura energía!</p>
                 </div>
             </a>
-            <a href="pollo.html" class="category-card fade-in">
+            <a href="Menú.html" class="category-card fade-in">
                 <span class="category-number">03</span>
-                <img src="img/doble.jpg" alt="Pollo">
+                <img src="img/enganosa.jpg" alt="La Engañosa">
                 <div class="category-overlay">
-                    <h3>POLLO</h3>
-                    <p>Opciones de pollo crujientes y jugosas para todos los gustos</p>
+                    <h3>LA ENGAÑOSA</h3>
+                    <p>Doble carne que parece una sola. Tamaño XL con ingredientes que te dejarán sin palabras.</p>
                 </div>
             </a>
-            <a href="combos.html" class="category-card fade-in">
+            <a href="Menú.html" class="category-card fade-in">
                 <span class="category-number">04</span>
-                <img src="img/combo.jpg" alt="Combos">
+                <img src="img/papasmex.jpg" alt="Papas Mexicanas">
                 <div class="category-overlay">
-                    <h3>COMBOS</h3>
-                    <p>La combinación perfecta con papas y bebidas artesanales</p>
+                    <h3>PAPAS MEXICANAS</h3>
+                    <p>Papas fritas cargadas con queso, jalapeños, carne molida y salsa especial. ¡Explosión de sabor!</p>
                 </div>
             </a>
         </div>
@@ -1568,11 +1676,58 @@
 
     <!-- Promos -->
     <section class="promos" id="promos">
-        <div class="promos-grid">
-            <div class="promo-content fade-in">
-                <h2>Promociones <span>Especiales</span></h2>
-                <p>Aprovecha nuestras ofertas exclusivas y disfruta de las mejores hamburguesas artesanales al mejor precio.</p>
-                <a href="combos.html" class="btn-primary">Ver todas las promos →</a>
+        <div class="section-header fade-in">
+            <h2>Promociones <span>Especiales</span></h2>
+            <p>Aprovecha nuestras ofertas exclusivas y disfruta de las mejores hamburguesas artesanales al mejor precio.</p>
+        </div>
+        <div class="promos-list">
+            <div class="promo-item fade-in">
+                <div class="promo-icon">💐</div>
+                <div class="promo-info">
+                    <h3>Día de la Madre</h3>
+                    <p>2x1 en La Facilota + papas gratis para mamá. ¡Celebra con sabor!</p>
+                    <span class="promo-tag">Mayo 10</span>
+                </div>
+            </div>
+            <div class="promo-item fade-in">
+                <div class="promo-icon">❤️</div>
+                <div class="promo-info">
+                    <h3>San Valentín</h3>
+                    <p>Combo pareja: 2 hamburguesas + 2 bebidas + papas compartidas con 20% OFF</p>
+                    <span class="promo-tag">Febrero 14</span>
+                </div>
+            </div>
+            <div class="promo-item fade-in">
+                <div class="promo-icon">🎉</div>
+                <div class="promo-info">
+                    <h3>Días Feriados</h3>
+                    <p>15% OFF en todo el menú. ¡Disfruta tu día libre con una Flama's!</p>
+                    <span class="promo-tag">Todo feriado</span>
+                </div>
+            </div>
+            <div class="promo-item fade-in">
+                <div class="promo-icon">🎂</div>
+                <div class="promo-info">
+                    <h3>Cumpleaños</h3>
+                    <p>¡La Ahuevada GRATIS en tu cumple! Presenta tu DUI y celebra con nosotros.</p>
+                    <span class="promo-tag">Todo el año</span>
+                </div>
+            </div>
+            <div class="promo-item fade-in">
+                <div class="promo-icon">🍟</div>
+                <div class="promo-info">
+                    <h3>Martes de Papas</h3>
+                    <p>Papas Mexicanas a mitad de precio todos los martes. ¡No te lo pierdas!</p>
+                    <span class="promo-tag">Todos los martes</span>
+                </div>
+            </div>
+            <div class="promo-item fade-in">
+                <div class="promo-icon">🎓</div>
+                <div class="promo-info">
+                    <h3>Promo Estudiante</h3>
+                    <p>10% OFF presentando tu carnet. ¡La Facilota te espera después de clases!</p>
+                    <span class="promo-tag">Lun - Vie</span>
+                </div>
             </div>
         </div>
     </section>
