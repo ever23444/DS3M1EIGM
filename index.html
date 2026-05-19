@@ -63,27 +63,38 @@
         }
         #loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
-        .loader-ring {
-            width: 80px; height: 80px;
+        .loader-logo-wrap {
             position: relative;
+            width: 110px; height: 110px;
+            display: flex; align-items: center; justify-content: center;
         }
-        .loader-ring svg {
-            width: 80px; height: 80px;
+        .loader-logo-wrap::before {
+            content: '';
+            position: absolute; inset: 0;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            border-top-color: var(--fire);
+            border-right-color: var(--ember);
             animation: spin 1.2s linear infinite;
+        }
+        .loader-logo-wrap::after {
+            content: '';
+            position: absolute; inset: 6px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,77,0,0.15);
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        .loader-inner {
-            position: absolute; inset: 15px;
-            background: linear-gradient(135deg, var(--fire), var(--ember));
+        .loader-logo {
+            width: 72px; height: 72px;
+            object-fit: contain;
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.6rem;
-            animation: pulse-scale 1.2s ease-in-out infinite;
+            animation: pulse-scale 1.4s ease-in-out infinite;
+            filter: drop-shadow(0 0 16px var(--fire-glow));
         }
         @keyframes pulse-scale {
             0%,100% { transform: scale(1); }
-            50% { transform: scale(1.1); box-shadow: 0 0 30px var(--fire-glow); }
+            50% { transform: scale(1.08); filter: drop-shadow(0 0 24px rgba(255,77,0,0.6)); }
         }
         .loader-text {
             margin-top: 1.5rem;
@@ -868,18 +879,8 @@
 
 <!-- LOADER -->
 <div id="loader">
-    <div class="loader-ring">
-        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="40" cy="40" r="36" stroke="rgba(255,77,0,0.15)" stroke-width="3"/>
-            <path d="M 40 4 A 36 36 0 0 1 76 40" stroke="url(#lg)" stroke-width="3" stroke-linecap="round"/>
-            <defs>
-                <linearGradient id="lg" x1="40" y1="4" x2="76" y2="40" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#FF4D00"/>
-                    <stop offset="1" stop-color="#FF8C00"/>
-                </linearGradient>
-            </defs>
-        </svg>
-        <div class="loader-inner">🔥</div>
+    <div class="loader-logo-wrap">
+        <img class="loader-logo" src="img/logoperron.png" alt="Flama's">
     </div>
     <div class="loader-text">Flama's</div>
 </div>
