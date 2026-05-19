@@ -6,6 +6,7 @@
     <title>Ordenar - Flama's </title>
     <link rel="icon" href="img/Logoburger-.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- ✅ SIN <base target="_blank"> -->
     <style>
         * {
             margin: 0;
@@ -41,10 +42,7 @@
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
             pointer-events: none;
             z-index: 9999;
@@ -53,17 +51,9 @@
 
         /* Loader */
         .loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--dark);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            transition: opacity 0.5s, visibility 0.5s;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--dark); display: flex; justify-content: center; align-items: center;
+            z-index: 10000; transition: opacity 0.5s, visibility 0.5s;
         }
         .loader.hidden { opacity: 0; visibility: hidden; }
         .loader-burger { width: 80px; height: 80px; animation: bounce 1s infinite; }
@@ -74,73 +64,70 @@
 
         /* Navegación */
         nav {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 1400px;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            z-index: 1000;
-            padding: 0.8rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 1400px;
+            background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); z-index: 1000; padding: 0.8rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
             border-radius: 50px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,77,0,0.1);
         }
+
         .logo-container { display: flex; align-items: center; gap: 0.8rem; text-decoration: none; }
         .logo-icon { width: 50px; height: 50px; animation: float 3s ease-in-out infinite; filter: drop-shadow(0 0 10px var(--primary-glow)); }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-5px); }
-        }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-5px); } }
         .logo-text { display: flex; flex-direction: column; line-height: 1; }
         .logo-main { font-family: 'Bebas Neue', cursive; font-size: 2rem; color: var(--primary); letter-spacing: 3px; text-transform: uppercase; text-shadow: 0 0 20px var(--primary-glow); }
         .logo-sub { font-size: 0.7rem; color: var(--gray); letter-spacing: 4px; text-transform: uppercase; font-weight: 600; }
+
         .nav-links { display: flex; list-style: none; gap: 2rem; align-items: center; }
-        .nav-links a { color: var(--light); text-decoration: none; font-weight: 600; transition: all 0.3s; position: relative; font-size: 0.9rem; letter-spacing: 0.5px; }
-        .nav-links a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--primary); transition: width 0.3s; box-shadow: 0 0 10px var(--primary); }
+        .nav-links a {
+            color: var(--light); text-decoration: none; font-weight: 600;
+            transition: all 0.3s; position: relative; font-size: 0.9rem; letter-spacing: 0.5px;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: -5px; left: 0;
+            width: 0; height: 2px; background: var(--primary); transition: width 0.3s;
+            box-shadow: 0 0 10px var(--primary);
+        }
         .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
         .nav-links a:hover, .nav-links a.active { color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); }
-        .order-btn { background: var(--primary); color: white; padding: 0.8rem 1.5rem; border-radius: 50px; text-decoration: none; font-weight: 700; transition: all 0.3s; border: 2px solid var(--primary); display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 0 20px var(--primary-glow); }
-        .order-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 30px var(--primary-glow); background: transparent; color: var(--primary); }
+
+        /* ✅ order-btn activo: fondo naranja sólido */
+        .order-btn {
+            background: var(--primary); color: white !important; padding: 0.8rem 1.5rem;
+            border-radius: 50px; text-decoration: none; font-weight: 700; transition: all 0.3s;
+            border: 2px solid var(--primary); display: flex; align-items: center; gap: 0.5rem;
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+        .order-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 30px var(--primary-glow); background: transparent; color: var(--primary) !important; }
+        /* ✅ Evitar que .active sobreescriba el estilo del botón de ordenar */
+        .order-btn.active::after { display: none; }
+
         .menu-toggle { display: none; flex-direction: column; cursor: pointer; gap: 5px; z-index: 1001; }
         .menu-toggle span { width: 25px; height: 3px; background: white; transition: 0.3s; border-radius: 2px; }
+        .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .menu-toggle.active span:nth-child(2) { opacity: 0; }
+        .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
 
         /* Header */
         .page-header {
-            margin-top: 100px;
-            padding: 5rem 5%;
+            margin-top: 100px; padding: 5rem 5%;
             background: linear-gradient(135deg, rgba(5,5,5,0.95), rgba(5,5,5,0.9)), url('img/Comboduo1.jpg');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+            background-size: cover; background-position: center;
+            color: white; text-align: center; position: relative; overflow: hidden;
             border-bottom: 1px solid var(--glass-border);
         }
         .page-header::before {
-            content: '';
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-image: linear-gradient(rgba(255,77,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,77,0,0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-            pointer-events: none;
+            background-size: 50px 50px; pointer-events: none;
         }
         .page-header h1 {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 6rem;
-            letter-spacing: 10px;
-            margin-bottom: 1rem;
-            position: relative; z-index: 2;
+            font-family: 'Bebas Neue', cursive; font-size: 6rem; letter-spacing: 10px;
+            margin-bottom: 1rem; position: relative; z-index: 2;
             background: linear-gradient(135deg, var(--primary), #ffaa00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
         }
         .page-header p { color: var(--gray); font-size: 1.3rem; position: relative; z-index: 2; font-weight: 300; letter-spacing: 1px; }
 
@@ -208,182 +195,69 @@
 
         /* Notificación */
         .notification {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: var(--primary);
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            font-weight: 600;
-            z-index: 9998;
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.3s;
+            position: fixed; bottom: 30px; right: 30px;
+            background: var(--primary); color: white; padding: 1rem 2rem;
+            border-radius: 50px; font-weight: 600; z-index: 9998;
+            transform: translateY(100px); opacity: 0; transition: all 0.3s;
             box-shadow: 0 5px 20px var(--primary-glow);
         }
         .notification.show { transform: translateY(0); opacity: 1; }
 
-        /* ==========================================
-           FOOTER — CORREGIDO
-        ========================================== */
+        /* FOOTER */
         footer {
-            background: var(--dark);
-            color: white;
-            padding: 5rem 5% 2rem;
-            border-top: 1px solid var(--glass-border);
-            position: relative;
-            margin-top: 4rem;
+            background: var(--dark); color: white; padding: 5rem 5% 2rem;
+            border-top: 1px solid var(--glass-border); position: relative; margin-top: 4rem;
         }
-
         footer::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 1px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
-            opacity: 0.6;
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent); opacity: 0.6;
         }
-
         .footer-content {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 4rem;
-            max-width: 1400px;
-            margin: 0 auto 4rem;
+            display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem;
+            max-width: 1400px; margin: 0 auto 4rem;
         }
-
         .footer-brand { max-width: 300px; }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .footer-logo-img {
-            width: 55px;
-            height: 55px;
-            filter: drop-shadow(0 0 10px var(--primary-glow));
-        }
-
+        .footer-logo { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .footer-logo-img { width: 55px; height: 55px; filter: drop-shadow(0 0 10px var(--primary-glow)); }
         .footer-logo-text { display: flex; flex-direction: column; }
         .footer-logo-text .main {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 2rem;
+            font-family: 'Bebas Neue', cursive; font-size: 2rem;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: 3px;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; letter-spacing: 3px;
         }
-        .footer-logo-text .sub {
-            font-size: 0.65rem;
-            color: var(--text-muted);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
+        .footer-logo-text .sub { font-size: 0.65rem; color: var(--text-muted); letter-spacing: 3px; text-transform: uppercase; font-weight: 600; }
+        .footer-brand p { color: var(--text-muted); line-height: 1.8; margin-bottom: 2rem; font-size: 0.95rem; }
 
-        .footer-brand p {
-            color: var(--text-muted);
-            line-height: 1.8;
-            margin-bottom: 2rem;
-            font-size: 0.95rem;
-        }
-
-        /* Íconos sociales con SVG — siempre funcionan */
         .social-links { display: flex; gap: 0.8rem; }
-
         .social-links a {
-            width: 44px;
-            height: 44px;
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            text-decoration: none;
+            width: 44px; height: 44px; background: var(--glass); border: 1px solid var(--glass-border);
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s; text-decoration: none;
         }
-
-        .social-links a:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px var(--primary-glow);
-        }
-
-        .social-links a.whatsapp:hover { background: #25D366; border-color: #25D366; }
-        .social-links a.facebook:hover { background: #1877F2; border-color: #1877F2; }
+        .social-links a:hover { transform: translateY(-5px); box-shadow: 0 10px 20px var(--primary-glow); }
+        .social-links a.whatsapp:hover  { background: #25D366; border-color: #25D366; }
+        .social-links a.facebook:hover  { background: #1877F2; border-color: #1877F2; }
         .social-links a.instagram:hover { background: linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); border-color: #dc2743; }
-        .social-links a.twitter:hover  { background: #000; border-color: #555; }
-
+        .social-links a.twitter:hover   { background: #000; border-color: #555; }
         .social-links a svg { width: 20px; height: 20px; fill: white; }
 
         .footer-section h3 {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-            color: white;
-            letter-spacing: 2px;
-            position: relative;
-            display: inline-block;
+            font-family: 'Bebas Neue', cursive; font-size: 1.3rem; margin-bottom: 1.5rem;
+            color: white; letter-spacing: 2px; position: relative; display: inline-block;
         }
-        .footer-section h3::after {
-            content: '';
-            position: absolute;
-            bottom: -6px; left: 0;
-            width: 30px; height: 2px;
-            background: var(--primary);
-            border-radius: 2px;
-        }
-
+        .footer-section h3::after { content: ''; position: absolute; bottom: -6px; left: 0; width: 30px; height: 2px; background: var(--primary); border-radius: 2px; }
         .footer-section ul { list-style: none; }
         .footer-section ul li { margin-bottom: 0.8rem; }
-        .footer-section a {
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.95rem;
-        }
+        .footer-section a { color: var(--text-muted); text-decoration: none; transition: all 0.3s; display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; }
         .footer-section a:hover { color: var(--primary); transform: translateX(5px); }
-
-        .footer-contact p {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-            font-size: 0.95rem;
-        }
-
-        /* Íconos de contacto con SVG inline */
-        .contact-icon {
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
+        .footer-contact p { display: flex; align-items: center; gap: 0.8rem; color: var(--text-muted); margin-bottom: 1rem; font-size: 0.95rem; }
+        .contact-icon { width: 20px; height: 20px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; }
         .footer-bottom {
-            text-align: center;
-            padding-top: 2.5rem;
-            border-top: 1px solid var(--glass-border);
-            color: var(--text-muted);
-            font-size: 0.88rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            text-align: center; padding-top: 2.5rem; border-top: 1px solid var(--glass-border);
+            color: var(--text-muted); font-size: 0.88rem; max-width: 1400px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center;
         }
-
         .footer-bottom-links { display: flex; gap: 2rem; }
         .footer-bottom-links a { color: var(--text-muted); text-decoration: none; transition: color 0.3s; }
         .footer-bottom-links a:hover { color: var(--primary); }
@@ -397,15 +271,10 @@
         @media (max-width: 768px) {
             nav { width: 95%; padding: 0.8rem 1.5rem; }
             .nav-links {
-                position: fixed; top: 0; right: -100%;
-                width: 80%; max-width: 400px; height: 100vh;
-                background: rgba(5,5,5,0.98);
-                backdrop-filter: blur(20px);
-                flex-direction: column;
-                padding: 6rem 2rem 2rem;
-                transition: right 0.4s;
-                border-left: 1px solid var(--glass-border);
-                gap: 1.5rem;
+                position: fixed; top: 0; right: -100%; width: 80%; max-width: 400px; height: 100vh;
+                background: rgba(5,5,5,0.98); backdrop-filter: blur(20px);
+                flex-direction: column; padding: 6rem 2rem 2rem;
+                transition: right 0.4s; border-left: 1px solid var(--glass-border); gap: 1.5rem;
             }
             .nav-links.active { right: 0; }
             .menu-toggle { display: flex; }
@@ -441,6 +310,7 @@
     </div>
 
     <!-- Navegación -->
+    <!-- ✅ Links de nav sin target="_blank" — solo WhatsApp/redes sociales pueden abrirse en pestaña nueva -->
     <nav id="navbar">
         <a href="index.html" class="logo-container">
             <img src="/DS3M1EIGM/img/logoperron.png" alt="Logo" class="logo-icon"/>
@@ -454,8 +324,9 @@
             <li><a href="Menú.html">Menu</a></li>
             <li><a href="historia.html">Historia</a></li>
             <li><a href="Galeria.html">Galería</a></li>
-            <li><a href="Ordenar.html" class="order-btn active">🛒 Ordenar</a></li>
             <li><a href="ubicacion.html">Ubicación</a></li>
+            <!-- ✅ Ordenar es la página activa — class="order-btn active" -->
+            <li><a href="Ordenar.html" class="order-btn active">🛒 Ordenar</a></li>
         </ul>
         <div class="menu-toggle" onclick="toggleMenu()">
             <span></span><span></span><span></span>
@@ -474,11 +345,11 @@
         <div class="products-section">
             <h2 class="section-title">Nuestro Menú</h2>
             <div class="category-filter">
-                <button class="filter-btn active" onclick="filterProducts('all')">Todos</button>
-                <button class="filter-btn" onclick="filterProducts('clasicas')">Clásicas</button>
-                <button class="filter-btn" onclick="filterProducts('premium')">Premium</button>
-                <button class="filter-btn" onclick="filterProducts('pollo')">Pollo</button>
-                <button class="filter-btn" onclick="filterProducts('combos')">Combos</button>
+                <button class="filter-btn active" onclick="filterProducts('all', event)">Todos</button>
+                <button class="filter-btn" onclick="filterProducts('clasicas', event)">Clásicas</button>
+                <button class="filter-btn" onclick="filterProducts('premium', event)">Premium</button>
+                <button class="filter-btn" onclick="filterProducts('pollo', event)">Pollo</button>
+                <button class="filter-btn" onclick="filterProducts('combos', event)">Combos</button>
             </div>
             <div class="products-grid" id="productsGrid"></div>
         </div>
@@ -551,11 +422,9 @@
     <!-- Notificación -->
     <div class="notification" id="notification">Producto agregado al carrito</div>
 
-    <!-- ===================== FOOTER CORREGIDO ===================== -->
+    <!-- FOOTER -->
     <footer id="contacto">
         <div class="footer-content">
-
-            <!-- Marca -->
             <div class="footer-brand">
                 <div class="footer-logo">
                     <img src="/DS3M1EIGM/img/logoperron.png" alt="Logo Flamas" class="footer-logo-img"/>
@@ -565,29 +434,24 @@
                     </div>
                 </div>
                 <p>Las mejores hamburguesas artesanales de Jucuapa. Hechas con amor, pasión y los mejores ingredientes locales.</p>
-
-                <!-- Íconos sociales SVG — no dependen de imágenes locales -->
                 <div class="social-links">
-                    <!-- WhatsApp -->
-                    <a href="https://wa.me/50375416644" target="_blank" class="whatsapp" title="WhatsApp">
+                    <!-- ✅ Solo redes sociales y WhatsApp tienen target="_blank" -->
+                    <a href="https://wa.me/50375416644" target="_blank" rel="noopener noreferrer" class="whatsapp" title="WhatsApp">
                         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
                             <path d="M11.998 0C5.374 0 0 5.373 0 11.998c0 2.117.554 4.1 1.523 5.822L.057 23.998l6.347-1.485A11.945 11.945 0 0011.998 24C18.626 24 24 18.626 24 11.998 24 5.373 18.626 0 11.998 0zm0 21.818a9.814 9.814 0 01-5.001-1.368l-.359-.214-3.718.871.936-3.63-.234-.373A9.817 9.817 0 012.18 11.998c0-5.42 4.4-9.82 9.818-9.82 5.42 0 9.82 4.4 9.82 9.82 0 5.418-4.4 9.82-9.82 9.82z"/>
                         </svg>
                     </a>
-                    <!-- Facebook -->
                     <a href="#" class="facebook" title="Facebook">
                         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                         </svg>
                     </a>
-                    <!-- Instagram -->
                     <a href="#" class="instagram" title="Instagram">
                         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
                         </svg>
                     </a>
-                    <!-- X / Twitter -->
                     <a href="#" class="twitter" title="X (Twitter)">
                         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
@@ -596,7 +460,6 @@
                 </div>
             </div>
 
-            <!-- Horario -->
             <div class="footer-section">
                 <h3>Horario</h3>
                 <ul>
@@ -606,7 +469,6 @@
                 </ul>
             </div>
 
-            <!-- Contacto con íconos SVG inline -->
             <div class="footer-contact footer-section">
                 <h3>Contacto</h3>
                 <p>
@@ -629,7 +491,6 @@
                 </p>
             </div>
 
-            <!-- Links -->
             <div class="footer-section">
                 <h3>Links</h3>
                 <ul>
@@ -660,30 +521,30 @@
 
         // Productos
         const products = [
-            { id: 1,  name: "Clásica Simple",             price: 9.99,  category: "clasicas", image: "img/clasica1.jpg" },
-            { id: 2,  name: "Doble Queso",                price: 12.99, category: "clasicas", image: "img/Hdoblequeso2.jpg" },
-            { id: 3,  name: "Smash Burger",               price: 11.99, category: "clasicas", image: "img/Doblecarne2.jpg" },
-            { id: 4,  name: "Bacon Lovers",               price: 13.99, category: "clasicas", image: "img/tocinoplus2.png" },
-            { id: 5,  name: "Mushroom Swiss",             price: 14.49, category: "clasicas", image: "img/Mushroom.jpg" },
-            { id: 6,  name: "Western BBQ",                price: 13.49, category: "clasicas", image: "img/Western.jpg" },
-            { id: 7,  name: "Wagyu Truffle",              price: 34.99, category: "premium",  image: "img/Wagyu.png" },
-            { id: 8,  name: "Foie Gras Deluxe",          price: 29.99, category: "premium",  image: "img/Foeigrass.jpg" },
-            { id: 9,  name: "Surf & Turf",                price: 32.99, category: "premium",  image: "img/Surfyturf.jpg" },
-            { id: 10, name: "Dry Aged Prime",             price: 27.99, category: "premium",  image: "img/Dry.png" },
-            { id: 11, name: "Blue Cheese Royal",          price: 24.99, category: "premium",  image: "img/Blue burger.webp" },
-            { id: 12, name: "The Valencia Siena",         price: 26.50, category: "premium",  image: "img/Iberiangold.png" },
-            { id: 13, name: "Classic Crispy",             price: 10.99, category: "pollo",    image: "img/Hpollo.jpg" },
-            { id: 14, name: "Spicy Nashville",            price: 12.49, category: "pollo",    image: "img/Nashville.jpg" },
-            { id: 15, name: "Honey Butter Chicken",       price: 13.99, category: "pollo",    image: "img/Honey.jpg" },
-            { id: 16, name: "Buffalo Roach",              price: 12.99, category: "pollo",    image: "img/Rach.jpg" },
-            { id: 17, name: "BBQ Bacon Chicken",          price: 14.49, category: "pollo",    image: "img/BBQ chicken.jpg" },
-            { id: 18, name: "Grilled Deluxe",             price: 13.49, category: "pollo",    image: "img/Queso.webp" },
-            { id: 19, name: "Beyond Classic",             price: 14.99, category: "combos",   image: "img/Vegan.jpg" },
-            { id: 20, name: "Bar Combo",                  price: 13.49, category: "combos",   image: "img/Comboduo.webp" },
-            { id: 21, name: "Impossible BBQ",             price: 15.99, category: "combos",   image: "img/TOCIHAM2.jpg" },
-            { id: 22, name: "Classic Combo",              price: 11.99, category: "combos",   image: "img/Classic.webp" },
-            { id: 23, name: "Deluxe Family",              price: 18.99, category: "combos",   image: "img/Hamburger.png" },
-            { id: 24, name: "The California Double Combo",price: 21.49, category: "combos",   image: "img/3hambur3.jpg" }
+            { id: 1,  name: "Clásica Simple",              price: 9.99,  category: "clasicas", image: "img/clasica1.jpg" },
+            { id: 2,  name: "Doble Queso",                 price: 12.99, category: "clasicas", image: "img/Hdoblequeso2.jpg" },
+            { id: 3,  name: "Smash Burger",                price: 11.99, category: "clasicas", image: "img/Doblecarne2.jpg" },
+            { id: 4,  name: "Bacon Lovers",                price: 13.99, category: "clasicas", image: "img/tocinoplus2.png" },
+            { id: 5,  name: "Mushroom Swiss",              price: 14.49, category: "clasicas", image: "img/Mushroom.jpg" },
+            { id: 6,  name: "Western BBQ",                 price: 13.49, category: "clasicas", image: "img/Western.jpg" },
+            { id: 7,  name: "Wagyu Truffle",               price: 34.99, category: "premium",  image: "img/Wagyu.png" },
+            { id: 8,  name: "Foie Gras Deluxe",           price: 29.99, category: "premium",  image: "img/Foeigrass.jpg" },
+            { id: 9,  name: "Surf & Turf",                 price: 32.99, category: "premium",  image: "img/Surfyturf.jpg" },
+            { id: 10, name: "Dry Aged Prime",              price: 27.99, category: "premium",  image: "img/Dry.png" },
+            { id: 11, name: "Blue Cheese Royal",           price: 24.99, category: "premium",  image: "img/Blue burger.webp" },
+            { id: 12, name: "The Valencia Siena",          price: 26.50, category: "premium",  image: "img/Iberiangold.png" },
+            { id: 13, name: "Classic Crispy",              price: 10.99, category: "pollo",    image: "img/Hpollo.jpg" },
+            { id: 14, name: "Spicy Nashville",             price: 12.49, category: "pollo",    image: "img/Nashville.jpg" },
+            { id: 15, name: "Honey Butter Chicken",        price: 13.99, category: "pollo",    image: "img/Honey.jpg" },
+            { id: 16, name: "Buffalo Roach",               price: 12.99, category: "pollo",    image: "img/Rach.jpg" },
+            { id: 17, name: "BBQ Bacon Chicken",           price: 14.49, category: "pollo",    image: "img/BBQ chicken.jpg" },
+            { id: 18, name: "Grilled Deluxe",              price: 13.49, category: "pollo",    image: "img/Queso.webp" },
+            { id: 19, name: "Beyond Classic",              price: 14.99, category: "combos",   image: "img/Vegan.jpg" },
+            { id: 20, name: "Bar Combo",                   price: 13.49, category: "combos",   image: "img/Comboduo.webp" },
+            { id: 21, name: "Impossible BBQ",              price: 15.99, category: "combos",   image: "img/TOCIHAM2.jpg" },
+            { id: 22, name: "Classic Combo",               price: 11.99, category: "combos",   image: "img/Classic.webp" },
+            { id: 23, name: "Deluxe Family",               price: 18.99, category: "combos",   image: "img/Hamburger.png" },
+            { id: 24, name: "The California Double Combo", price: 21.49, category: "combos",   image: "img/3hambur3.jpg" }
         ];
 
         let cart = [];
@@ -715,9 +576,10 @@
             });
         }
 
-        function filterProducts(category) {
+        // ✅ filterProducts recibe el evento correctamente
+        function filterProducts(category, event) {
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            if (event && event.target) event.target.classList.add('active');
             loadProducts(category);
         }
 
@@ -794,15 +656,15 @@
         function submitOrder(event) {
             event.preventDefault();
             if (cart.length === 0) { alert('Tu carrito está vacío'); return; }
-            const form     = event.target;
-            const nombre   = form.querySelector('input[type="text"]').value;
-            const telefono = form.querySelector('input[type="tel"]').value;
-            const direccion= form.querySelector('textarea').value;
-            const pago     = form.querySelector('select').value;
-            const cambio   = form.querySelectorAll('input[type="text"]')[1].value;
-            const notas    = form.querySelectorAll('textarea')[1].value;
-            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const total    = subtotal + 2.00;
+            const form      = event.target;
+            const nombre    = form.querySelector('input[type="text"]').value;
+            const telefono  = form.querySelector('input[type="tel"]').value;
+            const direccion = form.querySelector('textarea').value;
+            const pago      = form.querySelector('select').value;
+            const cambio    = form.querySelectorAll('input[type="text"]')[1].value;
+            const notas     = form.querySelectorAll('textarea')[1].value;
+            const subtotal  = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const total     = subtotal + 2.00;
 
             let mensaje = `🍔 *NUEVO PEDIDO FLAMA'S* 🍔\n\n`;
             mensaje += `👤 *Cliente:* ${nombre}\n`;
@@ -819,6 +681,7 @@
             if (cambio) mensaje += `💵 *Cambio para:* $${cambio}\n`;
             if (notas)  mensaje += `📝 *Notas:* ${notas}\n`;
 
+            // ✅ WhatsApp sí puede abrir en nueva pestaña
             window.open(`https://wa.me/50375416644?text=${encodeURIComponent(mensaje)}`, '_blank');
             cart = [];
             updateCart();
