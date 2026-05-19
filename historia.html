@@ -6,6 +6,7 @@
     <title>FLAMA'S | Nuestra Historia - The Best Burgers in Jucuapa</title>
     <link rel="icon" href="img/Logoburger-.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- ✅ SE ELIMINÓ <base target="_blank"> QUE CAUSABA EL ERROR -->
     <style>
         * {
             margin: 0;
@@ -59,7 +60,7 @@
         }
 
         /* ==========================================
-           LOADER (AGREGADO DESDE INDEX.HTML)
+           LOADER
            ========================================== */
         .loader {
             position: fixed;
@@ -92,7 +93,7 @@
         }
 
         /* ==========================================
-           NAVBAR (IGUAL A MENÚ.HTML)
+           NAVBAR
            ========================================== */
         nav {
             position: fixed;
@@ -276,9 +277,9 @@
         }
 
         /* ==========================================
-           HERO HISTORIA
+           HERO HISTORIA — ✅ CORREGIDO
            ========================================== */
-        .hero {
+        .hero-historia {
             min-height: 100vh;
             background: 
                 radial-gradient(ellipse at 20% 50%, rgba(255, 77, 0, 0.15) 0%, transparent 50%),
@@ -358,7 +359,6 @@
             padding: 40px 20px 80px;
         }
 
-        /* Historia Section */
         .historia-section {
             background: var(--gray);
             border-radius: 30px;
@@ -486,8 +486,6 @@
             font-size: 0.9rem;
         }
 
-
-
         /* Timeline */
         .timeline-section {
             background: var(--gray);
@@ -555,7 +553,7 @@
             color: var(--text-muted);
         }
 
-         /* ==========================================
+        /* ==========================================
            FOOTER
            ========================================== */
         footer {
@@ -595,12 +593,6 @@
             align-items: center;
             gap: 1rem;
             margin-bottom: 1.5rem;
-        }
-
-        .footer-logo svg {
-            width: 50px;
-            height: 50px;
-            filter: drop-shadow(0 0 10px var(--primary-glow));
         }
 
         .footer-logo-text {
@@ -725,100 +717,31 @@
             align-items: center;
         }
 
-        .footer-bottom-links {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .footer-bottom-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .footer-bottom-links a:hover {
-            color: var(--primary);
-        }
-
         /* ==========================================
            ANIMATIONS
            ========================================== */
-        .fade-in {
+        .fade-up {
             opacity: 0;
             transform: translateY(30px);
-            transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .fade-in.visible {
+        .fade-up.visible {
             opacity: 1;
             transform: translateY(0);
         }
 
         /* ==========================================
-           LOADER
-           ========================================== */
-        .loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--darker);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            transition: opacity 0.5s, visibility 0.5s;
-        }
-
-        .loader.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .loader-burger {
-            width: 60px;
-            height: 60px;
-            animation: bounce 1s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        /* ==========================================
            RESPONSIVE
            ========================================== */
-        @media (max-width: 1200px) {
-            .categories-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .category-card {
-                height: 300px;
-            }
-        }
-
         @media (max-width: 968px) {
-            .features-bar {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .promos-grid {
-                grid-template-columns: 1fr;
-            }
-            .about-container {
-                grid-template-columns: 1fr;
-            }
-            .testimonials-grid {
-                grid-template-columns: 1fr;
-            }
-            .featured-grid {
+            .mvv-section {
                 grid-template-columns: 1fr;
             }
             .footer-content {
                 grid-template-columns: 1fr 1fr;
             }
-            .values-grid {
+            .historia-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -849,13 +772,6 @@
             .menu-toggle {
                 display: flex;
             }
-            .categories-grid {
-                grid-template-columns: 1fr;
-            }
-            .features-bar {
-                grid-template-columns: 1fr;
-                margin-top: -30px;
-            }
             .footer-content {
                 grid-template-columns: 1fr;
                 gap: 2rem;
@@ -864,15 +780,6 @@
                 flex-direction: column;
                 gap: 1rem;
                 text-align: center;
-            }
-            .experience-badge {
-                width: 100px;
-                height: 100px;
-                bottom: -10px;
-                right: -10px;
-            }
-            .experience-badge .years {
-                font-size: 2rem;
             }
             .logo-main {
                 font-size: 1.5rem;
@@ -883,11 +790,10 @@
             }
         }
     </style>
-<base target="_blank">
 </head>
 <body>
 
-    <!-- Loader (AGREGADO DESDE INDEX.HTML) -->
+    <!-- Loader -->
     <div class="loader" id="loader">
         <svg class="loader-burger" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <circle cx="50" cy="50" r="45" fill="none" stroke="#FF4D00" stroke-width="2"/>
@@ -900,7 +806,7 @@
         </svg>
     </div>
 
-    <!-- Navigation (IGUAL A MENÚ.HTML) -->
+    <!-- Navigation -->
     <nav id="navbar">
         <a href="index.html" class="logo-container">
             <img src="/DS3M1EIGM/img/logoperron.png" alt="Logo" class="logo-icon"/>
@@ -912,10 +818,10 @@
         <ul class="nav-links" id="navLinks">
             <li><a href="index.html">Inicio</a></li>
             <li><a href="Menú.html">Menu</a></li>
-            <li><a href="historia.html"  class="active">Historia</a></li>
-            <li><a href="Galeria.html"> Galería</a></li>
-            <li><a href="Ordenar.html" class="order-btn">🛒 Ordenar</a></li>
+            <li><a href="historia.html" class="active">Historia</a></li>
+            <li><a href="Galeria.html">Galería</a></li>
             <li><a href="ubicacion.html">Ubicación</a></li>
+            <li><a href="Ordenar.html" class="order-btn">🛒 Ordenar</a></li>
         </ul>
         <div class="menu-toggle" onclick="toggleMenu()">
             <span></span>
@@ -972,7 +878,6 @@
             </div>
         </div>
 
-
         <!-- Línea de Tiempo -->
         <div class="timeline-section fade-up">
             <div class="timeline-header">
@@ -1004,8 +909,8 @@
         </div>
     </main>
 
-    <!-- Footer (IGUAL A MENÚ.HTML) -->
-     <footer id="contacto">
+    <!-- Footer -->
+    <footer id="contacto">
         <div class="footer-content">
             <div class="footer-brand">
                 <div class="footer-logo">
@@ -1034,7 +939,7 @@
                 <h3>Contacto</h3>
                 <p><img src="img/Ubicacion-.png" alt=""> Plaza, Jucuapa</p>
                 <p><img src="img/Whatsap-.png" alt=""> 7067-1505</p>
-                <p><img src="img/gmail-.png" alt=""> hola@burgercraft.com</p>
+                <p><img src="img/gmail-.png" alt=""> hola@flamassv.com</p>
             </div>
             <div class="footer-section">
                 <h3>Links</h3>
