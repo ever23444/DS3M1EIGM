@@ -1,833 +1,1436 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flama's - Galería </title>
-    <link rel="icon" href="img/logoperron.png" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- ✅ SE ELIMINÓ <base target="_blank"> QUE CAUSABA EL ERROR -->
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flama's - Galería</title>
+<link rel="icon" href="img/logoperron.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --fire: #FF4D00; --ember: #FF6B1A; --gold: #FFB800;
+  --void: #050505; --abyss: #0a0a0a; --coal: #111111;
+  --ash: #1a1a1a; --fog: #2a2a2a; --mist: #888888;
+  --light: #fafafa; --fire-glow: rgba(255, 77, 0, 0.4);
+  --glass: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
+html { scroll-behavior: smooth; overflow-x: hidden; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background-color: var(--void);
+  color: var(--light);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--abyss); }
+::-webkit-scrollbar-thumb { background: var(--fire); border-radius: 4px; }
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
 
-        :root {
-            --primary: #FF4D00;
-            --primary-glow: rgba(255, 77, 0, 0.4);
-            --secondary: #FF8C00;
-            --dark: #0a0a0a;
-            --darker: #050505;
-            --light: #fafafa;
-            --gray: #1a1a1a;
-            --text-muted: #888;
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
-        }
+/* LOADER */
+#loader {
+  position: fixed;
+  inset: 0;
+  background: var(--void);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+#loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.loader-ring {
+  width: 120px; height: 120px;
+  border: 3px solid transparent;
+  border-top-color: var(--ember);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  position: relative;
+}
+.loader-ring::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 3px solid transparent;
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 1.5s linear infinite reverse;
+}
+.loader-logo {
+  position: absolute;
+  width: 64px; height: 64px;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation: pulse-scale 1.5s ease-in-out infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse-scale {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.15); }
+}
+.loader-text {
+  margin-top: 2rem;
+  font-family: 'Bebas Neue', cursive;
+  font-size: 1.5rem;
+  letter-spacing: 6px;
+  color: var(--fire);
+  animation: blink 1.2s ease-in-out infinite;
+}
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-        html { scroll-behavior: smooth; }
+/* NAVBAR */
+nav {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 1400px;
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 60px;
+  z-index: 1000;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,77,0,0.1);
+}
+nav.scrolled {
+  width: 95%;
+  background: rgba(10, 10, 10, 0.95);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  text-decoration: none;
+}
+.logo-icon {
+  width: 45px; height: 45px;
+  filter: drop-shadow(0 0 10px var(--fire-glow));
+  animation: float 3s ease-in-out infinite;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+}
+.logo-text { display: flex; flex-direction: column; line-height: 1; }
+.logo-main {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 1.8rem;
+  background: linear-gradient(135deg, var(--fire), var(--ember));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 2px;
+}
+.logo-sub {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.6rem;
+  color: var(--mist);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 0.5rem;
+  align-items: center;
+}
+.nav-links a {
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 25px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  font-family: 'DM Sans', sans-serif;
+}
+.nav-links a::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, var(--fire), var(--ember));
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: -1;
+  border-radius: 25px;
+}
+.nav-links a:hover { color: white; transform: translateY(-2px); }
+.nav-links a:hover::before { opacity: 1; }
+.nav-links a.active {
+  color: white;
+  background: linear-gradient(135deg, var(--fire), var(--ember));
+}
+.order-btn {
+  background: transparent;
+  color: var(--fire);
+  padding: 0.6rem 1.5rem;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 700;
+  border: 2px solid var(--fire);
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+  font-family: 'DM Sans', sans-serif;
+}
+.order-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: var(--fire);
+  transition: left 0.3s;
+  z-index: -1;
+}
+.order-btn:hover { color: white; box-shadow: 0 0 30px var(--fire-glow); }
+.order-btn:hover::before { left: 0; }
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 5px;
+  z-index: 1001;
+}
+.menu-toggle span {
+  width: 25px; height: 2px;
+  background: white;
+  transition: 0.3s;
+  border-radius: 2px;
+}
+.menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.menu-toggle.active span:nth-child(2) { opacity: 0; }
+.menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
 
-        body {
-            font-family: 'Space Grotesk', sans-serif;
-            background-color: var(--darker);
-            color: var(--light);
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
+/* HERO */
+.gallery-hero {
+  min-height: 100svh;
+  background: radial-gradient(ellipse at 20% 50%, rgba(255, 77, 0, 0.15) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 80%, rgba(255, 140, 0, 0.1) 0%, transparent 50%),
+              linear-gradient(to bottom, rgba(5,5,5,0.3), rgba(5,5,5,0.9)),
+              url('img/horno.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: scroll;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  padding-top: 100px;
+}
+.gallery-hero-grid {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+}
+.gallery-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  padding: 0 2rem;
+}
+.gallery-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 77, 0, 0.1);
+  border: 1px solid rgba(255, 77, 0, 0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  color: var(--fire);
+  margin-bottom: 2rem;
+  animation: fadeInDown 1s ease;
+  backdrop-filter: blur(10px);
+  font-family: 'Barlow Condensed', sans-serif;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.gallery-hero-badge::before {
+  content: '';
+  width: 8px; height: 8px;
+  background: var(--fire);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--dark); }
-        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+.gallery-hero h1 {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(3rem, 10vw, 7rem);
+  margin-bottom: 1.5rem;
+  letter-spacing: 2px;
+  animation: fadeInUp 1s ease 0.2s backwards;
+  line-height: 1.1;
+  background: linear-gradient(to bottom, #fff 0%, rgba(255,255,255,0.8) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.gallery-hero h1 span {
+  color: var(--fire);
+  -webkit-text-fill-color: var(--fire);
+}
+.gallery-hero p {
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  margin-bottom: 3rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.7);
+  animation: fadeInUp 1s ease 0.4s backwards;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-        body::before {
-            content: '';
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
-            pointer-events: none; z-index: 9999;
-        }
+/* SECTION HEADER */
+.section-header {
+  text-align: center;
+  margin-bottom: clamp(2rem, 5vw, 4rem);
+}
+.section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--fire);
+  margin-bottom: 1rem;
+}
+.section-tag::before,
+.section-tag::after {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--fire));
+}
+.section-tag::after {
+  background: linear-gradient(90deg, var(--fire), transparent);
+}
+.section-header h2 {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  letter-spacing: 2px;
+  line-height: 1.1;
+  color: white;
+}
+.section-header p {
+  color: var(--mist);
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+  max-width: 600px;
+  margin: 1rem auto 0;
+}
 
-        /* NAVBAR */
-        nav {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 1400px;
-            background: rgba(10, 10, 10, 0.7); backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border);
-            border-radius: 50px; z-index: 1000; padding: 1rem 2rem;
-            display: flex; justify-content: space-between; align-items: center;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,77,0,0.1);
-        }
-        nav.scrolled { width: 95%; background: rgba(10, 10, 10, 0.95); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+/* GALLERY TABS */
+.gallery-tabs-container {
+  background: var(--abyss);
+  padding: 2rem 5%;
+  position: sticky;
+  top: 90px;
+  z-index: 100;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.gallery-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+}
+.gallery-tab {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--mist);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.8rem 2.5rem;
+  border-radius: 50px;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.gallery-tab:hover {
+  background: rgba(255,77,0,0.1);
+  border-color: rgba(255,77,0,0.3);
+  color: white;
+  transform: translateY(-2px);
+}
+.gallery-tab.active {
+  color: white;
+  background: linear-gradient(135deg, var(--fire), var(--ember));
+  border-color: transparent;
+  box-shadow: 0 10px 30px rgba(255, 77, 0, 0.3);
+}
+.gallery-tab .tab-icon { font-size: 1.1rem; }
 
-        .logo-container { display: flex; align-items: center; gap: 0.8rem; text-decoration: none; }
-        .logo-icon { width: 45px; height: 45px; filter: drop-shadow(0 0 10px var(--primary-glow)); animation: float 3s ease-in-out infinite; }
-        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-5px); } }
+/* GALLERY SECTIONS */
+.gallery-section {
+  padding: clamp(3rem, 8vw, 8rem) 5%;
+  display: none;
+  background: var(--void);
+}
+.gallery-section.active {
+  display: block;
+  animation: fadeInSection 0.5s ease;
+}
+@keyframes fadeInSection {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-        .logo-text { display: flex; flex-direction: column; line-height: 1; }
-        .logo-main {
-            font-family: 'Bebas Neue', cursive; font-size: 1.8rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            background-clip: text; letter-spacing: 2px;
-        }
-        .logo-sub { font-size: 0.6rem; color: var(--text-muted); letter-spacing: 4px; text-transform: uppercase; font-weight: 500; }
+/* FADE-IN */
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
 
-        .nav-links { display: flex; list-style: none; gap: 0.5rem; align-items: center; }
-        .nav-links a {
-            color: rgba(255,255,255,0.7); text-decoration: none; font-weight: 500; font-size: 0.9rem;
-            padding: 0.6rem 1.2rem; border-radius: 25px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden;
-        }
-        .nav-links a::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            opacity: 0; transition: opacity 0.3s; z-index: -1; border-radius: 25px;
-        }
-        .nav-links a:hover { color: white; transform: translateY(-2px); }
-        .nav-links a:hover::before { opacity: 1; }
-        .nav-links a.active { color: white; background: linear-gradient(135deg, var(--primary), var(--secondary)); }
+/* MINI-PAGE */
+.mini-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.02);
+}
+.mini-page-header {
+  padding: 2.5rem 3rem 2rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  background: rgba(255,255,255,0.015);
+}
+.mini-page-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--fire);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.mini-page-title {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(2.5rem, 4vw, 4rem);
+  letter-spacing: 2px;
+  line-height: 1;
+  color: white;
+}
+.mini-page-subtitle {
+  color: var(--mist);
+  font-size: 0.9rem;
+  max-width: 360px;
+  text-align: right;
+  line-height: 1.7;
+}
+.mini-page-body { padding: 2rem 2.5rem 2.5rem; }
 
-        .order-btn {
-            background: transparent; color: var(--primary); padding: 0.6rem 1.5rem;
-            border-radius: 25px; text-decoration: none; font-weight: 700;
-            border: 2px solid var(--primary); transition: all 0.3s;
-            display: flex; align-items: center; gap: 0.5rem; position: relative; overflow: hidden;
-        }
-        .order-btn::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: var(--primary); transition: left 0.3s; z-index: -1;
-        }
-        .order-btn:hover { color: white; box-shadow: 0 0 30px var(--primary-glow); }
-        .order-btn:hover::before { left: 0; }
+/* 5-IMAGE GRID */
+.five-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: 310px 240px;
+  gap: 12px;
+}
+.slot-a { grid-column: 1 / 7; grid-row: 1; }
+.slot-b { grid-column: 7 / 10; grid-row: 1; }
+.slot-c { grid-column: 10 / 13; grid-row: 1; }
+.slot-d { grid-column: 1 / 5; grid-row: 2; }
+.slot-e { grid-column: 5 / 13; grid-row: 2; }
 
-        .menu-toggle { display: none; flex-direction: column; cursor: pointer; gap: 5px; z-index: 1001; }
-        .menu-toggle span { width: 25px; height: 2px; background: white; transition: 0.3s; border-radius: 2px; }
-        .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-        .menu-toggle.active span:nth-child(2) { opacity: 0; }
-        .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
+.gallery-item {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--coal);
+}
+.gallery-item:hover {
+  transform: translateY(-5px) scale(1.01);
+  border-color: rgba(255, 77, 0, 0.5);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 25px rgba(255, 77, 0, 0.1);
+  z-index: 2;
+}
+.gallery-item img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+  display: block;
+  max-width: 100%;
+}
+.gallery-item:hover img { transform: scale(1.08); }
+.gallery-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+.gallery-item:hover::before { opacity: 1; }
+.gallery-item::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 0; height: 3px;
+  background: linear-gradient(90deg, var(--fire), var(--ember));
+  z-index: 3;
+  transition: width 0.4s ease;
+}
+.gallery-item:hover::after { width: 100%; }
 
-        /* ✅ HERO — selector corregido para que coincida con la clase del <section> */
-        .gallery-hero {
-            min-height: 60vh;
-            background:
-                radial-gradient(ellipse at 20% 50%, rgba(255, 77, 0, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 80%, rgba(255, 140, 0, 0.1) 0%, transparent 50%),
-                linear-gradient(to bottom, rgba(5,5,5,0.3), rgba(5,5,5,0.9)),
-                url('https://drive.google.com/thumbnail?id=1a4WQvnHV9xE8NTnc4zL9IrZNNatlPGYH&sz=w1920');
-            background-size: cover;
-            background-position: center;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-align: center; color: white; position: relative; overflow: hidden; padding-top: 100px;
-        }
-        .gallery-hero-grid {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image:
-                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-            background-size: 50px 50px; pointer-events: none;
-        }
-        .gallery-hero-content { position: relative; z-index: 2; max-width: 900px; padding: 0 2rem; }
-        .gallery-hero-badge {
-            display: inline-flex; align-items: center; gap: 0.5rem;
-            background: rgba(255, 77, 0, 0.1); border: 1px solid rgba(255, 77, 0, 0.3);
-            padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.8rem;
-            color: var(--primary); margin-bottom: 2rem; animation: fadeInDown 1s ease; backdrop-filter: blur(10px);
-        }
-        .gallery-hero-badge::before {
-            content: ''; width: 8px; height: 8px; background: var(--primary); border-radius: 50%; animation: pulse 2s infinite;
-        }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+.gallery-item-overlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 1.4rem 1.6rem;
+  color: white;
+  z-index: 2;
+  transform: translateY(10px);
+  opacity: 0;
+  transition: all 0.35s 0.05s;
+}
+.gallery-item:hover .gallery-item-overlay {
+  transform: translateY(0);
+  opacity: 1;
+}
+.gallery-item-overlay h4 {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 1.5rem;
+  letter-spacing: 1.5px;
+  margin-bottom: 0.2rem;
+  line-height: 1;
+}
+.gallery-item-overlay p {
+  color: rgba(255,255,255,0.65);
+  font-size: 0.82rem;
+}
 
-        .gallery-hero h1 {
-            font-family: 'Bebas Neue', cursive;
-            font-size: clamp(3rem, 10vw, 7rem);
-            margin-bottom: 1.5rem; letter-spacing: 2px;
-            animation: fadeInUp 1s ease 0.2s backwards; line-height: 1.1;
-            background: linear-gradient(to bottom, #fff 0%, rgba(255,255,255,0.8) 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-        }
-        .gallery-hero h1 span { color: var(--primary); -webkit-text-fill-color: var(--primary); }
+.view-icon {
+  position: absolute;
+  top: 1rem; right: 1rem;
+  width: 44px; height: 44px;
+  background: rgba(255,77,0,0.92);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  z-index: 3;
+  transform: scale(0.7);
+  transition: all 0.3s 0.05s;
+  box-shadow: 0 4px 15px rgba(255,77,0,0.4);
+}
+.view-icon svg {
+  width: 22px; height: 22px;
+  stroke: white;
+  stroke-width: 2.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.gallery-item:hover .view-icon { opacity: 1; transform: scale(1); }
 
-        .gallery-hero p {
-            font-size: clamp(1rem, 2vw, 1.3rem); margin-bottom: 3rem; font-weight: 300;
-            color: rgba(255,255,255,0.7); animation: fadeInUp 1s ease 0.4s backwards;
-            max-width: 600px; margin-left: auto; margin-right: auto;
-        }
+.mini-page-footer {
+  padding: 1.8rem 3rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: rgba(255,255,255,0.015);
+}
+.mini-page-footer-bar {
+  width: 3px; height: 52px;
+  flex-shrink: 0;
+  border-radius: 2px;
+  background: linear-gradient(to bottom, var(--fire), var(--ember));
+}
+.mini-page-footer p {
+  color: var(--mist);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+.mini-page-footer strong {
+  color: rgba(255,255,255,0.8);
+  font-weight: 600;
+}
 
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+/* LIGHTBOX */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 5, 5, 0.97);
+  backdrop-filter: blur(20px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s;
+}
+.lightbox.active { opacity: 1; visibility: visible; }
+.lightbox-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+  transform: scale(0.9);
+  transition: transform 0.4s;
+}
+.lightbox.active .lightbox-content { transform: scale(1); }
+.lightbox-content img {
+  max-width: 100%;
+  max-height: 85vh;
+  display: block;
+  object-fit: contain;
+}
+.lightbox-close {
+  position: absolute;
+  top: 20px; right: 30px;
+  width: 50px; height: 50px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 50%;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  z-index: 10001;
+}
+.lightbox-close:hover {
+  background: var(--fire);
+  border-color: var(--fire);
+  transform: rotate(90deg);
+}
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 60px; height: 60px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 50%;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  z-index: 10001;
+}
+.lightbox-nav:hover { background: var(--fire); border-color: var(--fire); }
+.lightbox-prev { left: 30px; }
+.lightbox-next { right: 30px; }
+.lightbox-caption {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.7);
+  padding: 0.8rem 2rem;
+  border-radius: 50px;
+  color: white;
+  font-size: 1rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.1);
+  white-space: nowrap;
+  font-family: 'Barlow Condensed', sans-serif;
+  letter-spacing: 1px;
+}
 
-        /* GALLERY TABS */
-        .gallery-tabs-container {
-            background: var(--dark); padding: 2rem 5%;
-            position: sticky; top: 90px; z-index: 100;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .gallery-tabs {
-            display: flex; justify-content: center; gap: 1rem;
-            max-width: 800px; margin: 0 auto; flex-wrap: wrap;
-        }
-        .gallery-tab {
-            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
-            color: var(--text-muted); font-family: 'Space Grotesk', sans-serif;
-            font-size: 1rem; font-weight: 600; cursor: pointer;
-            padding: 0.8rem 2.5rem; border-radius: 50px;
-            transition: all 0.3s; display: flex; align-items: center; gap: 0.5rem;
-        }
-        .gallery-tab:hover {
-            background: rgba(255,77,0,0.1); border-color: rgba(255,77,0,0.3);
-            color: white; transform: translateY(-2px);
-        }
-        .gallery-tab.active {
-            color: white; background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-color: transparent; box-shadow: 0 10px 30px rgba(255, 77, 0, 0.3);
-        }
-        .gallery-tab .tab-icon { font-size: 1.1rem; }
+/* FOOTER */
+footer {
+  background: var(--abyss);
+  color: white;
+  padding: clamp(3rem, 6vw, 5rem) 5% 2rem;
+  border-top: 1px solid var(--glass-border);
+  position: relative;
+}
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--fire), transparent);
+  opacity: 0.5;
+}
+.footer-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 4rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  margin-bottom: 4rem;
+}
+.footer-brand { max-width: 300px; }
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.footer-logo-text { display: flex; flex-direction: column; }
+.footer-logo-text .main {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 1.8rem;
+  background: linear-gradient(135deg, var(--fire), var(--ember));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 2px;
+}
+.footer-logo-text .sub {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.7rem;
+  color: var(--mist);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+.footer-brand p {
+  color: var(--mist);
+  line-height: 1.8;
+  margin-bottom: 2rem;
+}
+.social-links {
+  display: flex;
+  gap: 1rem;
+}
+.social-links a {
+  width: 45px; height: 45px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  overflow: hidden;
+}
+.social-links a:hover {
+  background: var(--fire);
+  border-color: var(--fire);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px var(--fire-glow);
+}
+.social-links a img {
+  width: 20px; height: 20px;
+  filter: brightness(0) invert(1);
+  transition: transform 0.3s;
+}
+.social-links a:hover img { transform: scale(1.2); }
 
-        /* GALLERY SECTIONS */
-        .gallery-section { padding: 4rem 5%; display: none; background: var(--darker); }
-        .gallery-section.active { display: block; animation: fadeInSection 0.5s ease; }
-        @keyframes fadeInSection { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+.footer-section h3 {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  color: white;
+  letter-spacing: 1px;
+}
+.footer-section ul { list-style: none; }
+.footer-section ul li { margin-bottom: 0.8rem; }
+.footer-section a {
+  color: var(--mist);
+  text-decoration: none;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.footer-section a:hover {
+  color: var(--fire);
+  transform: translateX(5px);
+  text-shadow: 0 0 10px var(--fire-glow);
+}
+.footer-contact p {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: var(--mist);
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+.footer-contact img { width: 18px; opacity: 0.7; }
+.footer-bottom {
+  text-align: center;
+  padding-top: 3rem;
+  border-top: 1px solid var(--glass-border);
+  color: var(--mist);
+  font-size: 0.9rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-        /* ✅ FADE-IN — CSS corregido con .visible */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* MINI-PAGE */
-        .mini-page {
-            max-width: 1400px; margin: 0 auto;
-            border: 1px solid var(--glass-border);
-            border-radius: 24px; overflow: hidden;
-            background: rgba(255,255,255,0.02);
-        }
-        .mini-page-header {
-            padding: 2.5rem 3rem 2rem;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-            display: flex; align-items: flex-end; justify-content: space-between;
-            background: rgba(255,255,255,0.015);
-        }
-        .mini-page-label {
-            font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase;
-            color: var(--primary); font-weight: 600; margin-bottom: 0.5rem;
-        }
-        .mini-page-title {
-            font-family: 'Bebas Neue', cursive;
-            font-size: clamp(2.5rem, 4vw, 4rem);
-            letter-spacing: 2px; line-height: 1; color: white;
-        }
-        .mini-page-subtitle {
-            color: var(--text-muted); font-size: 0.9rem;
-            max-width: 360px; text-align: right; line-height: 1.7;
-        }
-        .mini-page-body { padding: 2rem 2.5rem 2.5rem; }
-
-        /* CUADRICULA DE 5 IMAGENES */
-        .five-grid {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            grid-template-rows: 310px 240px;
-            gap: 12px;
-        }
-        .slot-a { grid-column: 1 / 7;  grid-row: 1; }
-        .slot-b { grid-column: 7 / 10; grid-row: 1; }
-        .slot-c { grid-column: 10 / 13; grid-row: 1; }
-        .slot-d { grid-column: 1 / 5;  grid-row: 2; }
-        .slot-e { grid-column: 5 / 13; grid-row: 2; }
-
-        .gallery-item {
-            position: relative; border-radius: 14px; overflow: hidden; cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.06);
-            transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-            background: #111;
-        }
-        .gallery-item:hover {
-            transform: translateY(-5px) scale(1.01);
-            border-color: rgba(255, 77, 0, 0.5);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 25px rgba(255, 77, 0, 0.1);
-            z-index: 2;
-        }
-        .gallery-item img {
-            width: 100%; height: 100%; object-fit: cover;
-            transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1); display: block;
-        }
-        .gallery-item:hover img { transform: scale(1.08); }
-        .gallery-item::before {
-            content: ''; position: absolute; inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);
-            z-index: 1; opacity: 0; transition: opacity 0.35s;
-        }
-        .gallery-item:hover::before { opacity: 1; }
-        .gallery-item::after {
-            content: ''; position: absolute; top: 0; left: 0;
-            width: 0; height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            z-index: 3; transition: width 0.4s ease;
-        }
-        .gallery-item:hover::after { width: 100%; }
-
-        .gallery-item-overlay {
-            position: absolute; bottom: 0; left: 0; right: 0;
-            padding: 1.4rem 1.6rem; color: white; z-index: 2;
-            transform: translateY(10px); opacity: 0; transition: all 0.35s 0.05s;
-        }
-        .gallery-item:hover .gallery-item-overlay { transform: translateY(0); opacity: 1; }
-        .gallery-item-overlay h4 {
-            font-family: 'Bebas Neue', cursive; font-size: 1.5rem;
-            letter-spacing: 1.5px; margin-bottom: 0.2rem; line-height: 1;
-        }
-        .gallery-item-overlay p { color: rgba(255,255,255,0.65); font-size: 0.82rem; }
-
-        .view-icon {
-            position: absolute; top: 1rem; right: 1rem;
-            width: 44px; height: 44px;
-            background: rgba(255,77,0,0.92); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0; z-index: 3;
-            transform: scale(0.7); transition: all 0.3s 0.05s;
-            box-shadow: 0 4px 15px rgba(255,77,0,0.4);
-        }
-        .view-icon svg {
-            width: 22px; height: 22px; stroke: white;
-            stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round;
-        }
-        .gallery-item:hover .view-icon { opacity: 1; transform: scale(1); }
-
-        .mini-page-footer {
-            padding: 1.8rem 3rem;
-            border-top: 1px solid rgba(255,255,255,0.06);
-            display: flex; align-items: center; gap: 1.5rem;
-            background: rgba(255,255,255,0.015);
-        }
-        .mini-page-footer-bar {
-            width: 3px; height: 52px; flex-shrink: 0; border-radius: 2px;
-            background: linear-gradient(to bottom, var(--primary), var(--secondary));
-        }
-        .mini-page-footer p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.8; }
-        .mini-page-footer strong { color: rgba(255,255,255,0.8); font-weight: 600; }
-
-        /* LIGHTBOX */
-        .lightbox {
-            position: fixed; inset: 0; background: rgba(5, 5, 5, 0.97);
-            backdrop-filter: blur(20px); z-index: 10000;
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0; visibility: hidden; transition: all 0.4s;
-        }
-        .lightbox.active { opacity: 1; visibility: visible; }
-        .lightbox-content {
-            position: relative; max-width: 90%; max-height: 90%;
-            border-radius: 20px; overflow: hidden;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-            transform: scale(0.9); transition: transform 0.4s;
-        }
-        .lightbox.active .lightbox-content { transform: scale(1); }
-        .lightbox-content img { max-width: 100%; max-height: 85vh; display: block; object-fit: contain; }
-        .lightbox-close {
-            position: absolute; top: 20px; right: 30px;
-            width: 50px; height: 50px; background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2); border-radius: 50%;
-            color: white; font-size: 1.5rem; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            transition: all 0.3s; z-index: 10001;
-        }
-        .lightbox-close:hover { background: var(--primary); border-color: var(--primary); transform: rotate(90deg); }
-        .lightbox-nav {
-            position: absolute; top: 50%; transform: translateY(-50%);
-            width: 60px; height: 60px; background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2); border-radius: 50%;
-            color: white; font-size: 2rem; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            transition: all 0.3s; z-index: 10001;
-        }
-        .lightbox-nav:hover { background: var(--primary); border-color: var(--primary); }
-        .lightbox-prev { left: 30px; }
-        .lightbox-next { right: 30px; }
-        .lightbox-caption {
-            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background: rgba(0,0,0,0.7); padding: 0.8rem 2rem; border-radius: 50px;
-            color: white; font-size: 1rem; backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1); white-space: nowrap;
-        }
-
-        /* FOOTER */
-        footer {
-            background: var(--dark); color: white; padding: 5rem 5% 2rem;
-            border-top: 1px solid var(--glass-border); position: relative;
-        }
-        footer::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 1px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent); opacity: 0.5;
-        }
-        .footer-content {
-            display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem;
-            max-width: 1400px; margin: 0 auto; margin-bottom: 4rem;
-        }
-        .footer-brand { max-width: 300px; }
-        .footer-logo { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
-        .footer-logo-text { display: flex; flex-direction: column; }
-        .footer-logo-text .main {
-            font-family: 'Bebas Neue', cursive; font-size: 1.8rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            background-clip: text; letter-spacing: 2px;
-        }
-        .footer-logo-text .sub { font-size: 0.7rem; color: var(--text-muted); letter-spacing: 3px; text-transform: uppercase; }
-        .footer-brand p { color: var(--text-muted); line-height: 1.8; margin-bottom: 2rem; }
-        .social-links { display: flex; gap: 1rem; }
-        .social-links a {
-            width: 45px; height: 45px; background: var(--glass); border: 1px solid var(--glass-border);
-            border-radius: 12px; display: flex; align-items: center; justify-content: center;
-            transition: all 0.3s; overflow: hidden;
-        }
-        .social-links a:hover { background: var(--primary); border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 10px 20px var(--primary-glow); }
-        .social-links a img { width: 20px; height: 20px; filter: brightness(0) invert(1); transition: transform 0.3s; }
-        .social-links a:hover img { transform: scale(1.2); }
-        .footer-section h3 { font-family: 'Bebas Neue', cursive; font-size: 1.3rem; margin-bottom: 1.5rem; color: white; letter-spacing: 1px; }
-        .footer-section ul { list-style: none; }
-        .footer-section ul li { margin-bottom: 0.8rem; }
-        .footer-section a { color: var(--text-muted); text-decoration: none; transition: all 0.3s; display: inline-flex; align-items: center; gap: 0.5rem; }
-        .footer-section a:hover { color: var(--primary); transform: translateX(5px); text-shadow: 0 0 10px var(--primary-glow); }
-        .footer-contact p { display: flex; align-items: center; gap: 0.8rem; color: var(--text-muted); margin-bottom: 1rem; font-size: 0.95rem; }
-        .footer-contact img { width: 18px; opacity: 0.7; }
-        .footer-bottom {
-            text-align: center; padding-top: 3rem; border-top: 1px solid var(--glass-border);
-            color: var(--text-muted); font-size: 0.9rem; max-width: 1400px; margin: 0 auto;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 1100px) {
-            .five-grid { grid-template-rows: 260px 210px; }
-        }
-        @media (max-width: 900px) {
-            .five-grid {
-                grid-template-columns: 1fr 1fr;
-                grid-template-rows: 220px 220px 200px;
-            }
-            .slot-a { grid-column: 1 / 3; grid-row: 1; }
-            .slot-b { grid-column: 1;     grid-row: 2; }
-            .slot-c { grid-column: 2;     grid-row: 2; }
-            .slot-d { grid-column: 1;     grid-row: 3; }
-            .slot-e { grid-column: 2;     grid-row: 3; }
-            .mini-page-header { flex-direction: column; align-items: flex-start; gap: 0.8rem; }
-            .mini-page-subtitle { text-align: left; max-width: 100%; }
-        }
-        @media (max-width: 768px) {
-            nav { width: 95%; padding: 0.8rem 1.5rem; }
-            .nav-links {
-                position: fixed; top: 0; right: -100%; width: 80%; max-width: 400px; height: 100vh;
-                background: rgba(5, 5, 5, 0.98); backdrop-filter: blur(20px);
-                flex-direction: column; padding: 6rem 2rem 2rem;
-                transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                border-left: 1px solid var(--glass-border); gap: 1.5rem;
-            }
-            .nav-links.active { right: 0; }
-            .menu-toggle { display: flex; }
-            .gallery-tabs-container { top: 80px; padding: 1rem; }
-            .gallery-tabs { gap: 0.5rem; }
-            .gallery-tab { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
-            .mini-page-header { padding: 1.8rem 1.5rem 1.5rem; }
-            .mini-page-body { padding: 1.2rem 1rem 1.5rem; }
-            .mini-page-footer { padding: 1.4rem 1.5rem; }
-            .five-grid {
-                grid-template-columns: 1fr;
-                grid-template-rows: repeat(5, 200px);
-            }
-            .slot-a, .slot-b, .slot-c, .slot-d, .slot-e { grid-column: 1; grid-row: auto; }
-            .footer-content { grid-template-columns: 1fr; gap: 2rem; }
-            .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
-            .lightbox-nav { width: 45px; height: 45px; font-size: 1.2rem; }
-            .lightbox-prev { left: 10px; }
-            .lightbox-next { right: 10px; }
-            .logo-main { font-size: 1.5rem; }
-            .logo-icon { width: 40px; height: 40px; }
-        }
-    </style>
+/* RESPONSIVE */
+@media (min-width: 2560px) {
+  html { font-size: 18px; }
+  .mini-page, .footer-content, .footer-bottom { max-width: 1800px; }
+  .gallery-hero h1 { font-size: clamp(4rem, 8vw, 9rem); }
+  .five-grid { grid-template-rows: 400px 300px; gap: 16px; }
+  .gallery-item-overlay h4 { font-size: 1.8rem; }
+}
+@media (min-width: 1920px) {
+  .mini-page, .footer-content, .footer-bottom { max-width: 1600px; }
+  .gallery-hero h1 { font-size: clamp(3.5rem, 7vw, 7.5rem); }
+  .five-grid { grid-template-rows: 350px 270px; }
+}
+@media (max-width: 1440px) {
+  .footer-content { grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; }
+  .five-grid { grid-template-rows: 280px 220px; }
+}
+@media (max-width: 1200px) {
+  .footer-content { grid-template-columns: 2fr 1fr 1fr; gap: 2.5rem; }
+  .five-grid { grid-template-rows: 260px 200px; }
+  .gallery-hero h1 { font-size: clamp(2.8rem, 8vw, 5rem); }
+  .nav-links a { padding: 0.5rem 1rem; font-size: 0.85rem; }
+}
+@media (max-width: 1024px) {
+  .footer-content { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .five-grid { grid-template-rows: 240px 190px; }
+  .gallery-tab { padding: 0.7rem 1.8rem; }
+  .mini-page-header { padding: 2rem 2rem 1.5rem; }
+  .mini-page-body { padding: 1.5rem 2rem 2rem; }
+}
+@media (max-width: 968px) {
+  .nav-links {
+    position: fixed;
+    top: 0; right: -100%;
+    width: 80%;
+    max-width: 400px;
+    height: 100vh;
+    background: rgba(5, 5, 5, 0.98);
+    backdrop-filter: blur(20px);
+    flex-direction: column;
+    padding: 6rem 2rem 2rem;
+    transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-left: 1px solid var(--glass-border);
+    gap: 1.5rem;
+    z-index: 2000;
+  }
+  .nav-links.active { right: 0; }
+  .menu-toggle { display: flex; }
+  .footer-content { grid-template-columns: 1fr 1fr; }
+  .five-grid { grid-template-rows: 220px 180px; }
+  .gallery-tabs-container { top: 80px; }
+}
+@media (max-width: 768px) {
+  nav { width: 95%; padding: 0.8rem 1.5rem; }
+  .gallery-hero { min-height: 100svh; padding-top: 80px; }
+  .gallery-hero h1 { font-size: clamp(2.2rem, 10vw, 3.5rem); }
+  .gallery-tabs { gap: 0.5rem; overflow-x: auto; -webkit-overflow-scrolling: touch; flex-wrap: nowrap; justify-content: flex-start; padding-bottom: 0.5rem; }
+  .gallery-tab { padding: 0.6rem 1.2rem; font-size: 0.9rem; flex-shrink: 0; }
+  .mini-page-header { flex-direction: column; align-items: flex-start; gap: 0.8rem; padding: 1.8rem 1.5rem 1.5rem; }
+  .mini-page-subtitle { text-align: left; max-width: 100%; }
+  .mini-page-body { padding: 1.2rem 1rem 1.5rem; }
+  .mini-page-footer { padding: 1.4rem 1.5rem; }
+  .five-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(5, 200px);
+  }
+  .slot-a, .slot-b, .slot-c, .slot-d, .slot-e { grid-column: 1; grid-row: auto; }
+  .footer-content { grid-template-columns: 1fr; gap: 2rem; }
+  .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+  .lightbox-nav { width: 45px; height: 45px; font-size: 1.2rem; }
+  .lightbox-prev { left: 10px; }
+  .lightbox-next { right: 10px; }
+  .section-tag::before, .section-tag::after { display: none; }
+}
+@media (max-width: 640px) {
+  .gallery-section { padding: 4rem 4%; }
+  .gallery-hero { padding: 80px 4% 4rem; }
+  .gallery-hero-badge { font-size: 0.7rem; padding: 0.4rem 0.8rem; }
+  .mini-page { border-radius: 16px; }
+  .mini-page-header { padding: 1.5rem 1.2rem 1.2rem; }
+  .mini-page-body { padding: 1rem 0.8rem 1.2rem; }
+  .five-grid { grid-template-rows: repeat(5, 180px); gap: 8px; }
+  .gallery-item-overlay { padding: 1rem 1.2rem; }
+  .gallery-item-overlay h4 { font-size: 1.2rem; }
+  .view-icon { width: 40px; height: 40px; }
+  .view-icon svg { width: 18px; height: 18px; }
+  footer { padding: 3rem 4% 1.5rem; }
+}
+@media (max-width: 480px) {
+  .gallery-section { padding: 3rem 5%; }
+  .gallery-hero { padding: 80px 5% 3rem; }
+  .gallery-hero p { font-size: 0.9rem; }
+  .gallery-tabs-container { padding: 1rem; top: 75px; }
+  .gallery-tab { padding: 0.5rem 1rem; font-size: 0.8rem; }
+  .mini-page-header { padding: 1.2rem 1rem 1rem; }
+  .mini-page-title { font-size: clamp(2rem, 8vw, 2.5rem); }
+  .mini-page-body { padding: 0.8rem 0.6rem 1rem; }
+  .five-grid { grid-template-rows: repeat(5, 160px); gap: 6px; }
+  .gallery-item { border-radius: 10px; }
+  .mini-page-footer { padding: 1rem; flex-direction: column; gap: 1rem; }
+  .mini-page-footer-bar { width: 100%; height: 3px; }
+  .logo-sub { display: none; }
+  .logo-main { font-size: 1.5rem; }
+  .logo-icon { width: 40px; height: 40px; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+  .social-links { justify-content: center; }
+  .lightbox-close { top: 10px; right: 10px; width: 44px; height: 44px; }
+  .lightbox-caption { font-size: 0.85rem; padding: 0.6rem 1.2rem; }
+}
+@media (max-width: 390px) {
+  html { font-size: 14px; }
+  .gallery-hero h1 { font-size: 2.8rem; }
+  .gallery-tab { padding: 0.5rem 0.9rem; font-size: 0.75rem; }
+  .five-grid { grid-template-rows: repeat(5, 150px); }
+  .gallery-item-overlay h4 { font-size: 1.1rem; }
+  .loader-logo { width: 56px; height: 56px; }
+  nav { width: 95%; }
+  .order-btn { padding: 0.5rem 1rem; font-size: 0.85rem; }
+}
+@media (max-width: 320px) {
+  .gallery-hero h1 { font-size: 2.2rem; }
+  .gallery-hero p { font-size: 0.85rem; }
+  .gallery-tab { padding: 0.4rem 0.7rem; font-size: 0.7rem; }
+  .five-grid { grid-template-rows: repeat(5, 130px); gap: 4px; }
+  .mini-page-title { font-size: 1.8rem; }
+  .mini-page-label { font-size: 0.6rem; }
+  .gallery-item-overlay { padding: 0.8rem 1rem; }
+  .gallery-item-overlay h4 { font-size: 1rem; }
+  .gallery-item-overlay p { font-size: 0.75rem; }
+  .view-icon { width: 36px; height: 36px; }
+  .view-icon svg { width: 16px; height: 16px; }
+  .mini-page-footer p { font-size: 0.85rem; }
+  footer { padding: 2rem 5% 1rem; }
+  .footer-section h3 { font-size: 1.1rem; }
+  .footer-section a, .footer-contact p { font-size: 0.85rem; }
+  .social-links a { width: 40px; height: 40px; }
+  .social-links a img { width: 18px; height: 18px; }
+  .loader-logo { width: 48px; height: 48px; }
+  .loader-text { font-size: 1.2rem; letter-spacing: 4px; }
+  .lightbox-nav { width: 40px; height: 40px; font-size: 1rem; }
+  .lightbox-prev { left: 5px; }
+  .lightbox-next { right: 5px; }
+}
+@media (max-width: 768px) {
+  .gallery-tab, .lightbox-nav, .lightbox-close, .view-icon, .menu-toggle {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+</style>
+<base target="_blank">
 </head>
 <body>
 
-    <!-- Navigation -->
-    <nav id="navbar">
-        <a href="index.html" class="logo-container">
-            <img src="/DS3M1EIGM/img/logoperron.png" alt="Logo" class="logo-icon"/>
-            <div class="logo-text">
-                <span class="logo-main">FLAMAS_SV</span>
-                <span class="logo-sub">La Mejor Hamburguesa</span>
-            </div>
-        </a>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="Menú.html">Menu</a></li>
-            <li><a href="historia.html">Historia</a></li>
-            <li><a href="Galeria.html" class="active">Galería</a></li>
-            <li><a href="ubicacion.html">Ubicación</a></li>
-            <li><a href="Ordenar.html" class="order-btn">🛒 Ordenar</a></li>
-        </ul>
-        <div class="menu-toggle" onclick="toggleMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-    </nav>
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-ring">
+    <img src="img/logoperron.png" alt="Logo" class="loader-logo">
+  </div>
+  <div class="loader-text">FLAMA'S</div>
+</div>
 
-    <!-- Hero -->
-    <section class="gallery-hero">
-        <div class="gallery-hero-grid"></div>
-        <div class="gallery-hero-content">
-            <div class="gallery-hero-badge">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;">
-                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                    <circle cx="12" cy="13" r="4"></circle>
-                </svg>
-                Conoce Nuestro Espacio
-            </div>
-            <h1>NUESTRAS <span>INSTALACIONES</span></h1>
-            <p>Un ambiente único diseñado para que disfrutes de la mejor experiencia gastronómica. Descubre cada rincón de Flama's.</p>
-        </div>
-    </section>
-
-    <!-- Tabs -->
-    <div class="gallery-tabs-container">
-        <div class="gallery-tabs">
-            <button class="gallery-tab active" onclick="switchGallery('exteriores', this)">
-                <span class="tab-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                    </svg>
-                </span> Exteriores
-            </button>
-            <button class="gallery-tab" onclick="switchGallery('interiores', this)">
-                <span class="tab-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="9" y1="3" x2="9" y2="21"></line>
-                    </svg>
-                </span> Interiores
-            </button>
-            <button class="gallery-tab" onclick="switchGallery('cocina', this)">
-                <span class="tab-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path>
-                        <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                </span> Cocina
-            </button>
-        </div>
+<!-- NAVIGATION -->
+<nav id="navbar">
+  <a href="index.html" class="logo-container">
+    <img src="img/logoperron.png" alt="Logo" class="logo-icon"/>
+    <div class="logo-text">
+      <span class="logo-main">FLAMA'S</span>
+      <span class="logo-sub">La Mejor Hamburguesa</span>
     </div>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Inicio</a></li>
+    <li><a href="menu.html">Men&uacute;</a></li>
+    <li><a href="historia.html">Historia</a></li>
+    <li><a href="galeria.html" class="active">Galer&iacute;a</a></li>
+    <li><a href="ubicacion.html">Ubicaci&oacute;n</a></li>
+    <li><a href="ordenar.html" class="order-btn">&#128722; Ordenar</a></li>
+  </ul>
+  <div class="menu-toggle" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</nav>
 
-    <!-- EXTERIORES -->
-    <section class="gallery-section active" id="exteriores">
-        <div class="mini-page fade-in">
-            <div class="mini-page-header">
-                <div>
-                    <div class="mini-page-label">Galeria — 01 / 03</div>
-                    <div class="mini-page-title">Exteriores</div>
-                </div>
-                <p class="mini-page-subtitle">Nuestra fachada y espacios al aire libre, el primer impacto de Flama's en Jucuapa.</p>
-            </div>
-            <div class="mini-page-body">
-                <div class="five-grid">
-                    <div class="gallery-item slot-a" onclick="openLightbox(this)">
-                        <img src="img/exterior 208.jpeg" alt="Fachada Principal">
-                        <div class="view-icon">
-                            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-                        </div>
-                        <div class="gallery-item-overlay"><h4>Fachada Principal</h4><p>El corazon de Jucuapa en Flamas</p></div>
-                    </div>
-                    <div class="gallery-item slot-b" onclick="openLightbox(this)">
-                        <img src="img/exterior_2.jpeg" alt="Vista Lateral">
-                        <div class="view-icon">
-                            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-                        </div>
-                        <div class="gallery-item-overlay"><h4>Vista Lateral</h4><p>Colores que nos identifican.</p></div>
-                    </div>
-                    <div class="gallery-item slot-c" onclick="openLightbox(this)">
-                        <img src="img/exterior_3.jpeg" alt="Entrada">
-                        <div class="view-icon">
-                            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-                        </div>
-                        <div class="gallery-item-overlay"><h4>Entrada Principal</h4><p>Bienvenidos a la experiencia</p></div>
-                    </div>
-                    <div class="gallery-item slot-d" onclick="openLightbox(this)">
-                        <img src="img/exterior_4.jpeg" alt="Terraza">
-                        <div class="view-icon">
-                            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-                        </div>
-                        <div class="gallery-item-overlay"><h4>Terraza Exterior</h4><p>Disfruta al aire libre</p></div>
-                    </div>
-                    <div class="gallery-item slot-e" onclick="openLightbox(this)">
-                        <img src="img/exterior_5.jpeg" alt="Vista Completa" style="object-position:center 40%;">
-                        <div class="view-icon">
-                            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-                        </div>
-                        <div class="gallery-item-overlay"><h4>Vista de Nuestro Ambiente al Entrar</h4><p>Todo el ambiente Flama's</p></div>
-                    </div>
-                </div>
-            </div>
-            <div class="mini-page-footer">
-                <div class="mini-page-footer-bar"></div>
-                <p>La fachada de Flama's es el primer punto de contacto con nuestra experiencia. <strong>Diseñada para impactar desde la calle,</strong> cada detalle exterior refleja la personalidad de nuestro lugar — cálida, vibrante y auténtica.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- INTERIORES -->
-    <section class="gallery-section" id="interiores">
-        <div class="mini-page fade-in">
-            <div class="mini-page-header">
-                <div>
-                    <div class="mini-page-label">Galeria — 02 / 03</div>
-                    <div class="mini-page-title">Interiores</div>
-                </div>
-                <p class="mini-page-subtitle">Un ambiente cálido y moderno donde cada detalle está pensado para tu comodidad.</p>
-            </div>
-            <div class="mini-page-body">
-                <div class="five-grid">
-                    <div class="gallery-item slot-a" onclick="openLightbox(this)">
-                        <img src="img/interior_1.jpeg" alt="Sala Principal">
-                        <div class="view-icon">
-                            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-                        </div>
-                        <div class="gallery-item-overlay"><h4>Sala Principal</h4><p>El corazon de Flama's</p></div>
-                    </div>
-                    <div class="gallery-item slot-b" onclick="openLightbox(this)">
-                        <img src="img/interior_2.jpeg" alt="Decoracion Industrial">
-                        <div class="view-icon">
-                            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-                        </div>
-                        <div class="gallery-item-overlay"><h4>Decoracion Industrial</h4><p>Cada rincon cuenta una historia</p></div>
-                    </div>
-                    <div class="gallery-item slot-c" onclick="openLightbox(this)">
-                        <img src="img/interior_3.jpeg" alt="Neon Sign">
-                        <div class="view-icon">
-                            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-                        </div>
-                        <div class="gallery-item-overlay"><h4>Decoraciones</h4><p>A falta de amor, una burger</p></div>
-                    </div>
-                    <div class="gallery-item slot-d" onclick="openLightbox(this)">
-                        <img src="img/interior_4.jpeg" alt="Area de Booths">
-                        <div class="view-icon">
-                            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-                        </div>
-                        <div class="gallery-item-overlay"><h4>Areas de Comida</h4><p>Comodidad para compartir</p></div>
-                    </div>
-                    <div class="gallery-item slot-e" onclick="openLightbox(this)">
-                        <img src="img/interior_5.jpeg" alt="Vista desde Entrada" style="object-position:center 30%;">
-                        <div class="view-icon">
-                            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-                        </div>
-                        <div class="gallery-item-overlay"><h4>Vista desde Entrada</h4><p>Iluminacion que enamora</p></div>
-                    </div>
-                </div>
-            </div>
-            <div class="mini-page-footer">
-                <div class="mini-page-footer-bar"></div>
-                <p>El interior combina <strong>estética industrial con calidez genuina.</strong> Las luces de neón y los detalles decorativos crean un ambiente que invita a quedarse y disfrutar cada momento.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- COCINA -->
-    <section class="gallery-section" id="cocina">
-        <div class="mini-page fade-in">
-            <div class="mini-page-header">
-                <div>
-                    <div class="mini-page-label">Galeria — 03 / 03</div>
-                    <div class="mini-page-title">Cocina</div>
-                </div>
-                <p class="mini-page-subtitle">Donde la magia sucede. Equipamiento profesional y los más altos estándares de higiene.</p>
-            </div>
-            <div class="mini-page-body">
-                <div class="five-grid">
-                    <div class="gallery-item slot-a" onclick="openLightbox(this)">
-                        <img src="img/cocina_1.jpeg" alt="Linea de Cocina">
-                        <div class="view-icon">
-                            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-                        </div>
-                        <div class="gallery-item-overlay"><h4>Linea de Cocina</h4><p>Donde nace la magia</p></div>
-                    </div>
-                    <div class="gallery-item slot-b" onclick="openLightbox(this)">
-                        <img src="img/cocina_2.jpeg" alt="Area de Preparacion">
-                        <div class="view-icon">
-                            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-                        </div>
-                        <div class="gallery-item-overlay"><h4>Area de Preparacion</h4><p>Orden y limpieza garantizados</p></div>
-                    </div>
-                    <div class="gallery-item slot-c" onclick="openLightbox(this)">
-                        <img src="img/cocina_3.jpeg" alt="Plancha">
-                        <div class="view-icon">
-                            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-                        </div>
-                        <div class="gallery-item-overlay"><h4>Plancha</h4><p>La clave de las mejores hamburguesas</p></div>
-                    </div>
-                    <div class="gallery-item slot-d" onclick="openLightbox(this)">
-                        <img src="img/cocina_4.jpeg" alt="Area de Bebidas">
-                        <div class="view-icon">
-                            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-                        </div>
-                        <div class="gallery-item-overlay"><h4>Area de Preparación de Bebidas</h4><p>Refrescos listos para servir</p></div>
-                    </div>
-                    <div class="gallery-item slot-e" onclick="openLightbox(this)">
-                        <img src="img/cocina_5.jpeg" alt="Vista General Cocina" style="object-position:center 50%;">
-                        <div class="view-icon">
-                            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-                        </div>
-                        <div class="gallery-item-overlay"><h4>Vista General</h4><p>Profesionalismo en cada detalle</p></div>
-                    </div>
-                </div>
-            </div>
-            <div class="mini-page-footer">
-                <div class="mini-page-footer-bar"></div>
-                <p>Trabajamos con <strong>equipamiento profesional y los más altos estándares de higiene.</strong> Cada burger nace aquí, donde la plancha, los ingredientes frescos y la técnica se unen para crear algo extraordinario.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Lightbox -->
-    <div class="lightbox" id="lightbox" onclick="handleLightboxClick(event)">
-        <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-        <button class="lightbox-nav lightbox-prev" onclick="navigateLightbox(-1, event)">‹</button>
-        <button class="lightbox-nav lightbox-next" onclick="navigateLightbox(1, event)">›</button>
-        <div class="lightbox-content">
-            <img src="" alt="" id="lightbox-img">
-        </div>
-        <div class="lightbox-caption" id="lightbox-caption"></div>
+<!-- HERO -->
+<section class="gallery-hero">
+  <div class="gallery-hero-grid"></div>
+  <div class="gallery-hero-content">
+    <div class="gallery-hero-badge">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;">
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+        <circle cx="12" cy="13" r="4"></circle>
+      </svg>
+      Conoce Nuestro Espacio
     </div>
+    <h1>NUESTRAS <span>INSTALACIONES</span></h1>
+    <p>Un ambiente &uacute;nico dise&ntilde;ado para que disfrutes de la mejor experiencia gastron&oacute;mica. Descubre cada rinc&oacute;n de Flama's.</p>
+  </div>
+</section>
 
-    <!-- Footer -->
-    <footer id="contacto">
-        <div class="footer-content">
-            <div class="footer-brand">
-                <div class="footer-logo">
-                    <img src="/DS3M1EIGM/img/logoperron.png" alt="Logo" class="logo-icon"/>
-                    <div class="footer-logo-text">
-                        <span class="main">FLAMAS_SV</span>
-                    </div>
-                </div>
-                <p>Las mejores hamburguesas artesanales de Jucuapa. Hechas con amor, pasion y los mejores ingredientes locales.</p>
-                <div class="social-links">
-                    <a href="#"><img src="img/Whatsap-.png" alt="WhatsApp"></a>
-                    <a href="#"><img src="img/Facebook-.png" alt="Facebook"></a>
-                    <a href="#"><img src="img/Instagram-.png" alt="Instagram"></a>
-                    <a href="#"><img src="img/Twitter.jpg" alt="Twitter"></a>
-                </div>
-            </div>
-            <div class="footer-section">
-                <h3>Horario</h3>
-                <ul>
-                    <li><a href="#">Lun - Mar: 12:00 - 5:00</a></li>
-                    <li><a href="#">Jue - Sáb: 12:00 - 5:00</a></li>
-                    <li><a href="#">Domingo: 12:00 - 5:30</a></li>
-                </ul>
-            </div>
-            <div class="footer-contact footer-section">
-                <h3>Contacto</h3>
-                <p><img src="img/Ubicacion-.png" alt=""> Plaza, Jucuapa</p>
-                <p><img src="img/Whatsap-.png" alt=""> 7067-1505</p>
-                <p><img src="img/gmail-.png" alt=""> hola@flamassv.com</p>
-            </div>
-            <div class="footer-section">
-                <h3>Links</h3>
-                <ul>
-                    <li><a href="Menú.html">→ Menú</a></li>
-                    <li><a href="historia.html">→ Historia</a></li>
-                    <li><a href="Galeria.html">→ Galería</a></li>
-                    <li><a href="ubicacion.html">→ Ubicación</a></li>
-                </ul>
-            </div>
+<!-- TABS -->
+<div class="gallery-tabs-container">
+  <div class="gallery-tabs">
+    <button class="gallery-tab active" onclick="switchGallery('exteriores', this)">
+      <span class="tab-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+      </span>
+      Exteriores
+    </button>
+    <button class="gallery-tab" onclick="switchGallery('interiores', this)">
+      <span class="tab-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="9" y1="3" x2="9" y2="21"></line>
+        </svg>
+      </span>
+      Interiores
+    </button>
+    <button class="gallery-tab" onclick="switchGallery('cocina', this)">
+      <span class="tab-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+      </span>
+      Cocina
+    </button>
+  </div>
+</div>
+
+<!-- EXTERIORES -->
+<section class="gallery-section active" id="exteriores">
+  <div class="mini-page fade-in">
+    <div class="mini-page-header">
+      <div>
+        <div class="mini-page-label">Galer&iacute;a &mdash; 01 / 03</div>
+        <div class="mini-page-title">Exteriores</div>
+      </div>
+      <p class="mini-page-subtitle">Nuestra fachada y espacios al aire libre, el primer impacto de Flama's en Jucuapa.</p>
+    </div>
+    <div class="mini-page-body">
+      <div class="five-grid">
+        <div class="gallery-item slot-a" onclick="openLightbox(this)">
+          <img src="img/exterior_1.jpeg" alt="Fachada Principal">
+          <div class="view-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+          </div>
+          <div class="gallery-item-overlay"><h4>Fachada Principal</h4><p>El coraz&oacute;n de Jucuapa en Flama's</p></div>
         </div>
-    </footer>
+        <div class="gallery-item slot-b" onclick="openLightbox(this)">
+          <img src="img/exterior_2.jpeg" alt="Vista Lateral">
+          <div class="view-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+          </div>
+          <div class="gallery-item-overlay"><h4>Vista Lateral</h4><p>Colores que nos identifican</p></div>
+        </div>
+        <div class="gallery-item slot-c" onclick="openLightbox(this)">
+          <img src="img/exterior_3.jpeg" alt="Entrada">
+          <div class="view-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+          </div>
+          <div class="gallery-item-overlay"><h4>Entrada Principal</h4><p>Bienvenidos a la experiencia</p></div>
+        </div>
+        <div class="gallery-item slot-d" onclick="openLightbox(this)">
+          <img src="img/exterior_4.jpeg" alt="Terraza">
+          <div class="view-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+          </div>
+          <div class="gallery-item-overlay"><h4>Terraza Exterior</h4><p>Disfruta al aire libre</p></div>
+        </div>
+        <div class="gallery-item slot-e" onclick="openLightbox(this)">
+          <img src="img/exterior_5.jpeg" alt="Vista Completa" style="object-position:center 40%;">
+          <div class="view-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+          </div>
+          <div class="gallery-item-overlay"><h4>Vista de Nuestro Ambiente</h4><p>Todo el ambiente Flama's</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="mini-page-footer">
+      <div class="mini-page-footer-bar"></div>
+      <p>La fachada de Flama's es el primer punto de contacto con nuestra experiencia. <strong>Dise&ntilde;ada para impactar desde la calle,</strong> cada detalle exterior refleja la personalidad de nuestro lugar &mdash; c&aacute;lida, vibrante y aut&eacute;ntica.</p>
+    </div>
+  </div>
+</section>
 
-    <script>
-        // Navbar
-        function toggleMenu() {
-            document.getElementById('navLinks').classList.toggle('active');
-            document.querySelector('.menu-toggle').classList.toggle('active');
-        }
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                document.getElementById('navLinks').classList.remove('active');
-                document.querySelector('.menu-toggle').classList.remove('active');
-            });
-        });
-        window.addEventListener('scroll', () => {
-            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
-        });
+<!-- INTERIORES -->
+<section class="gallery-section" id="interiores">
+  <div class="mini-page fade-in">
+    <div class="mini-page-header">
+      <div>
+        <div class="mini-page-label">Galer&iacute;a &mdash; 02 / 03</div>
+        <div class="mini-page-title">Interiores</div>
+      </div>
+      <p class="mini-page-subtitle">Un ambiente c&aacute;lido y moderno donde cada detalle est&aacute; pensado para tu comodidad.</p>
+    </div>
+    <div class="mini-page-body">
+      <div class="five-grid">
+        <div class="gallery-item slot-a" onclick="openLightbox(this)">
+          <img src="img/interior_1.jpeg" alt="Sala Principal">
+          <div class="view-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+          </div>
+          <div class="gallery-item-overlay"><h4>Sala Principal</h4><p>El coraz&oacute;n de Flama's</p></div>
+        </div>
+        <div class="gallery-item slot-b" onclick="openLightbox(this)">
+          <img src="img/interior_2.jpeg" alt="Decoraci&oacute;n Industrial">
+          <div class="view-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+          </div>
+          <div class="gallery-item-overlay"><h4>Decoraci&oacute;n Industrial</h4><p>Cada rinc&oacute;n cuenta una historia</p></div>
+        </div>
+        <div class="gallery-item slot-c" onclick="openLightbox(this)">
+          <img src="img/interior_3.jpeg" alt="Ne&oacute;n Sign">
+          <div class="view-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+          </div>
+          <div class="gallery-item-overlay"><h4>Decoraciones</h4><p>A falta de amor, una burger</p></div>
+        </div>
+        <div class="gallery-item slot-d" onclick="openLightbox(this)">
+          <img src="img/interior_4.jpeg" alt="&Aacute;rea de Booths">
+          <div class="view-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+          </div>
+          <div class="gallery-item-overlay"><h4>&Aacute;reas de Comida</h4><p>Comodidad para compartir</p></div>
+        </div>
+        <div class="gallery-item slot-e" onclick="openLightbox(this)">
+          <img src="img/interior_5.jpeg" alt="Vista desde Entrada" style="object-position:center 30%;">
+          <div class="view-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+          </div>
+          <div class="gallery-item-overlay"><h4>Vista desde Entrada</h4><p>Iluminaci&oacute;n que enamora</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="mini-page-footer">
+      <div class="mini-page-footer-bar"></div>
+      <p>El interior combina <strong>est&eacute;tica industrial con calidez genuina.</strong> Las luces de ne&oacute;n y los detalles decorativos crean un ambiente que invita a quedarse y disfrutar cada momento.</p>
+    </div>
+  </div>
+</section>
 
-        // Gallery Tab Switching
-        function switchGallery(sectionId, btn) {
-            document.querySelectorAll('.gallery-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.gallery-tab').forEach(t => t.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
-            btn.classList.add('active');
-            // ✅ Re-observar el fade-in de la sección recién activada
-            setTimeout(() => {
-                const mp = document.querySelector('#' + sectionId + ' .mini-page');
-                if (mp) {
-                    mp.classList.remove('visible');
-                    setTimeout(() => observer.observe(mp), 60);
-                }
-            }, 60);
-            document.querySelector('.gallery-tabs-container').scrollIntoView({ behavior: 'smooth' });
-        }
+<!-- COCINA -->
+<section class="gallery-section" id="cocina">
+  <div class="mini-page fade-in">
+    <div class="mini-page-header">
+      <div>
+        <div class="mini-page-label">Galer&iacute;a &mdash; 03 / 03</div>
+        <div class="mini-page-title">Cocina</div>
+      </div>
+      <p class="mini-page-subtitle">Donde la magia sucede. Equipamiento profesional y los m&aacute;s altos est&aacute;ndares de higiene.</p>
+    </div>
+    <div class="mini-page-body">
+      <div class="five-grid">
+        <div class="gallery-item slot-a" onclick="openLightbox(this)">
+          <img src="img/cocina_1.jpeg" alt="L&iacute;nea de Cocina">
+          <div class="view-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+          </div>
+          <div class="gallery-item-overlay"><h4>L&iacute;nea de Cocina</h4><p>Donde nace la magia</p></div>
+        </div>
+        <div class="gallery-item slot-b" onclick="openLightbox(this)">
+          <img src="img/cocina_2.jpeg" alt="&Aacute;rea de Preparaci&oacute;n">
+          <div class="view-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+          </div>
+          <div class="gallery-item-overlay"><h4>&Aacute;rea de Preparaci&oacute;n</h4><p>Orden y limpieza garantizados</p></div>
+        </div>
+        <div class="gallery-item slot-c" onclick="openLightbox(this)">
+          <img src="img/cocina_3.jpeg" alt="Plancha">
+          <div class="view-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+          </div>
+          <div class="gallery-item-overlay"><h4>Plancha</h4><p>La clave de las mejores hamburguesas</p></div>
+        </div>
+        <div class="gallery-item slot-d" onclick="openLightbox(this)">
+          <img src="img/cocina_4.jpeg" alt="&Aacute;rea de Bebidas">
+          <div class="view-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+          </div>
+          <div class="gallery-item-overlay"><h4>&Aacute;rea de Bebidas</h4><p>Refrescos listos para servir</p></div>
+        </div>
+        <div class="gallery-item slot-e" onclick="openLightbox(this)">
+          <img src="img/cocina_5.jpeg" alt="Vista General Cocina" style="object-position:center 50%;">
+          <div class="view-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+          </div>
+          <div class="gallery-item-overlay"><h4>Vista General</h4><p>Profesionalismo en cada detalle</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="mini-page-footer">
+      <div class="mini-page-footer-bar"></div>
+      <p>Trabajamos con <strong>equipamiento profesional y los m&aacute;s altos est&aacute;ndares de higiene.</strong> Cada burger nace aqu&iacute;, donde la plancha, los ingredientes frescos y la t&eacute;cnica se unen para crear algo extraordinario.</p>
+    </div>
+  </div>
+</section>
 
-        // ✅ IntersectionObserver corregido — agrega clase "visible"
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.05, rootMargin: "0px 0px -30px 0px" });
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="handleLightboxClick(event)">
+  <button class="lightbox-close" onclick="closeLightbox()">&#10005;</button>
+  <button class="lightbox-nav lightbox-prev" onclick="navigateLightbox(-1, event)">&#8249;</button>
+  <button class="lightbox-nav lightbox-next" onclick="navigateLightbox(1, event)">&#8250;</button>
+  <div class="lightbox-content">
+    <img src="" alt="" id="lightbox-img">
+  </div>
+  <div class="lightbox-caption" id="lightbox-caption"></div>
+</div>
 
-        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+<!-- FOOTER -->
+<footer id="contacto">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <img src="img/logoperron.png" alt="Logo" class="logo-icon"/>
+        <div class="footer-logo-text">
+          <span class="main">FLAMA'S</span>
+        </div>
+      </div>
+      <p>Las mejores hamburguesas artesanales de Jucuapa. Hechas con amor, pasi&oacute;n y los mejores ingredientes locales.</p>
+      <div class="social-links">
+        <a href="#"><img src="img/Whatsap-.png" alt="WhatsApp"></a>
+        <a href="#"><img src="img/Facebook-.png" alt="Facebook"></a>
+        <a href="#"><img src="img/Instagram-.png" alt="Instagram"></a>
+        <a href="#"><img src="img/Twitter.jpg" alt="Twitter"></a>
+      </div>
+    </div>
+    <div class="footer-col">
+            <h4>Horario</h4>
+            <ul>
+                <li><a href="#">Lun – Mar: 11am – 9pm</a></li>
+                <li><a href="#">Jue – Sáb: 11am – 9pm</a></li>
+                <li><a href="#">Domingo: 11am – 9pm</a></li>
+            </ul>
+        </div>
+    <div class="footer-contact footer-section">
+      <h3>Contacto</h3>
+      <p><img src="img/Ubicacion-.png" alt=""> Plaza, Jucuapa</p>
+      <p><img src="img/Whatsap-.png" alt=""> 7018-3333</p>
+      <p><img src="img/gmail-.png" alt=""> flamassv@gmail.com</p>
+    </div>
+    <div class="footer-section">
+      <h3>Links</h3>
+      <ul>
+        <li><a href="menu.html">&rarr; Men&uacute;</a></li>
+        <li><a href="historia.html">&rarr; Historia</a></li>
+        <li><a href="galeria.html">&rarr; Galer&iacute;a</a></li>
+        <li><a href="ubicacion.html">&rarr; Ubicaci&oacute;n</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Flama's. Todos los derechos reservados.</span>
+    <span>Hecho con &#128293; en Jucuapa</span>
+  </div>
+</footer>
 
-        // Lightbox
-        let currentIndex = 0;
-        let currentItems = [];
+<script>
+// LOADER
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hidden');
+  }, 1200);
+});
 
-        function openLightbox(element) {
-            const img = element.querySelector('img');
-            const title = element.querySelector('h4').textContent;
-            currentItems = Array.from(document.querySelector('.gallery-section.active').querySelectorAll('.gallery-item'));
-            currentIndex = currentItems.indexOf(element);
-            document.getElementById('lightbox-img').src = img.src;
-            document.getElementById('lightbox-img').alt = img.alt;
-            document.getElementById('lightbox-caption').textContent = title;
-            document.getElementById('lightbox').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
+// NAVBAR
+function toggleMenu() {
+  const navLinks = document.getElementById('navLinks');
+  const menuToggle = document.querySelector('.menu-toggle');
+  navLinks.classList.toggle('active');
+  menuToggle.classList.toggle('active');
+  if (navLinks.classList.contains('active')) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = '';
+  }
+}
 
-        function closeLightbox() {
-            document.getElementById('lightbox').classList.remove('active');
-            document.body.style.overflow = '';
-        }
+// Close nav on link click
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => {
+    document.getElementById('navLinks').classList.remove('active');
+    document.querySelector('.menu-toggle').classList.remove('active');
+    document.body.style.overflow = '';
+  });
+});
 
-        function handleLightboxClick(e) {
-            if (e.target === document.getElementById('lightbox')) closeLightbox();
-        }
+// Close nav when clicking outside
+const navOverlay = document.createElement('div');
+navOverlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1500;opacity:0;visibility:hidden;transition:all 0.3s;';
+document.body.appendChild(navOverlay);
 
-        function navigateLightbox(dir, e) {
-            if (e) e.stopPropagation();
-            currentIndex = (currentIndex + dir + currentItems.length) % currentItems.length;
-            const item = currentItems[currentIndex];
-            document.getElementById('lightbox-img').src = item.querySelector('img').src;
-            document.getElementById('lightbox-img').alt = item.querySelector('img').alt;
-            document.getElementById('lightbox-caption').textContent = item.querySelector('h4').textContent;
-        }
+function updateOverlay() {
+  const navLinks = document.getElementById('navLinks');
+  if (navLinks.classList.contains('active')) {
+    navOverlay.style.opacity = '1';
+    navOverlay.style.visibility = 'visible';
+  } else {
+    navOverlay.style.opacity = '0';
+    navOverlay.style.visibility = 'hidden';
+  }
+}
 
-        document.addEventListener('keydown', (e) => {
-            if (!document.getElementById('lightbox').classList.contains('active')) return;
-            if (e.key === 'Escape') closeLightbox();
-            if (e.key === 'ArrowLeft') navigateLightbox(-1, null);
-            if (e.key === 'ArrowRight') navigateLightbox(1, null);
-        });
-    </script>
+navOverlay.addEventListener('click', () => {
+  document.getElementById('navLinks').classList.remove('active');
+  document.querySelector('.menu-toggle').classList.remove('active');
+  document.body.style.overflow = '';
+  updateOverlay();
+});
+
+const originalToggleMenu = toggleMenu;
+window.toggleMenu = function() {
+  originalToggleMenu();
+  updateOverlay();
+};
+
+// Navbar scroll effect
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// GALLERY TAB SWITCHING
+function switchGallery(sectionId, btn) {
+  document.querySelectorAll('.gallery-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.gallery-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(sectionId).classList.add('active');
+  btn.classList.add('active');
+  setTimeout(() => {
+    const mp = document.querySelector('#' + sectionId + ' .mini-page');
+    if (mp) {
+      mp.classList.remove('visible');
+      setTimeout(() => observer.observe(mp), 60);
+    }
+  }, 60);
+  document.querySelector('.gallery-tabs-container').scrollIntoView({ behavior: 'smooth' });
+}
+
+// INTERSECTION OBSERVER
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.05, rootMargin: "0px 0px -30px 0px" });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// LIGHTBOX
+let currentIndex = 0;
+let currentItems = [];
+
+function openLightbox(element) {
+  const img = element.querySelector('img');
+  const title = element.querySelector('h4').textContent;
+  currentItems = Array.from(document.querySelector('.gallery-section.active').querySelectorAll('.gallery-item'));
+  currentIndex = currentItems.indexOf(element);
+  document.getElementById('lightbox-img').src = img.src;
+  document.getElementById('lightbox-img').alt = img.alt;
+  document.getElementById('lightbox-caption').textContent = title;
+  document.getElementById('lightbox').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function handleLightboxClick(e) {
+  if (e.target === document.getElementById('lightbox')) closeLightbox();
+}
+
+function navigateLightbox(dir, e) {
+  if (e) e.stopPropagation();
+  currentIndex = (currentIndex + dir + currentItems.length) % currentItems.length;
+  const item = currentItems[currentIndex];
+  document.getElementById('lightbox-img').src = item.querySelector('img').src;
+  document.getElementById('lightbox-img').alt = item.querySelector('img').alt;
+  document.getElementById('lightbox-caption').textContent = item.querySelector('h4').textContent;
+}
+
+document.addEventListener('keydown', (e) => {
+  if (!document.getElementById('lightbox').classList.contains('active')) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') navigateLightbox(-1, null);
+  if (e.key === 'ArrowRight') navigateLightbox(1, null);
+});
+
+// SMOOTH SCROLL for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    const href = this.getAttribute('href');
+    if (href !== '#') {
+      e.preventDefault();
+      const target = document.querySelector(href);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  });
+});
+</script>
 </body>
 </html>
