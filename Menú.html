@@ -6,7 +6,6 @@
     <title>Flama's | Menú - Las Mejores Hamburguesas Artesanales</title>
     <link rel="icon" href="img/logoperron.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- ✅ SE ELIMINÓ <base target="_blank"> QUE CAUSABA EL ERROR -->
     <style>
         * {
             margin: 0;
@@ -303,10 +302,10 @@
         }
 
         /* ==========================================
-           CONTENIDO DEL MENÚ
+           CONTENIDO DEL MENÚ - NUEVO DISEÑO CON IMÁGENES
            ========================================== */
         main {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px 20px 80px;
         }
@@ -314,8 +313,8 @@
         .menu-section {
             background: var(--gray);
             border-radius: 24px;
-            padding: 24px;
-            margin-bottom: 30px;
+            padding: 32px;
+            margin-bottom: 40px;
             border: 1px solid var(--glass-border);
             transition: all 0.3s;
         }
@@ -330,99 +329,189 @@
             align-items: center;
             gap: 12px;
             border-bottom: 1px solid var(--glass-border);
-            padding-bottom: 12px;
-            margin-bottom: 20px;
+            padding-bottom: 16px;
+            margin-bottom: 24px;
         }
 
         .section-header .emoji {
-            font-size: 28px;
+            font-size: 32px;
         }
 
         .section-header h2 {
             font-family: 'Bebas Neue', cursive;
-            font-size: 1.8rem;
+            font-size: 2.2rem;
             color: var(--primary);
             letter-spacing: 2px;
             flex: 1;
         }
 
         .section-count {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
             background: rgba(255,255,255,0.05);
-            padding: 4px 12px;
+            padding: 6px 16px;
             border-radius: 20px;
+            font-weight: 600;
         }
 
-        .menu-item {
+        /* Grid de productos */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background: var(--darker);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(255, 77, 0, 0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.08);
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            gap: 16px;
-            padding: 12px 0;
-            border-bottom: 1px dotted rgba(255,255,255,0.05);
+            gap: 10px;
+            margin-bottom: 8px;
         }
 
-        .menu-item:last-child {
-            border-bottom: none;
-        }
-
-        .item-info {
-            flex: 1;
-        }
-
-        .item-name {
+        .product-name {
             font-weight: 700;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
+            font-size: 1.1rem;
+            color: var(--light);
+            line-height: 1.3;
         }
 
-        .popular {
-            font-size: 0.55rem;
-            background: var(--primary);
-            color: #fff;
-            padding: 2px 8px;
-            border-radius: 4px;
-            text-transform: uppercase;
-        }
-
-        .item-desc {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-top: 4px;
-        }
-
-        .item-price {
+        .product-price {
             font-weight: 800;
-            font-size: 1rem;
+            font-size: 1.1rem;
             color: var(--primary);
             background: rgba(255, 77, 0, 0.1);
             border: 1px solid rgba(255, 77, 0, 0.2);
-            padding: 6px 16px;
+            padding: 6px 14px;
             border-radius: 30px;
             white-space: nowrap;
+            flex-shrink: 0;
         }
 
-        .note {
-            font-size: 0.7rem;
-            color: var(--primary);
-            text-align: center;
-            margin-top: 16px;
-            padding: 8px;
-            background: rgba(255, 77, 0, 0.05);
-            border-radius: 8px;
+        .product-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.5;
         }
 
+        .popular-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--primary);
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 2;
+            box-shadow: 0 4px 15px rgba(255, 77, 0, 0.4);
+        }
+
+        .new-badge {
+            background: linear-gradient(135deg, #00c853, #00e676);
+            box-shadow: 0 4px 15px rgba(0, 200, 83, 0.4);
+        }
+
+        .top-badge {
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            color: #000;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        /* Subcategorías */
         .sub-category {
             font-weight: 800;
-            font-size: 0.85rem;
+            font-size: 1rem;
             color: #e8d5a3;
-            margin: 16px 0 8px;
-            padding-bottom: 4px;
+            margin: 24px 0 16px;
+            padding-bottom: 8px;
             border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sub-category:first-of-type {
+            margin-top: 0;
+        }
+
+        /* Notas */
+        .note {
+            font-size: 0.8rem;
+            color: var(--primary);
+            text-align: center;
+            margin-top: 20px;
+            padding: 12px;
+            background: rgba(255, 77, 0, 0.05);
+            border-radius: 12px;
+            border: 1px dashed rgba(255, 77, 0, 0.2);
+        }
+
+        /* Lista clásica para bebidas sin imagen */
+        .drink-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .drink-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 20px;
+            background: var(--darker);
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s;
+        }
+
+        .drink-item:hover {
+            border-color: var(--primary);
+            background: rgba(255, 77, 0, 0.05);
+        }
+
+        .drink-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .drink-price {
+            font-weight: 700;
+            color: var(--primary);
         }
 
         /* ==========================================
@@ -607,6 +696,9 @@
            RESPONSIVE
            ========================================== */
         @media (max-width: 968px) {
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
             .footer-content {
                 grid-template-columns: 1fr 1fr;
             }
@@ -638,6 +730,12 @@
             .menu-toggle {
                 display: flex;
             }
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            .product-image {
+                height: 220px;
+            }
             .footer-content {
                 grid-template-columns: 1fr;
                 gap: 2rem;
@@ -656,6 +754,7 @@
             }
         }
     </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -712,33 +811,48 @@
                 <h2>Para Empezar</h2>
                 <span class="section-count">4 items</span>
             </div>
-            <div class="menu-item">
-                <div class="item-info">
-                    <div class="item-name">Pan con Ajo <span class="popular">Popular</span></div>
-                    <div class="item-desc">Pan artesanal tostado con mantequilla y ajo fresco (4 unidades)</div>
+            <div class="products-grid">
+                <div class="product-card">
+                    <span class="popular-badge">Popular</span>
+                    <img src="https://images.unsplash.com/photo-1573140247632-fa7207d2f4be?w=400&h=300&fit=crop" alt="Pan con Ajo" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">Pan con Ajo</span>
+                            <span class="product-price">$2.50</span>
+                        </div>
+                        <p class="product-desc">Pan artesanal tostado con mantequilla y ajo fresco (4 unidades)</p>
+                    </div>
                 </div>
-                <div class="item-price">$2.50</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info">
-                    <div class="item-name">Papas Sazonadas</div>
-                    <div class="item-desc">Crujientes papas fritas con especias especiales</div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?w=400&h=300&fit=crop" alt="Papas Sazonadas" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">Papas Sazonadas</span>
+                            <span class="product-price">$2.50</span>
+                        </div>
+                        <p class="product-desc">Crujientes papas fritas con especias especiales</p>
+                    </div>
                 </div>
-                <div class="item-price">$2.50</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info">
-                    <div class="item-name">Dedos de Queso</div>
-                    <div class="item-desc">Empanizados y crujientes (5 unidades)</div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=400&h=300&fit=crop" alt="Dedos de Queso" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">Dedos de Queso</span>
+                            <span class="product-price">$3.00</span>
+                        </div>
+                        <p class="product-desc">Empanizados y crujientes (5 unidades)</p>
+                    </div>
                 </div>
-                <div class="item-price">$3.00</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info">
-                    <div class="item-name">Aros de Cebolla</div>
-                    <div class="item-desc">Crujientes por fuera, tiernos por dentro (8 unidades)</div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1639024471283-03518883512d?w=400&h=300&fit=crop" alt="Aros de Cebolla" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">Aros de Cebolla</span>
+                            <span class="product-price">$2.50</span>
+                        </div>
+                        <p class="product-desc">Crujientes por fuera, tiernos por dentro (8 unidades)</p>
+                    </div>
                 </div>
-                <div class="item-price">$2.50</div>
             </div>
         </section>
 
@@ -749,26 +863,37 @@
                 <h2>Hamburguesas de Pollo</h2>
                 <span class="section-count">3 items</span>
             </div>
-            <div class="menu-item">
-                <div class="item-info">
-                    <div class="item-name">La Pió</div>
-                    <div class="item-desc">Pollo crujiente, queso, cebolla caramelizada, lechuga y tomate</div>
+            <div class="products-grid">
+                <div class="product-card">
+                    <img src="https://kimi-web-img.moonshot.cn/img/d1uc6tjdfuj6xp.cloudfront.net/64359a1297db7589086aeeca6a29af46ef150184.jpg" alt="La Pió" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">La Pió</span>
+                            <span class="product-price">$5.00</span>
+                        </div>
+                        <p class="product-desc">Pollo crujiente, queso, cebolla caramelizada, lechuga y tomate</p>
+                    </div>
                 </div>
-                <div class="item-price">$5.00</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info">
-                    <div class="item-name">La Chipotle</div>
-                    <div class="item-desc">Pollo crujiente bañado en salsa chipotle, queso, cebolla caramelizada</div>
+                <div class="product-card">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.butterbeready.com/e565747132ff346f8b1027e3881050a9ed13359b.jpg" alt="La Chipotle" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">La Chipotle</span>
+                            <span class="product-price">$6.00</span>
+                        </div>
+                        <p class="product-desc">Pollo crujiente bañado en salsa chipotle, queso, cebolla caramelizada</p>
+                    </div>
                 </div>
-                <div class="item-price">$6.00</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info">
-                    <div class="item-name">La Barbie</div>
-                    <div class="item-desc">Pollo crujiente bañado en salsa barbacoa, queso, cebolla caramelizada</div>
+                <div class="product-card">
+                    <img src="https://kimi-web-img.moonshot.cn/img/133902730.cdn6.editmysite.com/a395f71de981df8188449908d718ba0a64e8ddbb.jpeg" alt="La Barbie" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">La Barbie</span>
+                            <span class="product-price">$6.00</span>
+                        </div>
+                        <p class="product-desc">Pollo crujiente bañado en salsa barbacoa, queso, cebolla caramelizada</p>
+                    </div>
                 </div>
-                <div class="item-price">$6.00</div>
             </div>
             <div class="note">🍟 Todas incluyen papas fritas</div>
         </section>
@@ -778,35 +903,80 @@
             <div class="section-header">
                 <span class="emoji">🥩</span>
                 <h2>Hamburguesas de Res</h2>
-                <span class="section-count">9 items</span>
+                <span class="section-count">7 items</span>
             </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Facilota</div><div class="item-desc">Carne de res, lechuga, queso, tomate, cebolla caramelizada</div></div>
-                <div class="item-price">$5.00</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Cheese</div><div class="item-desc">Carne de res, queso americano y queso cheddar</div></div>
-                <div class="item-price">$5.00</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Honguito</div><div class="item-desc">Carne, hongos en salsa de la casa, queso, cebolla caramelizada</div></div>
-                <div class="item-price">$6.00</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Tropical <span class="popular">Nuevo</span></div><div class="item-desc">Carne, piña, tocino, lechuga, queso, tomate, cebolla caramelizada</div></div>
-                <div class="item-price">$6.00</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Bacon Cheese</div><div class="item-desc">Carne, queso americano, queso cheddar, pepinillos, tocino</div></div>
-                <div class="item-price">$6.00</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Ahuevada</div><div class="item-desc">Carne, huevo estrellado, tocino, lechuga, queso, tomate</div></div>
-                <div class="item-price">$6.00</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Guacamole</div><div class="item-desc">Carne, aguacate, tocino, lechuga, queso, tomate, cebolla morada</div></div>
-                <div class="item-price">$6.00</div>
+            <div class="products-grid">
+                <div class="product-card">
+                    <img src="https://kimi-web-img.moonshot.cn/img/thumbs.dreamstime.com/c6af9cf69756dc978c7ae4640883deb543285c0f.jpg" alt="La Facilota" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">La Facilota</span>
+                            <span class="product-price">$5.00</span>
+                        </div>
+                        <p class="product-desc">Carne de res, lechuga, queso, tomate, cebolla caramelizada</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop" alt="La Cheese" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">La Cheese</span>
+                            <span class="product-price">$5.00</span>
+                        </div>
+                        <p class="product-desc">Carne de res, queso americano y queso cheddar</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://kimi-web-img.moonshot.cn/img/t3.ftcdn.net/f694e05a90bc2e75f1645c6bff51ca0d482345de.jpg" alt="La Honguito" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">La Honguito</span>
+                            <span class="product-price">$6.00</span>
+                        </div>
+                        <p class="product-desc">Carne, hongos en salsa de la casa, queso, cebolla caramelizada</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <span class="popular-badge new-badge">Nuevo</span>
+                    <img src="https://kimi-web-img.moonshot.cn/img/media.istockphoto.com/3faa8670db50c5b4411d89a2dd5ba225979e7297.jpg" alt="La Tropical" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">La Tropical</span>
+                            <span class="product-price">$6.00</span>
+                        </div>
+                        <p class="product-desc">Carne, piña, tocino, lechuga, queso, tomate, cebolla caramelizada</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://kimi-web-img.moonshot.cn/img/s7d1.scene7.com/993d0a1af9e9fab5d8e058e82e0ccb15cdcac018" alt="La Bacon Cheese" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">La Bacon Cheese</span>
+                            <span class="product-price">$6.00</span>
+                        </div>
+                        <p class="product-desc">Carne, queso americano, queso cheddar, pepinillos, tocino</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://kimi-web-img.moonshot.cn/img/theheirloompantry.co/173d5753ce69d84f53971a0626a7b24a57067a6f.jpg" alt="La Ahuevada" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">La Ahuevada</span>
+                            <span class="product-price">$6.00</span>
+                        </div>
+                        <p class="product-desc">Carne, huevo estrellado, tocino, lechuga, queso, tomate</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://kimi-web-img.moonshot.cn/img/californiaavocado.com/62eda50f1ac85a56630fb1ddf9cde7c3afb8c234.jpeg" alt="La Guacamole" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">La Guacamole</span>
+                            <span class="product-price">$6.00</span>
+                        </div>
+                        <p class="product-desc">Carne, aguacate, tocino, lechuga, queso, tomate, cebolla morada</p>
+                    </div>
+                </div>
             </div>
             <div class="note">🍟 Todas incluyen papas fritas</div>
         </section>
@@ -816,19 +986,40 @@
             <div class="section-header">
                 <span class="emoji">💎</span>
                 <h2>Premium</h2>
-                <span class="section-count">4 items</span>
+                <span class="section-count">3 items</span>
             </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Bañada <span class="popular">Top</span></div><div class="item-desc">Bañada en queso cheddar, carne, tocino, lechuga, tomate</div></div>
-                <div class="item-price">$7.50</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Engañosa</div><div class="item-desc">Servida en cama de queso cheddar, carne, lechuga, tomate</div></div>
-                <div class="item-price">$7.50</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Doble Carne</div><div class="item-desc">Doble carne, tocino, lechuga, queso, tomate, cebolla caramelizada</div></div>
-                <div class="item-price">$7.50</div>
+            <div class="products-grid">
+                <div class="product-card">
+                    <span class="popular-badge top-badge">Top</span>
+                    <img src="https://kimi-web-img.moonshot.cn/img/img.freepik.com/70be7b451aadab7806516ce63d6652947095ba9f.jpg" alt="La Bañada" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">La Bañada</span>
+                            <span class="product-price">$7.50</span>
+                        </div>
+                        <p class="product-desc">Bañada en queso cheddar, carne, tocino, lechuga, tomate</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://kimi-web-img.moonshot.cn/img/img.freepik.com/bf26fff541b793e73f86816f20eba56c895eefbd.jpg" alt="La Engañosa" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">La Engañosa</span>
+                            <span class="product-price">$7.50</span>
+                        </div>
+                        <p class="product-desc">Servida en cama de queso cheddar, carne, lechuga, tomate</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://kimi-web-img.moonshot.cn/img/groundbeefrecipes.com/df3612000b6d2eb31a5543b6d421b5812ab8be32.jpg" alt="La Doble Carne" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">La Doble Carne</span>
+                            <span class="product-price">$7.50</span>
+                        </div>
+                        <p class="product-desc">Doble carne, tocino, lechuga, queso, tomate, cebolla caramelizada</p>
+                    </div>
+                </div>
             </div>
             <div class="note">🍟 Todas incluyen papas fritas</div>
         </section>
@@ -838,23 +1029,50 @@
             <div class="section-header">
                 <span class="emoji">👑</span>
                 <h2>Especialidades</h2>
-                <span class="section-count">5 items</span>
+                <span class="section-count">4 items</span>
             </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Mar y Tierra</div><div class="item-desc">Carne, camarones empanizados, queso, tocino, lechuga, tomate</div></div>
-                <div class="item-price">$8.00</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Castrosa</div><div class="item-desc">Doble carne, queso americano, tocino, costa de queso</div></div>
-                <div class="item-price">$8.00</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Argentina <span class="popular">Top</span></div><div class="item-desc">Carne, chorizo argentino, aguacate, tocino, aderezo especial</div></div>
-                <div class="item-price">$8.00</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">La Triple Carne</div><div class="item-desc">Triple carne, tocino, lechuga, queso, tomate, cebolla caramelizada</div></div>
-                <div class="item-price">$8.50</div>
+            <div class="products-grid">
+                <div class="product-card">
+                    <img src="https://kimi-web-img.moonshot.cn/img/img.freepik.com/ee90d1d277a346169e1f4766626d65403e92849a.jpg" alt="La Mar y Tierra" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">La Mar y Tierra</span>
+                            <span class="product-price">$8.00</span>
+                        </div>
+                        <p class="product-desc">Carne, camarones empanizados, queso, tocino, lechuga, tomate</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://kimi-web-img.moonshot.cn/img/groundbeefrecipes.com/df3612000b6d2eb31a5543b6d421b5812ab8be32.jpg" alt="La Castrosa" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">La Castrosa</span>
+                            <span class="product-price">$8.00</span>
+                        </div>
+                        <p class="product-desc">Doble carne, queso americano, tocino, costa de queso</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <span class="popular-badge top-badge">Top</span>
+                    <img src="https://kimi-web-img.moonshot.cn/img/people.com/8c3d914e388683b8777a4f04a4350de26a7368f5.jpg" alt="La Argentina" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">La Argentina</span>
+                            <span class="product-price">$8.00</span>
+                        </div>
+                        <p class="product-desc">Carne, chorizo argentino, aguacate, tocino, aderezo especial</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://kimi-web-img.moonshot.cn/img/mxriyum.com/282d809fa1826b463b21480064501ff6bfae9465.jpeg" alt="La Triple Carne" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">La Triple Carne</span>
+                            <span class="product-price">$8.50</span>
+                        </div>
+                        <p class="product-desc">Triple carne, tocino, lechuga, queso, tomate, cebolla caramelizada</p>
+                    </div>
+                </div>
             </div>
             <div class="note">🍟 Todas incluyen papas fritas</div>
         </section>
@@ -866,25 +1084,58 @@
                 <h2>Papas Preparadas</h2>
                 <span class="section-count">5 items</span>
             </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">Papas Mexicanas <span class="popular">Top</span></div><div class="item-desc">Carne asada, chirmol, aguacate, jalapeños, queso</div></div>
-                <div class="item-price">$6.00</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">Salchipapa</div><div class="item-desc">Salchicha, queso y aderezo</div></div>
-                <div class="item-price">$5.50</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">Papas Bacon</div><div class="item-desc">Queso y tocino</div></div>
-                <div class="item-price">$5.50</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">Papas Chicken</div><div class="item-desc">Pechuga empanizada, queso y aderezo</div></div>
-                <div class="item-price">$5.50</div>
-            </div>
-            <div class="menu-item">
-                <div class="item-info"><div class="item-name">Papas Chili</div><div class="item-desc">Chili de la casa, queso y jalapeños</div></div>
-                <div class="item-price">$5.50</div>
+            <div class="products-grid">
+                <div class="product-card">
+                    <span class="popular-badge top-badge">Top</span>
+                    <img src="https://kimi-web-img.moonshot.cn/img/carlsbadcravings.com/ef1a93c41c199a1ab0f7932dc4d9da75893b3c09.jpg" alt="Papas Mexicanas" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">Papas Mexicanas</span>
+                            <span class="product-price">$6.00</span>
+                        </div>
+                        <p class="product-desc">Carne asada, chirmol, aguacate, jalapeños, queso</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.afarmgirlsdabbles.com/e7330a9d74437d2423d074076268309794fc32ab.jpg" alt="Salchipapa" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">Salchipapa</span>
+                            <span class="product-price">$5.50</span>
+                        </div>
+                        <p class="product-desc">Salchicha, queso y aderezo</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.carolynscooking.com/ce5aa2dfc7326d4e7a9677791c7e4f7e9785b1d6.jpg" alt="Papas Bacon" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">Papas Bacon</span>
+                            <span class="product-price">$5.50</span>
+                        </div>
+                        <p class="product-desc">Queso y tocino</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.bidfood.co.uk/fe2e96b5e597f364417abf88d1d22102a8fcaf8d.jpg" alt="Papas Chicken" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">Papas Chicken</span>
+                            <span class="product-price">$5.50</span>
+                        </div>
+                        <p class="product-desc">Pechuga empanizada, queso y aderezo</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://kimi-web-img.moonshot.cn/img/irepo.primecp.com/6032f1fe2e6e4092f3b4d73611e6cd2b8cfe867e.jpg" alt="Papas Chili" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">Papas Chili</span>
+                            <span class="product-price">$5.50</span>
+                        </div>
+                        <p class="product-desc">Chili de la casa, queso y jalapeños</p>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -895,14 +1146,68 @@
                 <h2>Alitas y Chunks</h2>
                 <span class="section-count">7 items</span>
             </div>
+
             <div class="sub-category">🍗 Alitas</div>
-            <div class="menu-item"><div class="item-info"><div class="item-name">5 Alitas + Papas</div></div><div class="item-price">$6.00</div></div>
-            <div class="menu-item"><div class="item-info"><div class="item-name">10 Alitas + Papas</div></div><div class="item-price">$8.00</div></div>
-            <div class="menu-item"><div class="item-info"><div class="item-name">15 Alitas + Papas</div></div><div class="item-price">$12.00</div></div>
+            <div class="products-grid">
+                <div class="product-card">
+                    <img src="https://kimi-web-img.moonshot.cn/img/media.istockphoto.com/2f8ee393f9203fdaa13967ad89e49c545a8d4e81.jpg" alt="5 Alitas" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">5 Alitas + Papas</span>
+                            <span class="product-price">$6.00</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=400&h=300&fit=crop" alt="10 Alitas" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">10 Alitas + Papas</span>
+                            <span class="product-price">$8.00</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=400&h=300&fit=crop" alt="15 Alitas" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">15 Alitas + Papas</span>
+                            <span class="product-price">$12.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="sub-category">🍗 Chunks</div>
-            <div class="menu-item"><div class="item-info"><div class="item-name">8 Chunks + Papas</div></div><div class="item-price">$5.00</div></div>
-            <div class="menu-item"><div class="item-info"><div class="item-name">16 Chunks + Papas</div></div><div class="item-price">$8.00</div></div>
-            <div class="menu-item"><div class="item-info"><div class="item-name">25 Chunks + Papas</div></div><div class="item-price">$15.00</div></div>
+            <div class="products-grid">
+                <div class="product-card">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.queensleeappetit.com/742d82f78f0c298efd1e1f29c43b0a096231b062.jpg" alt="8 Chunks" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">8 Chunks + Papas</span>
+                            <span class="product-price">$5.00</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.queensleeappetit.com/4bd6a30d225ec2f70a09c2de88af07173ad69a51.jpg" alt="16 Chunks" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">16 Chunks + Papas</span>
+                            <span class="product-price">$8.00</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=400&h=300&fit=crop" alt="25 Chunks" class="product-image">
+                    <div class="product-info">
+                        <div class="product-header">
+                            <span class="product-name">25 Chunks + Papas</span>
+                            <span class="product-price">$15.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- Bebidas -->
@@ -912,18 +1217,54 @@
                 <h2>Bebidas</h2>
                 <span class="section-count">Variedad</span>
             </div>
+
             <div class="sub-category">🍧 Frozen</div>
-            <div class="menu-item"><div class="item-info"><div class="item-name">Fresa / Piña / Maracuyá / Limón</div></div><div class="item-price">$2.50</div></div>
+            <div class="drink-list">
+                <div class="drink-item">
+                    <span class="drink-name">Fresa / Piña / Maracuyá / Limón</span>
+                    <span class="drink-price">$2.50</span>
+                </div>
+            </div>
+
             <div class="sub-category">🥤 Malteadas</div>
-            <div class="menu-item"><div class="item-info"><div class="item-name">Fresa / Oreo / Chocolate / Café / Coco</div></div><div class="item-price">$3.50</div></div>
+            <div class="drink-list">
+                <div class="drink-item">
+                    <span class="drink-name">Fresa / Oreo / Chocolate / Café / Coco</span>
+                    <span class="drink-price">$3.50</span>
+                </div>
+            </div>
+
             <div class="sub-category">🍋 Limonadas</div>
-            <div class="menu-item"><div class="item-info"><div class="item-name">Fresa / Hierbabuena / Piña / Cherry / Azul / Maracuyá</div></div><div class="item-price">$3.50</div></div>
+            <div class="drink-list">
+                <div class="drink-item">
+                    <span class="drink-name">Fresa / Hierbabuena / Piña / Cherry / Azul / Maracuyá</span>
+                    <span class="drink-price">$3.50</span>
+                </div>
+            </div>
+
             <div class="sub-category">🥤 Sodas</div>
-            <div class="menu-item"><div class="item-info"><div class="item-name">Coca Cola / Coca 0 / Uva / Fanta / Sprite</div></div><div class="item-price">$1.50</div></div>
+            <div class="drink-list">
+                <div class="drink-item">
+                    <span class="drink-name">Coca Cola / Coca 0 / Uva / Fanta / Sprite</span>
+                    <span class="drink-price">$1.50</span>
+                </div>
+            </div>
+
             <div class="sub-category">☕ Café</div>
-            <div class="menu-item"><div class="item-info"><div class="item-name">Café Caliente</div></div><div class="item-price">$1.00</div></div>
-            <div class="menu-item"><div class="item-info"><div class="item-name">Café con Leche</div></div><div class="item-price">$1.25</div></div>
-            <div class="menu-item"><div class="item-info"><div class="item-name">Iced Coffee</div></div><div class="item-price">$2.50</div></div>
+            <div class="drink-list">
+                <div class="drink-item">
+                    <span class="drink-name">Café Caliente</span>
+                    <span class="drink-price">$1.00</span>
+                </div>
+                <div class="drink-item">
+                    <span class="drink-name">Café con Leche</span>
+                    <span class="drink-price">$1.25</span>
+                </div>
+                <div class="drink-item">
+                    <span class="drink-name">Iced Coffee</span>
+                    <span class="drink-price">$2.50</span>
+                </div>
+            </div>
         </section>
     </main>
 
