@@ -7,11 +7,7 @@
     <link rel="icon" href="img/logoperron.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
             --primary: #FF4D00;
@@ -35,723 +31,148 @@
             overflow-x: hidden;
         }
 
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--dark);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 4px;
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--dark); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
 
-        /* ==========================================
-           LOADER
-           ========================================== */
+        /* LOADER */
         .loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--darker);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            transition: opacity 0.5s, visibility 0.5s;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--darker); display: flex; align-items: center; justify-content: center;
+            z-index: 10000; transition: opacity 0.5s, visibility 0.5s;
         }
+        .loader.hidden { opacity: 0; visibility: hidden; }
+        .loader-burger { width: 60px; height: 60px; animation: bounce 1s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
 
-        .loader.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .loader-burger {
-            width: 60px;
-            height: 60px;
-            animation: bounce 1s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        /* ==========================================
-           NAVBAR
-           ========================================== */
+        /* NAVBAR */
         nav {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 1400px;
-            background: rgba(10, 10, 10, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 50px;
-            z-index: 1000;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.4s;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 1400px; background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 50px; z-index: 1000;
+            padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center;
+            transition: all 0.4s; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
+        nav.scrolled { width: 95%; background: rgba(10, 10, 10, 0.95); }
+        .logo-container { display: flex; align-items: center; gap: 0.8rem; text-decoration: none; }
+        .logo-icon { width: 45px; height: 45px; filter: drop-shadow(0 0 10px var(--primary-glow)); animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-5px); } }
+        .logo-text { display: flex; flex-direction: column; line-height: 1; }
+        .logo-main { font-family: 'Bebas Neue', cursive; font-size: 1.8rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 2px; }
+        .logo-sub { font-size: 0.6rem; color: var(--text-muted); letter-spacing: 4px; text-transform: uppercase; font-weight: 500; }
+        .nav-links { display: flex; list-style: none; gap: 0.5rem; align-items: center; }
+        .nav-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-weight: 500; font-size: 0.9rem; padding: 0.6rem 1.2rem; border-radius: 25px; transition: all 0.3s; position: relative; overflow: hidden; }
+        .nav-links a::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, var(--primary), var(--secondary)); opacity: 0; transition: opacity 0.3s; z-index: -1; border-radius: 25px; }
+        .nav-links a:hover { color: white; transform: translateY(-2px); }
+        .nav-links a:hover::before { opacity: 1; }
+        .nav-links a.active { color: white; background: linear-gradient(135deg, var(--primary), var(--secondary)); }
+        .order-btn { background: transparent; color: var(--primary); padding: 0.6rem 1.5rem; border-radius: 25px; text-decoration: none; font-weight: 700; border: 2px solid var(--primary); transition: all 0.3s; display: flex; align-items: center; gap: 0.5rem; position: relative; overflow: hidden; }
+        .order-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--primary); transition: left 0.3s; z-index: -1; }
+        .order-btn:hover { color: white; box-shadow: 0 0 30px var(--primary-glow); }
+        .order-btn:hover::before { left: 0; }
+        .menu-toggle { display: none; flex-direction: column; cursor: pointer; gap: 5px; z-index: 1001; }
+        .menu-toggle span { width: 25px; height: 2px; background: white; transition: 0.3s; border-radius: 2px; }
+        .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .menu-toggle.active span:nth-child(2) { opacity: 0; }
+        .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
 
-        nav.scrolled {
-            width: 95%;
-            background: rgba(10, 10, 10, 0.95);
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            text-decoration: none;
-        }
-
-        .logo-icon {
-            width: 45px;
-            height: 45px;
-            filter: drop-shadow(0 0 10px var(--primary-glow));
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-5px); }
-        }
-
-        .logo-text {
-            display: flex;
-            flex-direction: column;
-            line-height: 1;
-        }
-
-        .logo-main {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 1.8rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: 2px;
-        }
-
-        .logo-sub {
-            font-size: 0.6rem;
-            color: var(--text-muted);
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            font-weight: 500;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 0.5rem;
-            align-items: center;
-        }
-
-        .nav-links a {
-            color: rgba(255,255,255,0.7);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.9rem;
-            padding: 0.6rem 1.2rem;
-            border-radius: 25px;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .nav-links a::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: -1;
-            border-radius: 25px;
-        }
-
-        .nav-links a:hover {
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .nav-links a:hover::before {
-            opacity: 1;
-        }
-
-        .nav-links a.active {
-            color: white;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-        }
-
-        .order-btn {
-            background: transparent;
-            color: var(--primary);
-            padding: 0.6rem 1.5rem;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: 700;
-            border: 2px solid var(--primary);
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .order-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: var(--primary);
-            transition: left 0.3s;
-            z-index: -1;
-        }
-
-        .order-btn:hover {
-            color: white;
-            box-shadow: 0 0 30px var(--primary-glow);
-        }
-
-        .order-btn:hover::before {
-            left: 0;
-        }
-
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            gap: 5px;
-            z-index: 1001;
-        }
-
-        .menu-toggle span {
-            width: 25px;
-            height: 2px;
-            background: white;
-            transition: 0.3s;
-            border-radius: 2px;
-        }
-
-        .menu-toggle.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-
-        .menu-toggle.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .menu-toggle.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -6px);
-        }
-
-        /* ==========================================
-           HERO MENÚ
-           ========================================== */
+        /* HERO */
         .hero-menu {
-            min-height: 100vh;
-            padding: 140px 5% 60px;
-            text-align: center;
-            background: 
-                radial-gradient(ellipse at 20% 50%, rgba(255, 77, 0, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 80%, rgba(255, 140, 0, 0.1) 0%, transparent 50%),
-                linear-gradient(to bottom, rgba(5,5,5,0.3), rgba(5,5,5,0.9)),
-                url('https://drive.google.com/thumbnail?id=1a4WQvnHV9xE8NTnc4zL9IrZNNatlPGYH&sz=w1920');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            position: relative;
-            overflow: hidden;
+            min-height: 100vh; padding: 140px 5% 60px; text-align: center;
+            background: radial-gradient(ellipse at 20% 50%, rgba(255, 77, 0, 0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(255, 140, 0, 0.1) 0%, transparent 50%), linear-gradient(to bottom, rgba(5,5,5,0.3), rgba(5,5,5,0.9)), url('https://drive.google.com/thumbnail?id=1a4WQvnHV9xE8NTnc4zL9IrZNNatlPGYH&sz=w1920');
+            background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; position: relative; overflow: hidden;
         }
+        .hero-menu h1 { font-family: 'Bebas Neue', cursive; font-size: clamp(3rem, 8vw, 6rem); background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 4px; }
+        .hero-menu p { color: var(--text-muted); margin-top: 16px; }
 
-        .hero-menu h1 {
-            font-family: 'Bebas Neue', cursive;
-            font-size: clamp(3rem, 8vw, 6rem);
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: 4px;
+        /* MAIN */
+        main { max-width: 1200px; margin: 0 auto; padding: 20px 20px 80px; }
+        .menu-section { background: var(--gray); border-radius: 24px; padding: 32px; margin-bottom: 40px; border: 1px solid var(--glass-border); transition: all 0.3s; }
+        .menu-section:hover { border-color: rgba(255, 77, 0, 0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .section-header { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--glass-border); padding-bottom: 16px; margin-bottom: 24px; }
+        .section-header .emoji { font-size: 32px; }
+        .section-header h2 { font-family: 'Bebas Neue', cursive; font-size: 2.2rem; color: var(--primary); letter-spacing: 2px; flex: 1; }
+        .section-count { font-size: 0.75rem; color: var(--text-muted); background: rgba(255,255,255,0.05); padding: 6px 16px; border-radius: 20px; font-weight: 600; }
+
+        /* GRID 4 COLUMNAS */
+        .products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+        .product-card { background: var(--darker); border-radius: 16px; overflow: hidden; border: 1px solid var(--glass-border); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; }
+        .product-card:hover { transform: translateY(-6px) scale(1.02); border-color: var(--primary); box-shadow: 0 15px 35px rgba(255, 77, 0, 0.12); }
+        .product-image { width: 100%; height: 140px; object-fit: cover; display: block; transition: transform 0.4s; }
+        .product-card:hover .product-image { transform: scale(1.06); }
+        .product-info { padding: 14px; }
+        .product-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px; }
+        .product-name { font-weight: 700; font-size: 0.95rem; color: var(--light); line-height: 1.2; }
+        .product-price { font-weight: 800; font-size: 0.9rem; color: var(--primary); background: rgba(255, 77, 0, 0.1); border: 1px solid rgba(255, 77, 0, 0.2); padding: 4px 10px; border-radius: 30px; white-space: nowrap; flex-shrink: 0; }
+        .product-desc { font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; }
+        .popular-badge { position: absolute; top: 8px; right: 8px; background: var(--primary); color: white; font-size: 0.55rem; font-weight: 700; padding: 3px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; z-index: 2; box-shadow: 0 4px 15px rgba(255, 77, 0, 0.4); }
+        .new-badge { background: linear-gradient(135deg, #00c853, #00e676); box-shadow: 0 4px 15px rgba(0, 200, 83, 0.4); }
+        .top-badge { background: linear-gradient(135deg, #ffd700, #ffaa00); color: #000; box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4); }
+
+        .sub-category { font-weight: 800; font-size: 1rem; color: #e8d5a3; margin: 24px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; gap: 8px; }
+        .sub-category:first-of-type { margin-top: 0; }
+        .note { font-size: 0.8rem; color: var(--primary); text-align: center; margin-top: 20px; padding: 12px; background: rgba(255, 77, 0, 0.05); border-radius: 12px; border: 1px dashed rgba(255, 77, 0, 0.2); }
+
+        /* BEBIDAS */
+        .drinks-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+        .drink-card { background: var(--darker); border-radius: 16px; overflow: hidden; border: 1px solid var(--glass-border); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; }
+        .drink-card:hover { transform: translateY(-6px) scale(1.02); border-color: var(--primary); box-shadow: 0 15px 35px rgba(255, 77, 0, 0.12); }
+        .drink-image { width: 100%; height: 140px; object-fit: cover; display: block; transition: transform 0.4s; }
+        .drink-card:hover .drink-image { transform: scale(1.06); }
+        .drink-info { padding: 14px; }
+        .drink-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+        .drink-name { font-weight: 700; font-size: 0.9rem; color: var(--light); line-height: 1.2; }
+        .drink-price { font-weight: 800; font-size: 0.9rem; color: var(--primary); background: rgba(255, 77, 0, 0.1); border: 1px solid rgba(255, 77, 0, 0.2); padding: 4px 10px; border-radius: 30px; white-space: nowrap; flex-shrink: 0; }
+        .drink-flavors { font-size: 0.7rem; color: var(--text-muted); margin-top: 6px; line-height: 1.4; }
+
+        /* FOOTER */
+        footer { background: var(--dark); color: white; padding: 5rem 5% 2rem; border-top: 1px solid var(--glass-border); position: relative; }
+        footer::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 1px; background: linear-gradient(90deg, transparent, var(--primary), transparent); opacity: 0.5; }
+        .footer-content { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; max-width: 1400px; margin: 0 auto; margin-bottom: 4rem; }
+        .footer-brand { max-width: 300px; }
+        .footer-logo { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .footer-logo-text { display: flex; flex-direction: column; }
+        .footer-logo-text .main { font-family: 'Bebas Neue', cursive; font-size: 1.8rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 2px; }
+        .footer-logo-text .sub { font-size: 0.7rem; color: var(--text-muted); letter-spacing: 3px; text-transform: uppercase; }
+        .footer-brand p { color: var(--text-muted); line-height: 1.8; margin-bottom: 2rem; }
+        .social-links { display: flex; gap: 1rem; }
+        .social-links a { width: 45px; height: 45px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 12px; display: flex; align-items: center; justify-content: center; transition: all 0.3s; overflow: hidden; }
+        .social-links a:hover { background: var(--primary); border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 10px 20px var(--primary-glow); }
+        .social-links a img { width: 20px; height: 20px; filter: brightness(0) invert(1); transition: transform 0.3s; }
+        .social-links a:hover img { transform: scale(1.2); }
+        .footer-section h3 { font-family: 'Bebas Neue', cursive; font-size: 1.3rem; margin-bottom: 1.5rem; color: white; letter-spacing: 1px; }
+        .footer-section ul { list-style: none; }
+        .footer-section ul li { margin-bottom: 0.8rem; }
+        .footer-section a { color: var(--text-muted); text-decoration: none; transition: all 0.3s; display: inline-flex; align-items: center; gap: 0.5rem; }
+        .footer-section a:hover { color: var(--primary); transform: translateX(5px); text-shadow: 0 0 10px var(--primary-glow); }
+        .footer-contact p { display: flex; align-items: center; gap: 0.8rem; color: var(--text-muted); margin-bottom: 1rem; font-size: 0.95rem; }
+        .footer-contact img { width: 18px; opacity: 0.7; }
+        .footer-bottom { text-align: center; padding-top: 3rem; border-top: 1px solid var(--glass-border); color: var(--text-muted); font-size: 0.9rem; max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+
+        /* ANIMATIONS */
+        .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), transform 0.1s cubic-bezier(0.4, 0, 0.2, 1); }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .products-grid, .drinks-grid { grid-template-columns: repeat(3, 1fr); }
         }
-
-        .hero-menu p {
-            color: var(--text-muted);
-            margin-top: 16px;
-        }
-
-        /* ==========================================
-           CONTENIDO DEL MENÚ - NUEVO DISEÑO CON IMÁGENES
-           ========================================== */
-        main {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px 20px 80px;
-        }
-
-        .menu-section {
-            background: var(--gray);
-            border-radius: 24px;
-            padding: 32px;
-            margin-bottom: 40px;
-            border: 1px solid var(--glass-border);
-            transition: all 0.3s;
-        }
-
-        .menu-section:hover {
-            border-color: rgba(255, 77, 0, 0.3);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border-bottom: 1px solid var(--glass-border);
-            padding-bottom: 16px;
-            margin-bottom: 24px;
-        }
-
-        .section-header .emoji {
-            font-size: 32px;
-        }
-
-        .section-header h2 {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 2.2rem;
-            color: var(--primary);
-            letter-spacing: 2px;
-            flex: 1;
-        }
-
-        .section-count {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            background: rgba(255,255,255,0.05);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-weight: 600;
-        }
-
-        /* Grid de productos */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .product-card {
-            background: var(--darker);
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid var(--glass-border);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-        }
-
-        .product-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            border-color: var(--primary);
-            box-shadow: 0 20px 40px rgba(255, 77, 0, 0.15);
-        }
-
-        .product-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            display: block;
-            transition: transform 0.4s;
-        }
-
-        .product-card:hover .product-image {
-            transform: scale(1.08);
-        }
-
-        .product-info {
-            padding: 20px;
-        }
-
-        .product-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 10px;
-            margin-bottom: 8px;
-        }
-
-        .product-name {
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: var(--light);
-            line-height: 1.3;
-        }
-
-        .product-price {
-            font-weight: 800;
-            font-size: 1.1rem;
-            color: var(--primary);
-            background: rgba(255, 77, 0, 0.1);
-            border: 1px solid rgba(255, 77, 0, 0.2);
-            padding: 6px 14px;
-            border-radius: 30px;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-
-        .product-desc {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-
-        .popular-badge {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: var(--primary);
-            color: white;
-            font-size: 0.6rem;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            z-index: 2;
-            box-shadow: 0 4px 15px rgba(255, 77, 0, 0.4);
-        }
-
-        .new-badge {
-            background: linear-gradient(135deg, #00c853, #00e676);
-            box-shadow: 0 4px 15px rgba(0, 200, 83, 0.4);
-        }
-
-        .top-badge {
-            background: linear-gradient(135deg, #ffd700, #ffaa00);
-            color: #000;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
-        }
-
-        /* Subcategorías */
-        .sub-category {
-            font-weight: 800;
-            font-size: 1rem;
-            color: #e8d5a3;
-            margin: 24px 0 16px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid var(--glass-border);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .sub-category:first-of-type {
-            margin-top: 0;
-        }
-
-        /* Notas */
-        .note {
-            font-size: 0.8rem;
-            color: var(--primary);
-            text-align: center;
-            margin-top: 20px;
-            padding: 12px;
-            background: rgba(255, 77, 0, 0.05);
-            border-radius: 12px;
-            border: 1px dashed rgba(255, 77, 0, 0.2);
-        }
-
-        /* Lista clásica para bebidas sin imagen */
-        .drink-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .drink-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 20px;
-            background: var(--darker);
-            border-radius: 12px;
-            border: 1px solid var(--glass-border);
-            transition: all 0.3s;
-        }
-
-        .drink-item:hover {
-            border-color: var(--primary);
-            background: rgba(255, 77, 0, 0.05);
-        }
-
-        .drink-name {
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        .drink-price {
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        /* ==========================================
-           FOOTER
-           ========================================== */
-        footer {
-            background: var(--dark);
-            color: white;
-            padding: 5rem 5% 2rem;
-            border-top: 1px solid var(--glass-border);
-            position: relative;
-        }
-
-        footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
-            opacity: 0.5;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 4rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            margin-bottom: 4rem;
-        }
-
-        .footer-brand {
-            max-width: 300px;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .footer-logo-text {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .footer-logo-text .main {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 1.8rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: 2px;
-        }
-
-        .footer-logo-text .sub {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
-
-        .footer-brand p {
-            color: var(--text-muted);
-            line-height: 1.8;
-            margin-bottom: 2rem;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .social-links a {
-            width: 45px;
-            height: 45px;
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            overflow: hidden;
-        }
-
-        .social-links a:hover {
-            background: var(--primary);
-            border-color: var(--primary);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px var(--primary-glow);
-        }
-
-        .social-links a img {
-            width: 20px;
-            height: 20px;
-            filter: brightness(0) invert(1);
-            transition: transform 0.3s;
-        }
-
-        .social-links a:hover img {
-            transform: scale(1.2);
-        }
-
-        .footer-section h3 {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-            color: white;
-            letter-spacing: 1px;
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section ul li {
-            margin-bottom: 0.8rem;
-        }
-
-        .footer-section a {
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .footer-section a:hover {
-            color: var(--primary);
-            transform: translateX(5px);
-            text-shadow: 0 0 10px var(--primary-glow);
-        }
-
-        .footer-contact p {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-            font-size: 0.95rem;
-        }
-
-        .footer-contact img {
-            width: 18px;
-            opacity: 0.7;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 3rem;
-            border-top: 1px solid var(--glass-border);
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* ==========================================
-           ANIMATIONS
-           ========================================== */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* ==========================================
-           RESPONSIVE
-           ========================================== */
-        @media (max-width: 968px) {
-            .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            }
-            .footer-content {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
         @media (max-width: 768px) {
-            nav {
-                width: 95%;
-                padding: 0.8rem 1.5rem;
-            }
-            .nav-links {
-                position: fixed;
-                top: 0;
-                right: -100%;
-                width: 80%;
-                max-width: 400px;
-                height: 100vh;
-                background: rgba(5, 5, 5, 0.98);
-                backdrop-filter: blur(20px);
-                flex-direction: column;
-                padding: 6rem 2rem 2rem;
-                transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                border-left: 1px solid var(--glass-border);
-                gap: 1.5rem;
-            }
-            .nav-links.active {
-                right: 0;
-            }
-            .menu-toggle {
-                display: flex;
-            }
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
-            .product-image {
-                height: 220px;
-            }
-            .footer-content {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-            .footer-bottom {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-            .logo-main {
-                font-size: 1.5rem;
-            }
-            .logo-icon {
-                width: 40px;
-                height: 40px;
-            }
+            nav { width: 95%; padding: 0.8rem 1.5rem; }
+            .nav-links { position: fixed; top: 0; right: -100%; width: 80%; max-width: 400px; height: 100vh; background: rgba(5, 5, 5, 0.98); backdrop-filter: blur(20px); flex-direction: column; padding: 6rem 2rem 2rem; transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border-left: 1px solid var(--glass-border); gap: 1.5rem; }
+            .nav-links.active { right: 0; }
+            .menu-toggle { display: flex; }
+            .products-grid, .drinks-grid { grid-template-columns: repeat(2, 1fr); }
+            .product-image, .drink-image { height: 160px; }
+            .footer-content { grid-template-columns: 1fr; gap: 2rem; }
+            .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+            .logo-main { font-size: 1.5rem; }
+            .logo-icon { width: 40px; height: 40px; }
+        }
+        @media (max-width: 480px) {
+            .products-grid, .drinks-grid { grid-template-columns: 1fr; }
+            .product-image, .drink-image { height: 180px; }
         }
     </style>
 <base target="_blank">
@@ -789,9 +210,7 @@
             <li><a href="Ordenar.html" class="order-btn">🛒 Ordenar</a></li>
         </ul>
         <div class="menu-toggle" onclick="toggleMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
+            <span></span><span></span><span></span>
         </div>
     </nav>
 
@@ -805,7 +224,7 @@
 
     <main>
         <!-- Entradas -->
-        <section class="menu-section fade-up">
+        <section class="menu-section fade-in">
             <div class="section-header">
                 <span class="emoji">🥖</span>
                 <h2>Para Empezar</h2>
@@ -814,7 +233,7 @@
             <div class="products-grid">
                 <div class="product-card">
                     <span class="popular-badge">Popular</span>
-                    <img src="https://images.unsplash.com/photo-1573140247632-fa7207d2f4be?w=400&h=300&fit=crop" alt="Pan con Ajo" class="product-image">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.shutterstock.com/2d089680ad2f1bd0d92b3ada02a995c8f2ae431e.jpg" alt="Pan con Ajo" class="product-image">
                     <div class="product-info">
                         <div class="product-header">
                             <span class="product-name">Pan con Ajo</span>
@@ -824,7 +243,7 @@
                     </div>
                 </div>
                 <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?w=400&h=300&fit=crop" alt="Papas Sazonadas" class="product-image">
+                    <img src="https://kimi-web-img.moonshot.cn/img/static.vecteezy.com/058d52fb51abb15a64e04a12ced90368a96d1c72.jpeg" alt="Papas Sazonadas" class="product-image">
                     <div class="product-info">
                         <div class="product-header">
                             <span class="product-name">Papas Sazonadas</span>
@@ -834,7 +253,7 @@
                     </div>
                 </div>
                 <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=400&h=300&fit=crop" alt="Dedos de Queso" class="product-image">
+                    <img src="https://kimi-web-img.moonshot.cn/img/static.vecteezy.com/cd146f3c65f301aa1511cdd72742a375e294c39e.png" alt="Dedos de Queso" class="product-image">
                     <div class="product-info">
                         <div class="product-header">
                             <span class="product-name">Dedos de Queso</span>
@@ -844,7 +263,7 @@
                     </div>
                 </div>
                 <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1639024471283-03518883512d?w=400&h=300&fit=crop" alt="Aros de Cebolla" class="product-image">
+                    <img src="https://kimi-web-img.moonshot.cn/img/img.freepik.com/8afa66acbdd020fae9b7afe02db807f531dd6ee8.jpg" alt="Aros de Cebolla" class="product-image">
                     <div class="product-info">
                         <div class="product-header">
                             <span class="product-name">Aros de Cebolla</span>
@@ -857,7 +276,7 @@
         </section>
 
         <!-- Hamburguesas de Pollo -->
-        <section class="menu-section fade-up">
+        <section class="menu-section fade-in">
             <div class="section-header">
                 <span class="emoji">🍗</span>
                 <h2>Hamburguesas de Pollo</h2>
@@ -865,7 +284,7 @@
             </div>
             <div class="products-grid">
                 <div class="product-card">
-                    <img src="https://kimi-web-img.moonshot.cn/img/d1uc6tjdfuj6xp.cloudfront.net/64359a1297db7589086aeeca6a29af46ef150184.jpg" alt="La Pió" class="product-image">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.shutterstock.com/64373a1083889230b3a8b927b127535ac2e27235.jpg" alt="La Pió" class="product-image">
                     <div class="product-info">
                         <div class="product-header">
                             <span class="product-name">La Pió</span>
@@ -875,7 +294,7 @@
                     </div>
                 </div>
                 <div class="product-card">
-                    <img src="https://kimi-web-img.moonshot.cn/img/www.butterbeready.com/e565747132ff346f8b1027e3881050a9ed13359b.jpg" alt="La Chipotle" class="product-image">
+                    <img src="https://kimi-web-img.moonshot.cn/img/st2.depositphotos.com/bf7e97c4a2c9cd897915d92fe4e8fa600682bb2f.jpg" alt="La Chipotle" class="product-image">
                     <div class="product-info">
                         <div class="product-header">
                             <span class="product-name">La Chipotle</span>
@@ -885,7 +304,7 @@
                     </div>
                 </div>
                 <div class="product-card">
-                    <img src="https://kimi-web-img.moonshot.cn/img/133902730.cdn6.editmysite.com/a395f71de981df8188449908d718ba0a64e8ddbb.jpeg" alt="La Barbie" class="product-image">
+                    <img src="https://kimi-web-img.moonshot.cn/img/media-cdn.tripadvisor.com/a53f745635628d5fa58e620459378d667a31f031.jpg" alt="La Barbie" class="product-image">
                     <div class="product-info">
                         <div class="product-header">
                             <span class="product-name">La Barbie</span>
@@ -899,7 +318,7 @@
         </section>
 
         <!-- Hamburguesas de Res -->
-        <section class="menu-section fade-up">
+        <section class="menu-section fade-in">
             <div class="section-header">
                 <span class="emoji">🥩</span>
                 <h2>Hamburguesas de Res</h2>
@@ -907,7 +326,7 @@
             </div>
             <div class="products-grid">
                 <div class="product-card">
-                    <img src="https://kimi-web-img.moonshot.cn/img/thumbs.dreamstime.com/c6af9cf69756dc978c7ae4640883deb543285c0f.jpg" alt="La Facilota" class="product-image">
+                    <img src="https://kimi-web-img.moonshot.cn/img/static.vecteezy.com/c8229cea149cfc03249ffc054b5a049ba9d603a7.jpg" alt="La Facilota" class="product-image">
                     <div class="product-info">
                         <div class="product-header">
                             <span class="product-name">La Facilota</span>
@@ -917,7 +336,7 @@
                     </div>
                 </div>
                 <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop" alt="La Cheese" class="product-image">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.shutterstock.com/216f30341e01a32e46f5347d973c6a04053b7efb.jpg" alt="La Cheese" class="product-image">
                     <div class="product-info">
                         <div class="product-header">
                             <span class="product-name">La Cheese</span>
@@ -948,7 +367,7 @@
                     </div>
                 </div>
                 <div class="product-card">
-                    <img src="https://kimi-web-img.moonshot.cn/img/s7d1.scene7.com/993d0a1af9e9fab5d8e058e82e0ccb15cdcac018" alt="La Bacon Cheese" class="product-image">
+                    <img src="https://kimi-web-img.moonshot.cn/img/t4.ftcdn.net/56e7246a658f27d5527506800e193ce001f74c42.jpg" alt="La Bacon Cheese" class="product-image">
                     <div class="product-info">
                         <div class="product-header">
                             <span class="product-name">La Bacon Cheese</span>
@@ -982,7 +401,7 @@
         </section>
 
         <!-- Premium -->
-        <section class="menu-section fade-up">
+        <section class="menu-section fade-in">
             <div class="section-header">
                 <span class="emoji">💎</span>
                 <h2>Premium</h2>
@@ -1011,7 +430,7 @@
                     </div>
                 </div>
                 <div class="product-card">
-                    <img src="https://kimi-web-img.moonshot.cn/img/groundbeefrecipes.com/df3612000b6d2eb31a5543b6d421b5812ab8be32.jpg" alt="La Doble Carne" class="product-image">
+                    <img src="https://kimi-web-img.moonshot.cn/img/t4.ftcdn.net/5aa738363c28fc6cc1754edd7045cd25beaccd2a.jpg" alt="La Doble Carne" class="product-image">
                     <div class="product-info">
                         <div class="product-header">
                             <span class="product-name">La Doble Carne</span>
@@ -1025,7 +444,7 @@
         </section>
 
         <!-- Especialidades -->
-        <section class="menu-section fade-up">
+        <section class="menu-section fade-in">
             <div class="section-header">
                 <span class="emoji">👑</span>
                 <h2>Especialidades</h2>
@@ -1033,7 +452,7 @@
             </div>
             <div class="products-grid">
                 <div class="product-card">
-                    <img src="https://kimi-web-img.moonshot.cn/img/img.freepik.com/ee90d1d277a346169e1f4766626d65403e92849a.jpg" alt="La Mar y Tierra" class="product-image">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.primeshrimp.com/80cc510103dfcc06061462ae463b49a65cb434af.jpg" alt="La Mar y Tierra" class="product-image">
                     <div class="product-info">
                         <div class="product-header">
                             <span class="product-name">La Mar y Tierra</span>
@@ -1078,7 +497,7 @@
         </section>
 
         <!-- Papas Preparadas -->
-        <section class="menu-section fade-up">
+        <section class="menu-section fade-in">
             <div class="section-header">
                 <span class="emoji">🍟</span>
                 <h2>Papas Preparadas</h2>
@@ -1097,7 +516,7 @@
                     </div>
                 </div>
                 <div class="product-card">
-                    <img src="https://kimi-web-img.moonshot.cn/img/www.afarmgirlsdabbles.com/e7330a9d74437d2423d074076268309794fc32ab.jpg" alt="Salchipapa" class="product-image">
+                    <img src="https://kimi-web-img.moonshot.cn/img/n5s3k8m4.delivery.rocketcdn.me/e1d3b860cc36a1080b8f827c63b5479eaa9233ca.jpg" alt="Salchipapa" class="product-image">
                     <div class="product-info">
                         <div class="product-header">
                             <span class="product-name">Salchipapa</span>
@@ -1107,7 +526,7 @@
                     </div>
                 </div>
                 <div class="product-card">
-                    <img src="https://kimi-web-img.moonshot.cn/img/www.carolynscooking.com/ce5aa2dfc7326d4e7a9677791c7e4f7e9785b1d6.jpg" alt="Papas Bacon" class="product-image">
+                    <img src="https://kimi-web-img.moonshot.cn/img/thumbs.dreamstime.com/47abe65ae3d826735de66a873adc4a5b9f4c9b15.jpg" alt="Papas Bacon" class="product-image">
                     <div class="product-info">
                         <div class="product-header">
                             <span class="product-name">Papas Bacon</span>
@@ -1117,7 +536,7 @@
                     </div>
                 </div>
                 <div class="product-card">
-                    <img src="https://kimi-web-img.moonshot.cn/img/www.bidfood.co.uk/fe2e96b5e597f364417abf88d1d22102a8fcaf8d.jpg" alt="Papas Chicken" class="product-image">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.shutterstock.com/a399f15a4d5adf447a73dc71b6d7e81640ea489e.jpg" alt="Papas Chicken" class="product-image">
                     <div class="product-info">
                         <div class="product-header">
                             <span class="product-name">Papas Chicken</span>
@@ -1127,7 +546,7 @@
                     </div>
                 </div>
                 <div class="product-card">
-                    <img src="https://kimi-web-img.moonshot.cn/img/irepo.primecp.com/6032f1fe2e6e4092f3b4d73611e6cd2b8cfe867e.jpg" alt="Papas Chili" class="product-image">
+                    <img src="https://kimi-web-img.moonshot.cn/img/thumbs.dreamstime.com/41bde6ed3bb7880d6f25aba5e4e8cdabd5b44ff0.jpg" alt="Papas Chili" class="product-image">
                     <div class="product-info">
                         <div class="product-header">
                             <span class="product-name">Papas Chili</span>
@@ -1140,17 +559,16 @@
         </section>
 
         <!-- Alitas y Chunks -->
-        <section class="menu-section fade-up">
+        <section class="menu-section fade-in">
             <div class="section-header">
                 <span class="emoji">🔥</span>
                 <h2>Alitas y Chunks</h2>
-                <span class="section-count">7 items</span>
+                <span class="section-count">6 items</span>
             </div>
-
             <div class="sub-category">🍗 Alitas</div>
             <div class="products-grid">
                 <div class="product-card">
-                    <img src="https://kimi-web-img.moonshot.cn/img/media.istockphoto.com/2f8ee393f9203fdaa13967ad89e49c545a8d4e81.jpg" alt="5 Alitas" class="product-image">
+                    <img src="https://kimi-web-img.moonshot.cn/img/static.vecteezy.com/2fe31eebdd083dcb4c54308f4d0c8a4dbc430fb5.jpg" alt="5 Alitas" class="product-image">
                     <div class="product-info">
                         <div class="product-header">
                             <span class="product-name">5 Alitas + Papas</span>
@@ -1159,7 +577,7 @@
                     </div>
                 </div>
                 <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=400&h=300&fit=crop" alt="10 Alitas" class="product-image">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.shutterstock.com/1521137ed4085506380ec1685301c617a816a47b.jpg" alt="10 Alitas" class="product-image">
                     <div class="product-info">
                         <div class="product-header">
                             <span class="product-name">10 Alitas + Papas</span>
@@ -1168,7 +586,7 @@
                     </div>
                 </div>
                 <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=400&h=300&fit=crop" alt="15 Alitas" class="product-image">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.shutterstock.com/cdb4913c17cb87b3c24754743a6e01e2788d9998.jpg" alt="15 Alitas" class="product-image">
                     <div class="product-info">
                         <div class="product-header">
                             <span class="product-name">15 Alitas + Papas</span>
@@ -1177,7 +595,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="sub-category">🍗 Chunks</div>
             <div class="products-grid">
                 <div class="product-card">
@@ -1199,7 +616,7 @@
                     </div>
                 </div>
                 <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=400&h=300&fit=crop" alt="25 Chunks" class="product-image">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.bidfood.co.uk/fe2e96b5e597f364417abf88d1d22102a8fcaf8d.jpg" alt="25 Chunks" class="product-image">
                     <div class="product-info">
                         <div class="product-header">
                             <span class="product-name">25 Chunks + Papas</span>
@@ -1210,59 +627,93 @@
             </div>
         </section>
 
-        <!-- Bebidas -->
-        <section class="menu-section fade-up">
+        <!-- Bebidas CON IMÁGENES VERIFICADAS -->
+        <section class="menu-section fade-in">
             <div class="section-header">
                 <span class="emoji">🥤</span>
                 <h2>Bebidas</h2>
                 <span class="section-count">Variedad</span>
             </div>
-
             <div class="sub-category">🍧 Frozen</div>
-            <div class="drink-list">
-                <div class="drink-item">
-                    <span class="drink-name">Fresa / Piña / Maracuyá / Limón</span>
-                    <span class="drink-price">$2.50</span>
+            <div class="drinks-grid">
+                <div class="drink-card">
+                    <img src="https://images.unsplash.com/photo-1553530979-7ee52a2670c4?w=400&h=300&fit=crop" alt="Frozen" class="drink-image">
+                    <div class="drink-info">
+                        <div class="drink-header">
+                            <span class="drink-name">Frozen</span>
+                            <span class="drink-price">$2.50</span>
+                        </div>
+                        <p class="drink-flavors">Fresa · Piña · Maracuyá · Limón</p>
+                    </div>
                 </div>
             </div>
-
             <div class="sub-category">🥤 Malteadas</div>
-            <div class="drink-list">
-                <div class="drink-item">
-                    <span class="drink-name">Fresa / Oreo / Chocolate / Café / Coco</span>
-                    <span class="drink-price">$3.50</span>
+            <div class="drinks-grid">
+                <div class="drink-card">
+                    <img src="https://kimi-web-img.moonshot.cn/img/static.vecteezy.com/cca98cffef6f414c9449c2f1dcbbce6acbb4c519.jpeg" alt="Malteadas" class="drink-image">
+                    <div class="drink-info">
+                        <div class="drink-header">
+                            <span class="drink-name">Malteadas</span>
+                            <span class="drink-price">$3.50</span>
+                        </div>
+                        <p class="drink-flavors">Fresa · Oreo · Chocolate · Café · Coco</p>
+                    </div>
                 </div>
             </div>
-
             <div class="sub-category">🍋 Limonadas</div>
-            <div class="drink-list">
-                <div class="drink-item">
-                    <span class="drink-name">Fresa / Hierbabuena / Piña / Cherry / Azul / Maracuyá</span>
-                    <span class="drink-price">$3.50</span>
+            <div class="drinks-grid">
+                <div class="drink-card">
+                    <img src="https://kimi-web-img.moonshot.cn/img/c8.alamy.com/38c38c6e082a4cac7c771db8871360c4b0ee4705.jpg" alt="Limonadas" class="drink-image">
+                    <div class="drink-info">
+                        <div class="drink-header">
+                            <span class="drink-name">Limonadas</span>
+                            <span class="drink-price">$3.50</span>
+                        </div>
+                        <p class="drink-flavors">Fresa · Hierbabuena · Piña · Cherry · Azul · Maracuyá</p>
+                    </div>
                 </div>
             </div>
-
             <div class="sub-category">🥤 Sodas</div>
-            <div class="drink-list">
-                <div class="drink-item">
-                    <span class="drink-name">Coca Cola / Coca 0 / Uva / Fanta / Sprite</span>
-                    <span class="drink-price">$1.50</span>
+            <div class="drinks-grid">
+                <div class="drink-card">
+                    <img src="https://kimi-web-img.moonshot.cn/img/img.freepik.com/ec088f81b449ccc9e472cff6e1fd328165a8032c.jpg" alt="Sodas" class="drink-image">
+                    <div class="drink-info">
+                        <div class="drink-header">
+                            <span class="drink-name">Sodas</span>
+                            <span class="drink-price">$1.50</span>
+                        </div>
+                        <p class="drink-flavors">Coca Cola · Coca 0 · Uva · Fanta · Sprite</p>
+                    </div>
                 </div>
             </div>
-
             <div class="sub-category">☕ Café</div>
-            <div class="drink-list">
-                <div class="drink-item">
-                    <span class="drink-name">Café Caliente</span>
-                    <span class="drink-price">$1.00</span>
+            <div class="drinks-grid">
+                <div class="drink-card">
+                    <img src="https://kimi-web-img.moonshot.cn/img/static.vecteezy.com/8726db1a382aa9b1bbf54f419f4dd8f77fe31662.jpeg" alt="Café Caliente" class="drink-image">
+                    <div class="drink-info">
+                        <div class="drink-header">
+                            <span class="drink-name">Café Caliente</span>
+                            <span class="drink-price">$1.00</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="drink-item">
-                    <span class="drink-name">Café con Leche</span>
-                    <span class="drink-price">$1.25</span>
+                <div class="drink-card">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.shutterstock.com/ec01fbc91b5478597f27e69828d354781735ec9d.jpg" alt="Café con Leche" class="drink-image">
+                    <div class="drink-info">
+                        <div class="drink-header">
+                            <span class="drink-name">Café con Leche</span>
+                            <span class="drink-price">$1.25</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="drink-item">
-                    <span class="drink-name">Iced Coffee</span>
-                    <span class="drink-price">$2.50</span>
+                <div class="drink-card">
+                    <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&h=300&fit=crop" alt="Iced Coffee" class="drink-image">
+                    <div class="drink-info">
+                        <div class="drink-header">
+                            <span class="drink-name">Iced Coffee</span>
+                            <span class="drink-price">$2.50</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -1313,52 +764,31 @@
     </footer>
 
     <script>
-        // Loader
         window.addEventListener('load', () => {
             const loader = document.getElementById('loader');
-            if (loader) {
-                setTimeout(() => {
-                    loader.classList.add('hidden');
-                }, 1000);
-            }
+            if (loader) { setTimeout(() => { loader.classList.add('hidden'); }, 1000); }
         });
-
-        // Toggle menu móvil
         function toggleMenu() {
             const navLinks = document.getElementById('navLinks');
             const menuToggle = document.querySelector('.menu-toggle');
             navLinks.classList.toggle('active');
             menuToggle.classList.toggle('active');
         }
-
-        // Cerrar menú al hacer clic en un enlace
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => {
                 document.getElementById('navLinks')?.classList.remove('active');
                 document.querySelector('.menu-toggle')?.classList.remove('active');
             });
         });
-
-        // Navbar scroll effect
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                nav.classList.add('scrolled');
-            } else {
-                nav.classList.remove('scrolled');
-            }
+            if (window.scrollY > 50) { nav.classList.add('scrolled'); }
+            else { nav.classList.remove('scrolled'); }
         });
-
-        // Intersection Observer para animaciones
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
+            entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); } });
         }, { threshold: 0.1 });
-
-        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
     </script>
 </body>
 </html>
