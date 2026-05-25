@@ -4,218 +4,612 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Flama's | Menú</title>
+<link rel="icon" href="img/logoperron.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --fire:#FF4500;--fire2:#FF8C00;--fire3:#FFD700;
-  --dark:#080808;--surface:#111;--surface2:#1a1a1a;--surface3:#222;
-  --border:rgba(255,255,255,0.07);--border2:rgba(255,69,0,0.3);
-  --text:#f5f5f5;--muted:#666;--muted2:#444;
-  --radius:14px;--radius-lg:20px;
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --fire: #FF4D00;
+  --ember: #FF8C00;
+  --gold: #FFB800;
+  --void: #050505;
+  --abyss: #080808;
+  --coal: #111111;
+  --ash: #1c1c1c;
+  --smoke: #2a2a2a;
+  --fog: #444;
+  --mist: #888;
+  --light: #fafafa;
+  --fire-glow: rgba(255,77,0,0.35);
+  --glass: rgba(255,255,255,0.03);
+  --glass-border: rgba(255,255,255,0.08);
 }
-html{scroll-behavior:smooth}
-body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);overflow-x:hidden;cursor:none}
 
-/* CUSTOM CURSOR */
-.cursor{position:fixed;width:12px;height:12px;background:var(--fire);border-radius:50%;pointer-events:none;z-index:99999;transition:transform 0.15s,opacity 0.15s;mix-blend-mode:difference}
-.cursor-trail{position:fixed;width:32px;height:32px;border:1px solid rgba(255,69,0,0.4);border-radius:50%;pointer-events:none;z-index:99998;transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275),opacity 0.3s}
+html { scroll-behavior: smooth; }
 
-/* LOADER */
-.loader{position:fixed;inset:0;background:var(--dark);z-index:99997;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;transition:opacity 0.6s,visibility 0.6s}
-.loader.out{opacity:0;visibility:hidden}
-.loader-flame{font-size:64px;animation:flamePulse 0.6s infinite alternate}
-@keyframes flamePulse{from{transform:scaleY(1) rotate(-3deg)}to{transform:scaleY(1.15) rotate(3deg)}}
-.loader-bar{width:200px;height:2px;background:var(--surface3);border-radius:2px;overflow:hidden}
-.loader-fill{height:100%;background:linear-gradient(90deg,var(--fire),var(--fire2),var(--fire3));animation:loadFill 1.8s ease-out forwards}
-@keyframes loadFill{from{width:0}to{width:100%}}
-.loader-text{font-family:'Bebas Neue';font-size:1.2rem;letter-spacing:6px;color:var(--muted);animation:blink 1s infinite}
-@keyframes blink{0%,100%{opacity:0.5}50%{opacity:1}}
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--void);
+  color: var(--light);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
 
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 5%;height:72px;display:flex;align-items:center;justify-content:space-between;transition:all 0.4s}
-nav.scrolled{background:rgba(8,8,8,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none}
-.logo-flame{font-size:28px;animation:float 2.5s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-.logo-wordmark{font-family:'Bebas Neue';font-size:1.9rem;letter-spacing:3px;background:linear-gradient(135deg,var(--fire),var(--fire2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.nav-right{display:flex;align-items:center;gap:8px}
-.nav-links{display:flex;list-style:none;gap:4px}
-.nav-links a{color:rgba(255,255,255,0.55);text-decoration:none;font-size:0.85rem;font-weight:500;padding:8px 14px;border-radius:30px;transition:all 0.2s}
-.nav-links a:hover,.nav-links a.active{color:white;background:rgba(255,255,255,0.06)}
-.cart-btn{position:relative;background:var(--fire);color:white;border:none;padding:10px 20px;border-radius:30px;font-family:'DM Sans';font-size:0.85rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all 0.3s;letter-spacing:0.3px}
-.cart-btn:hover{background:var(--fire2);transform:translateY(-1px);box-shadow:0 8px 24px rgba(255,69,0,0.35)}
-.cart-count{background:white;color:var(--fire);width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;transition:transform 0.3s}
-.cart-count.bump{transform:scale(1.5)}
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9998; mix-blend-mode: overlay;
+}
 
-/* HERO */
-.hero{height:92vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding:0 5%}
-.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(255,69,0,0.12) 0%,transparent 70%)}
-.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black,transparent)}
-.hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(255,69,0,0.1);border:1px solid rgba(255,69,0,0.25);color:var(--fire2);font-size:0.75rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:8px 18px;border-radius:30px;margin-bottom:28px;animation:fadeUp 0.8s 0.2s both}
-.hero h1{font-family:'Bebas Neue';font-size:clamp(4rem,10vw,8rem);line-height:0.9;letter-spacing:2px;animation:fadeUp 0.8s 0.4s both}
-.hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--fire),var(--fire2),var(--fire3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-sub{color:var(--muted);margin-top:20px;font-size:1rem;max-width:460px;line-height:1.6;animation:fadeUp 0.8s 0.6s both}
-.hero-ctas{display:flex;gap:12px;margin-top:36px;animation:fadeUp 0.8s 0.8s both}
-.btn-primary{background:var(--fire);color:white;border:none;padding:14px 28px;border-radius:30px;font-family:'DM Sans';font-size:0.9rem;font-weight:700;cursor:pointer;transition:all 0.3s;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
-.btn-primary:hover{background:var(--fire2);transform:translateY(-2px);box-shadow:0 12px 30px rgba(255,69,0,0.4)}
-.btn-outline{background:transparent;color:white;border:1px solid rgba(255,255,255,0.2);padding:14px 28px;border-radius:30px;font-family:'DM Sans';font-size:0.9rem;font-weight:500;cursor:pointer;transition:all 0.3s;text-decoration:none}
-.btn-outline:hover{border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.05)}
-.hero-scroll{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:8px;animation:fadeUp 0.8s 1s both}
-.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--fire),transparent);animation:scrollAnim 2s infinite}
-@keyframes scrollAnim{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--abyss); }
+::-webkit-scrollbar-thumb { background: linear-gradient(var(--fire), var(--ember)); border-radius: 3px; }
 
-/* STATS */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.stat{background:var(--dark);padding:28px 24px;text-align:center}
-.stat-num{font-family:'Bebas Neue';font-size:2.4rem;background:linear-gradient(135deg,var(--fire),var(--fire2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
-.stat-label{color:var(--muted);font-size:0.75rem;letter-spacing:1px;text-transform:uppercase;margin-top:4px}
+/* ── LOADER ── */
+#loader {
+  position: fixed; inset: 0;
+  background: var(--void);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  z-index: 99999;
+  transition: opacity 0.7s ease, visibility 0.7s ease;
+}
+#loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
-/* MENU MAIN */
-.menu-wrap{max-width:1280px;margin:0 auto;padding:80px 5%}
+.loader-logo-wrap {
+  position: relative;
+  width: 110px; height: 110px;
+  display: flex; align-items: center; justify-content: center;
+}
+.loader-logo-wrap::before {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: var(--fire);
+  border-right-color: var(--ember);
+  animation: spin 1.2s linear infinite;
+}
+.loader-logo-wrap::after {
+  content: '';
+  position: absolute; inset: 6px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,77,0,0.15);
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loader-logo {
+  width: 72px; height: 72px;
+  object-fit: contain; border-radius: 50%;
+  animation: pulse-scale 1.4s ease-in-out infinite;
+  filter: drop-shadow(0 0 16px var(--fire-glow));
+}
+@keyframes pulse-scale {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.08); filter: drop-shadow(0 0 24px rgba(255,77,0,0.6)); }
+}
+.loader-text {
+  margin-top: 1.5rem;
+  font-family: 'Bebas Neue', cursive;
+  font-size: 1.4rem; letter-spacing: 6px;
+  color: var(--mist);
+  animation: blink 1.4s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 16px; left: 50%;
+  transform: translateX(-50%);
+  width: 92%; max-width: 1380px;
+  background: rgba(8,8,8,0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border);
+  border-radius: 60px;
+  z-index: 1000;
+  padding: 0.85rem 1.8rem;
+  display: flex; justify-content: space-between; align-items: center;
+  transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+nav.scrolled {
+  background: rgba(5,5,5,0.95);
+  box-shadow: 0 12px 50px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,77,0,0.15);
+  top: 10px;
+}
+
+.logo-container { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+.logo-icon { width: 42px; height: 42px; filter: drop-shadow(0 0 12px var(--fire-glow)); animation: float 3.5s ease-in-out infinite; }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+.logo-text { display: flex; flex-direction: column; line-height: 1; }
+.logo-main {
+  font-family: 'Bebas Neue', cursive; font-size: 1.7rem;
+  background: linear-gradient(120deg, var(--fire) 0%, var(--ember) 60%, var(--gold) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  letter-spacing: 3px;
+}
+.logo-sub { font-size: 0.55rem; color: var(--mist); letter-spacing: 5px; text-transform: uppercase; font-weight: 500; margin-top: 1px; }
+
+.nav-links { display: flex; list-style: none; gap: 0.2rem; align-items: center; }
+.nav-links a {
+  color: rgba(255,255,255,0.6); text-decoration: none;
+  font-weight: 500; font-size: 0.88rem;
+  padding: 0.55rem 1.1rem; border-radius: 30px;
+  transition: all 0.3s; position: relative; letter-spacing: 0.3px;
+}
+.nav-links a:hover, .nav-links a.active { color: white; }
+.nav-links a::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, var(--fire), var(--ember));
+  border-radius: 30px; opacity: 0; transition: opacity 0.3s; z-index: -1;
+}
+.nav-links a:hover::after, .nav-links a.active::after { opacity: 1; }
+
+.order-btn {
+  background: linear-gradient(135deg, var(--fire), var(--ember)) !important;
+  color: white !important; padding: 0.6rem 1.4rem !important;
+  border-radius: 30px !important; font-weight: 700 !important;
+  box-shadow: 0 4px 20px rgba(255,77,0,0.35);
+  transition: all 0.3s !important;
+  display: inline-flex; align-items: center; gap: 0.4rem;
+}
+.order-btn::after { display: none !important; }
+.order-btn:hover { transform: translateY(-2px) scale(1.04) !important; box-shadow: 0 8px 30px rgba(255,77,0,0.5) !important; }
+
+.menu-toggle { display: none; flex-direction: column; cursor: pointer; gap: 5px; z-index: 1001; }
+.menu-toggle span { width: 24px; height: 2px; background: white; transition: 0.3s; border-radius: 2px; display: block; }
+.menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.menu-toggle.active span:nth-child(2) { opacity: 0; transform: translateX(10px); }
+.menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+.nav-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 999; backdrop-filter: blur(2px); }
+.nav-overlay.active { display: block; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 70vh;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; background: var(--void);
+}
+.hero-overlay {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(5,5,5,0.3) 0%, rgba(5,5,5,0.6) 50%, rgba(5,5,5,0.98) 100%),
+    radial-gradient(ellipse at 20% 50%, rgba(255,77,0,0.18) 0%, transparent 55%);
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
+}
+.hero-content {
+  position: relative; z-index: 2;
+  text-align: center; max-width: 800px;
+  padding: 0 2rem; padding-top: 100px;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  background: rgba(255,77,0,0.08); border: 1px solid rgba(255,77,0,0.25);
+  padding: 0.5rem 1.2rem; border-radius: 60px;
+  font-size: 0.78rem; font-weight: 600; color: var(--ember);
+  letter-spacing: 3px; text-transform: uppercase;
+  margin-bottom: 1.5rem; backdrop-filter: blur(10px);
+  animation: fadeInDown 0.9s ease both;
+}
+.hero-dot { width: 7px; height: 7px; background: var(--fire); border-radius: 50%; animation: pulse-dot 2s ease-in-out infinite; }
+@keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.7)} }
+
+.hero-title {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(3.5rem, 10vw, 7rem);
+  line-height: 0.92; letter-spacing: 1px;
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 1s ease 0.2s both;
+}
+.hero-title .line1 { display: block; color: rgba(255,255,255,0.92); }
+.hero-title .line2 {
+  display: block;
+  background: linear-gradient(90deg, var(--fire) 0%, var(--ember) 50%, var(--gold) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  filter: drop-shadow(0 0 30px rgba(255,77,0,0.4));
+}
+.hero-desc {
+  font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+  color: rgba(255,255,255,0.5); font-weight: 300;
+  max-width: 460px; margin: 0 auto;
+  animation: fadeInUp 1s ease 0.4s both;
+}
+
+@keyframes fadeInUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeInDown { from{opacity:0;transform:translateY(-28px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── STATS BAR ── */
+.stats-wrap { padding: 0 5%; margin-top: -40px; position: relative; z-index: 10; }
+.stats-bar {
+  background: var(--coal); border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 20px; max-width: 1380px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(4,1fr);
+  overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+}
+.stat-item {
+  padding: 1.6rem 1.5rem; text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.3s;
+}
+.stat-item:last-child { border-right: none; }
+.stat-item:hover { background: rgba(255,77,0,0.04); }
+.stat-num {
+  font-family: 'Bebas Neue', cursive; font-size: 2.2rem;
+  background: linear-gradient(135deg, var(--fire), var(--ember));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  line-height: 1;
+}
+.stat-label { color: var(--mist); font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+
+/* ── MENU MAIN ── */
+.menu-wrap { max-width: 1380px; margin: 0 auto; padding: 6rem 5%; }
+
+/* SECTION HEADER */
+.section-header { text-align: center; margin-bottom: 4rem; }
+.section-tag {
+  display: inline-block;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 5px; text-transform: uppercase;
+  color: var(--fire); margin-bottom: 1rem;
+  position: relative; padding: 0 1.5rem;
+}
+.section-tag::before, .section-tag::after {
+  content: ''; position: absolute;
+  top: 50%; transform: translateY(-50%);
+  width: 30px; height: 1px;
+  background: linear-gradient(90deg, var(--fire), transparent);
+}
+.section-tag::before { right: 100%; margin-right: -1.5rem; }
+.section-tag::after { left: 100%; margin-left: -1.5rem; background: linear-gradient(270deg, var(--fire), transparent); }
+
+.section-header h2 {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(2.2rem, 4vw, 3.8rem);
+  color: white; letter-spacing: 2px; line-height: 1;
+  position: relative; display: inline-block;
+}
+.section-header h2 .accent { color: var(--fire); }
+.section-header h2::after {
+  content: ''; position: absolute;
+  bottom: -10px; left: 50%; transform: translateX(-50%);
+  width: 50px; height: 3px;
+  background: linear-gradient(90deg, var(--fire), var(--ember)); border-radius: 2px;
+}
+.section-header p { color: var(--mist); font-size: 1rem; max-width: 440px; margin: 1.6rem auto 0; font-weight: 300; }
 
 /* FILTER BAR */
-.filter-bar{display:flex;gap:8px;margin-bottom:60px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}
-.filter-bar::-webkit-scrollbar{display:none}
-.filter-pill{background:var(--surface);border:1px solid var(--border);color:var(--muted);font-family:'DM Sans';font-size:0.8rem;font-weight:500;padding:9px 20px;border-radius:30px;cursor:pointer;transition:all 0.25s;white-space:nowrap;display:flex;align-items:center;gap:6px}
-.filter-pill:hover{border-color:rgba(255,255,255,0.2);color:white}
-.filter-pill.active{background:var(--fire);border-color:var(--fire);color:white;box-shadow:0 4px 16px rgba(255,69,0,0.3)}
+.filter-bar {
+  display: flex; gap: 8px; margin-bottom: 3.5rem;
+  overflow-x: auto; padding-bottom: 8px; scrollbar-width: none;
+  flex-wrap: wrap;
+}
+.filter-bar::-webkit-scrollbar { display: none; }
+.filter-pill {
+  background: var(--coal); border: 1px solid rgba(255,255,255,0.07);
+  color: var(--mist); font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem; font-weight: 500;
+  padding: 0.6rem 1.4rem; border-radius: 30px;
+  cursor: pointer; transition: all 0.25s; white-space: nowrap;
+  display: flex; align-items: center; gap: 6px;
+}
+.filter-pill:hover { border-color: rgba(255,255,255,0.2); color: white; }
+.filter-pill.active {
+  background: linear-gradient(135deg, var(--fire), var(--ember));
+  border-color: transparent; color: white;
+  box-shadow: 0 4px 16px rgba(255,77,0,0.3);
+}
 
-/* SECTION */
-.menu-section{margin-bottom:80px;opacity:0;transform:translateY(40px);transition:opacity 0.7s,transform 0.7s}
-.menu-section.visible{opacity:1;transform:translateY(0)}
-.section-label{display:flex;align-items:center;gap:16px;margin-bottom:28px}
-.section-emoji{font-size:28px;line-height:1}
-.section-title{font-family:'Bebas Neue';font-size:2rem;letter-spacing:2px;color:white}
-.section-line{flex:1;height:1px;background:var(--border)}
-.section-count{font-size:0.7rem;color:var(--muted);background:var(--surface2);border:1px solid var(--border);padding:5px 12px;border-radius:20px;white-space:nowrap}
+/* MENU SECTION */
+.menu-section { margin-bottom: 5rem; opacity: 0; transform: translateY(40px); transition: opacity 0.7s, transform 0.7s; }
+.menu-section.visible { opacity: 1; transform: translateY(0); }
 
-/* PRODUCT GRID */
-.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
-.product-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);position:relative;cursor:pointer}
-.product-card:hover{border-color:var(--border2);transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,0.5),0 0 0 1px rgba(255,69,0,0.1)}
-.product-img-wrap{position:relative;overflow:hidden;height:160px}
-.product-img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s cubic-bezier(0.175,0.885,0.32,1.275);display:block}
-.product-card:hover .product-img{transform:scale(1.08)}
-.product-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.7) 0%,transparent 50%);opacity:0;transition:opacity 0.3s}
-.product-card:hover .product-img-overlay{opacity:1}
-.quick-add{position:absolute;bottom:10px;left:50%;transform:translateX(-50%) translateY(10px);opacity:0;background:var(--fire);color:white;border:none;padding:8px 20px;border-radius:30px;font-family:'DM Sans';font-size:0.75rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:all 0.3s;z-index:2}
-.product-card:hover .quick-add{opacity:1;transform:translateX(-50%) translateY(0)}
-.quick-add:hover{background:var(--fire2);transform:translateX(-50%) translateY(0) scale(1.05) !important}
-.badge{position:absolute;top:10px;left:10px;font-size:0.6rem;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:1px;text-transform:uppercase;z-index:2}
-.badge-popular{background:var(--fire);color:white;box-shadow:0 4px 12px rgba(255,69,0,0.4)}
-.badge-new{background:#00c853;color:white;box-shadow:0 4px 12px rgba(0,200,83,0.4)}
-.badge-top{background:#ffd700;color:#000;box-shadow:0 4px 12px rgba(255,215,0,0.4)}
-.product-info{padding:14px 16px 16px}
-.product-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:6px}
-.product-name{font-weight:600;font-size:0.92rem;line-height:1.3;color:var(--text)}
-.product-price{font-weight:700;font-size:0.88rem;color:var(--fire);background:rgba(255,69,0,0.1);border:1px solid rgba(255,69,0,0.2);padding:4px 10px;border-radius:20px;white-space:nowrap;flex-shrink:0}
-.product-desc{font-size:0.72rem;color:var(--muted);line-height:1.5}
-.add-btn{width:28px;height:28px;background:var(--fire);border:none;border-radius:50%;color:white;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0;margin-top:2px}
-.add-btn:hover{background:var(--fire2);transform:scale(1.15)}
-.add-btn:active{transform:scale(0.9)}
+.section-label {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 1.8rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.section-emoji { font-size: 1.6rem; line-height: 1; }
+.section-title { font-family: 'Bebas Neue', cursive; font-size: 1.8rem; letter-spacing: 2px; color: white; }
+.section-line { flex: 1; height: 1px; background: rgba(255,255,255,0.04); }
+.section-count {
+  font-size: 0.7rem; color: var(--mist);
+  background: var(--ash); border: 1px solid rgba(255,255,255,0.06);
+  padding: 4px 12px; border-radius: 20px; white-space: nowrap;
+}
 
 /* SUB CATEGORY */
-.sub-cat{font-size:0.8rem;font-weight:600;color:rgba(255,140,0,0.8);letter-spacing:2px;text-transform:uppercase;margin:28px 0 16px;display:flex;align-items:center;gap:10px}
-.sub-cat::after{content:'';flex:1;height:1px;background:var(--border)}
+.sub-cat {
+  font-size: 0.78rem; font-weight: 600; color: rgba(255,140,0,0.8);
+  letter-spacing: 2px; text-transform: uppercase;
+  margin: 2rem 0 1.2rem; display: flex; align-items: center; gap: 10px;
+}
+.sub-cat::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.06); }
+
+/* PRODUCTS GRID */
+.products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.2rem; }
+
+/* PRODUCT CARD */
+.product-card {
+  background: var(--coal); border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 20px; overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+  position: relative; cursor: pointer;
+}
+.product-card:hover {
+  border-color: rgba(255,77,0,0.35);
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,77,0,0.1);
+}
+.product-img-wrap { position: relative; overflow: hidden; height: 160px; }
+.product-img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s cubic-bezier(0.175,0.885,0.32,1.275); }
+.product-card:hover .product-img { transform: scale(1.08); }
+.product-img-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
+  opacity: 0; transition: opacity 0.3s;
+}
+.product-card:hover .product-img-overlay { opacity: 1; }
+
+/* SVG placeholder image */
+.product-img-placeholder {
+  width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+  font-size: 3rem; background: linear-gradient(135deg, var(--ash) 0%, var(--smoke) 100%);
+}
+
+.quick-add {
+  position: absolute; bottom: 10px; left: 50%;
+  transform: translateX(-50%) translateY(10px); opacity: 0;
+  background: var(--fire); color: white; border: none;
+  padding: 7px 18px; border-radius: 30px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.75rem; font-weight: 700;
+  cursor: pointer; white-space: nowrap; transition: all 0.3s; z-index: 2;
+}
+.product-card:hover .quick-add { opacity: 1; transform: translateX(-50%) translateY(0); }
+.quick-add:hover { background: var(--ember); transform: translateX(-50%) translateY(0) scale(1.05) !important; }
+
+.badge {
+  position: absolute; top: 10px; left: 10px;
+  font-size: 0.6rem; font-weight: 700;
+  padding: 4px 10px; border-radius: 20px;
+  letter-spacing: 1px; text-transform: uppercase; z-index: 2;
+}
+.badge-popular { background: var(--fire); color: white; box-shadow: 0 4px 12px rgba(255,77,0,0.4); }
+.badge-new { background: #00c853; color: white; box-shadow: 0 4px 12px rgba(0,200,83,0.4); }
+.badge-top { background: var(--gold); color: #000; box-shadow: 0 4px 12px rgba(255,184,0,0.4); }
+
+.product-info { padding: 1.1rem 1.2rem 1.3rem; }
+.product-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 5px; }
+.product-name { font-weight: 600; font-size: 0.92rem; line-height: 1.3; color: var(--light); }
+.product-price {
+  font-weight: 700; font-size: 0.85rem; color: var(--fire);
+  background: rgba(255,77,0,0.1); border: 1px solid rgba(255,77,0,0.2);
+  padding: 3px 9px; border-radius: 20px; white-space: nowrap; flex-shrink: 0;
+}
+.product-desc { font-size: 0.72rem; color: var(--mist); line-height: 1.5; }
 
 /* NOTE */
-.note{font-size:0.78rem;color:var(--fire2);text-align:center;margin-top:16px;padding:10px;background:rgba(255,69,0,0.05);border-radius:10px;border:1px dashed rgba(255,69,0,0.2)}
+.note {
+  font-size: 0.78rem; color: var(--ember); text-align: center;
+  margin-top: 1rem; padding: 0.6rem;
+  background: rgba(255,77,0,0.05); border-radius: 10px;
+  border: 1px dashed rgba(255,77,0,0.2);
+  grid-column: 1/-1;
+}
 
-/* ==================== CART ==================== */
-.cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9000;opacity:0;visibility:hidden;transition:all 0.3s;backdrop-filter:blur(4px)}
-.cart-overlay.open{opacity:1;visibility:visible}
-.cart-panel{position:fixed;right:0;top:0;bottom:0;width:100%;max-width:420px;background:var(--surface);z-index:9001;transform:translateX(100%);transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);display:flex;flex-direction:column;border-left:1px solid var(--border)}
-.cart-panel.open{transform:translateX(0)}
-.cart-header{padding:24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
-.cart-header h2{font-family:'Bebas Neue';font-size:1.6rem;letter-spacing:2px}
-.cart-close{background:var(--surface2);border:1px solid var(--border);color:white;width:36px;height:36px;border-radius:50%;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
-.cart-close:hover{background:var(--surface3);transform:rotate(90deg)}
-.cart-body{flex:1;overflow-y:auto;padding:16px 24px;scrollbar-width:thin;scrollbar-color:var(--muted2) transparent}
-.cart-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;gap:12px;color:var(--muted)}
-.cart-empty-icon{font-size:48px;opacity:0.4}
-.cart-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);animation:slideIn 0.3s ease}
-@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
-.cart-item-img{width:64px;height:64px;border-radius:10px;object-fit:cover;flex-shrink:0}
-.cart-item-info{flex:1;min-width:0}
-.cart-item-name{font-weight:600;font-size:0.9rem;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cart-item-price{font-size:0.82rem;color:var(--fire)}
-.cart-item-controls{display:flex;align-items:center;gap:10px;margin-top:8px}
-.qty-btn{width:26px;height:26px;background:var(--surface2);border:1px solid var(--border);color:white;border-radius:50%;font-size:0.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
-.qty-btn:hover{background:var(--fire);border-color:var(--fire)}
-.qty-num{font-size:0.85rem;font-weight:600;min-width:20px;text-align:center}
-.cart-item-remove{margin-left:auto;background:none;border:none;color:var(--muted);font-size:1rem;cursor:pointer;padding:4px;transition:color 0.2s;flex-shrink:0}
-.cart-item-remove:hover{color:#ff4040}
-.cart-footer{padding:20px 24px;border-top:1px solid var(--border);flex-shrink:0}
-.cart-subtotal{display:flex;justify-content:space-between;margin-bottom:8px;font-size:0.85rem;color:var(--muted)}
-.cart-total{display:flex;justify-content:space-between;font-weight:700;font-size:1.1rem;margin-bottom:20px}
-.cart-total span:last-child{color:var(--fire);font-family:'Bebas Neue';font-size:1.4rem;letter-spacing:1px}
-.checkout-btn{width:100%;background:linear-gradient(135deg,var(--fire),var(--fire2));color:white;border:none;padding:16px;border-radius:var(--radius);font-family:'DM Sans';font-size:1rem;font-weight:700;cursor:pointer;transition:all 0.3s;display:flex;align-items:center;justify-content:center;gap:10px;letter-spacing:0.5px}
-.checkout-btn:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(255,69,0,0.4)}
-.checkout-btn:active{transform:translateY(0)}
-.whatsapp-btn{width:100%;background:#25D366;color:white;border:none;padding:14px;border-radius:var(--radius);font-family:'DM Sans';font-size:0.9rem;font-weight:600;cursor:pointer;margin-top:10px;transition:all 0.3s;display:flex;align-items:center;justify-content:center;gap:8px}
-.whatsapp-btn:hover{background:#1da851;transform:translateY(-1px)}
+/* ── CART ── */
+.cart-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+  z-index: 9000; opacity: 0; visibility: hidden; transition: all 0.3s; backdrop-filter: blur(4px);
+}
+.cart-overlay.open { opacity: 1; visibility: visible; }
+.cart-panel {
+  position: fixed; right: 0; top: 0; bottom: 0;
+  width: 100%; max-width: 420px; background: var(--coal);
+  z-index: 9001; transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+  display: flex; flex-direction: column;
+  border-left: 1px solid rgba(255,255,255,0.07);
+}
+.cart-panel.open { transform: translateX(0); }
+.cart-header {
+  padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.07);
+  display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
+}
+.cart-header h2 { font-family: 'Bebas Neue', cursive; font-size: 1.6rem; letter-spacing: 2px; }
+.cart-close {
+  background: var(--ash); border: 1px solid rgba(255,255,255,0.08);
+  color: white; width: 36px; height: 36px; border-radius: 50%;
+  font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+}
+.cart-close:hover { background: var(--smoke); transform: rotate(90deg); }
+.cart-body { flex: 1; overflow-y: auto; padding: 1rem 1.5rem; }
+.cart-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 200px; gap: 12px; color: var(--mist); text-align: center; }
+.cart-empty-icon { font-size: 3rem; opacity: 0.4; }
+.cart-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); animation: slideIn 0.3s ease; }
+@keyframes slideIn { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+.cart-item-img { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
+.cart-item-info { flex: 1; min-width: 0; }
+.cart-item-name { font-weight: 600; font-size: 0.88rem; margin-bottom: 3px; }
+.cart-item-price { font-size: 0.8rem; color: var(--fire); }
+.cart-item-controls { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.qty-btn {
+  width: 24px; height: 24px; background: var(--ash); border: 1px solid rgba(255,255,255,0.08);
+  color: white; border-radius: 50%; font-size: 0.85rem;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+}
+.qty-btn:hover { background: var(--fire); border-color: var(--fire); }
+.qty-num { font-size: 0.85rem; font-weight: 600; min-width: 18px; text-align: center; }
+.cart-item-remove { margin-left: auto; background: none; border: none; color: var(--mist); font-size: 1rem; cursor: pointer; padding: 4px; transition: color 0.2s; flex-shrink: 0; }
+.cart-item-remove:hover { color: #ff4040; }
+.cart-footer { padding: 1.2rem 1.5rem; border-top: 1px solid rgba(255,255,255,0.07); flex-shrink: 0; }
+.cart-subtotal { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.85rem; color: var(--mist); }
+.cart-total-row { display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1rem; margin-bottom: 1.2rem; }
+.cart-total-row span:last-child { color: var(--fire); font-family: 'Bebas Neue', cursive; font-size: 1.4rem; letter-spacing: 1px; }
+.checkout-btn {
+  width: 100%; background: linear-gradient(135deg, var(--fire), var(--ember));
+  color: white; border: none; padding: 14px; border-radius: 14px;
+  font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 700;
+  cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.checkout-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(255,77,0,0.4); }
+.whatsapp-btn {
+  width: 100%; background: #25D366; color: white; border: none; padding: 12px;
+  border-radius: 14px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600;
+  cursor: pointer; margin-top: 8px; transition: all 0.3s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.whatsapp-btn:hover { background: #1da851; transform: translateY(-1px); }
+
+/* CART BUTTON */
+.cart-nav-btn {
+  background: linear-gradient(135deg, var(--fire), var(--ember));
+  color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 30px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 700;
+  cursor: pointer; display: flex; align-items: center; gap: 8px;
+  transition: all 0.3s; box-shadow: 0 4px 20px rgba(255,77,0,0.35);
+}
+.cart-nav-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 25px rgba(255,77,0,0.5); }
+.cart-nav-count {
+  background: white; color: var(--fire); width: 20px; height: 20px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-weight: 700; transition: transform 0.3s;
+}
+.cart-nav-count.bump { transform: scale(1.5); }
 
 /* TOAST */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--surface2);border:1px solid var(--border2);color:white;padding:12px 20px;border-radius:30px;font-size:0.85rem;font-weight:500;z-index:99996;transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275),opacity 0.3s;display:flex;align-items:center;gap:8px;white-space:nowrap;opacity:0}
-.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
-.toast-dot{width:8px;height:8px;background:var(--fire);border-radius:50%;animation:pulse 1s infinite}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.5)}}
-
-/* FOOTER */
-footer{background:var(--surface);border-top:1px solid var(--border);padding:60px 5% 30px}
-.footer-inner{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
-.footer-brand-name{font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:3px;background:linear-gradient(135deg,var(--fire),var(--fire2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.footer-desc{color:var(--muted);font-size:0.85rem;line-height:1.7;margin:12px 0 20px}
-.socials{display:flex;gap:8px}
-.social-link{width:38px;height:38px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all 0.2s;text-decoration:none}
-.social-link:hover{background:var(--fire);border-color:var(--fire);transform:translateY(-3px)}
-.footer-col h4{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:1px;margin-bottom:16px}
-.footer-col ul{list-style:none}
-.footer-col ul li{margin-bottom:10px}
-.footer-col a{color:var(--muted);text-decoration:none;font-size:0.85rem;transition:color 0.2s;display:flex;align-items:center;gap:6px}
-.footer-col a:hover{color:var(--fire)}
-.footer-bottom{max-width:1280px;margin:0 auto;padding-top:24px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:0.78rem}
-
-/* RESPONSIVE */
-@media(max-width:768px){
-  .nav-links{display:none}
-  .stats{grid-template-columns:repeat(2,1fr)}
-  .footer-inner{grid-template-columns:1fr;gap:32px}
-  .footer-bottom{flex-direction:column;gap:8px;text-align:center}
-  .hero h1{font-size:3.5rem}
+.toast {
+  position: fixed; bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--ash); border: 1px solid rgba(255,77,0,0.3);
+  color: white; padding: 10px 18px; border-radius: 30px;
+  font-size: 0.85rem; font-weight: 500; z-index: 99996;
+  transition: transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275), opacity 0.3s;
+  display: flex; align-items: center; gap: 8px; white-space: nowrap; opacity: 0;
 }
-@media(max-width:480px){
-  .hero-ctas{flex-direction:column;align-items:center}
-  .products-grid{grid-template-columns:1fr 1fr}
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+.toast-dot { width: 8px; height: 8px; background: var(--fire); border-radius: 50%; }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--coal); padding: 5rem 5% 2rem;
+  position: relative; margin-top: 2rem;
+}
+footer::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--fire), transparent); opacity: 0.4;
+}
+.footer-grid {
+  display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr;
+  gap: 4rem; max-width: 1380px; margin: 0 auto 4rem;
+}
+.footer-brand-logo { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.5rem; }
+.footer-brand-logo img { width: 44px; height: 44px; filter: drop-shadow(0 0 10px var(--fire-glow)); }
+.footer-logo-main {
+  font-family: 'Bebas Neue', cursive; font-size: 1.6rem;
+  background: linear-gradient(135deg, var(--fire), var(--ember));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 3px;
+}
+.footer-desc { color: var(--mist); line-height: 1.8; font-size: 0.9rem; margin-bottom: 2rem; max-width: 280px; }
+.social-row { display: flex; gap: 0.8rem; }
+.social-btn {
+  width: 42px; height: 42px; background: var(--ash); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px; display: flex; align-items: center; justify-content: center; transition: all 0.3s; text-decoration: none;
+}
+.social-btn:hover { background: linear-gradient(135deg, var(--fire), var(--ember)); border-color: transparent; transform: translateY(-4px); box-shadow: 0 8px 20px var(--fire-glow); }
+.social-btn svg { width: 18px; height: 18px; fill: rgba(255,255,255,0.6); transition: fill 0.3s; }
+.social-btn:hover svg { fill: white; }
+
+.footer-col h4 { font-family: 'Bebas Neue', cursive; font-size: 1.1rem; letter-spacing: 2px; color: white; margin-bottom: 1.5rem; }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 0.7rem; }
+.footer-col a { color: var(--mist); text-decoration: none; font-size: 0.9rem; transition: all 0.3s; display: inline-flex; align-items: center; gap: 0.4rem; }
+.footer-col a:hover { color: var(--fire); transform: translateX(5px); }
+.footer-contact-item { display: flex; align-items: flex-start; gap: 0.8rem; color: var(--mist); font-size: 0.88rem; margin-bottom: 0.9rem; line-height: 1.5; }
+
+.footer-bottom {
+  max-width: 1380px; margin: 0 auto; padding-top: 2.5rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  display: flex; justify-content: space-between; align-items: center;
+  color: var(--fog); font-size: 0.83rem;
+}
+.footer-bottom-links { display: flex; gap: 2rem; }
+.footer-bottom-links a { color: var(--fog); text-decoration: none; transition: color 0.3s; }
+.footer-bottom-links a:hover { color: var(--fire); }
+
+/* FADE IN */
+.fade-in { opacity: 0; transform: translateY(32px); transition: opacity 0.9s cubic-bezier(0.4,0,0.2,1), transform 0.9s cubic-bezier(0.4,0,0.2,1); }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media(max-width:968px) {
+  .menu-toggle { display: flex; }
+  .nav-links {
+    position: fixed; top: 0; right: -110%;
+    width: 80%; max-width: 360px; height: 100vh;
+    background: rgba(5,5,5,0.98); backdrop-filter: blur(24px);
+    flex-direction: column; padding: 5.5rem 2rem 2rem;
+    gap: 1rem; transition: right 0.45s cubic-bezier(0.175,0.885,0.32,1.275);
+    border-left: 1px solid rgba(255,255,255,0.06); z-index: 2000;
+  }
+  .nav-links.active { right: 0; }
+  .nav-links a { font-size: 1.1rem; padding: 0.8rem 1.2rem; min-height: 44px; display: flex; align-items: center; }
+  .stats-bar { grid-template-columns: repeat(2,1fr); }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+}
+@media(max-width:768px) {
+  nav { width: 94%; padding: 0.75rem 1.2rem; top: 12px; }
+  .logo-icon { width: 36px; height: 36px; }
+  .logo-main { font-size: 1.4rem; }
+  .stats-bar { grid-template-columns: repeat(2,1fr); }
+  .products-grid { grid-template-columns: 1fr 1fr; }
+  .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+  .menu-wrap { padding: 4rem 4%; }
+}
+@media(max-width:480px) {
+  .products-grid { grid-template-columns: 1fr 1fr; }
+  .stats-bar { grid-template-columns: 1fr 1fr; }
+  .hero-title { font-size: 3rem; }
+  nav { width: 92%; padding: 0.7rem 1rem; }
+  .logo-sub { display: none; }
 }
 </style>
 </head>
 <body>
 
-<!-- Custom Cursor -->
-<div class="cursor" id="cursor"></div>
-<div class="cursor-trail" id="cursorTrail"></div>
-
-<!-- Loader -->
-<div class="loader" id="loader">
-  <div class="loader-flame">🔥</div>
-  <div class="loader-bar"><div class="loader-fill"></div></div>
-  <div class="loader-text">Cargando el menú</div>
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo-wrap">
+    <img class="loader-logo" src="img/logoperron.png" alt="Flama's">
+  </div>
+  <div class="loader-text">Cargando el Menú</div>
 </div>
 
-<!-- Toast -->
+<!-- TOAST -->
 <div class="toast" id="toast">
   <div class="toast-dot"></div>
   <span id="toastMsg">Agregado al carrito</span>
 </div>
 
-<!-- Cart Overlay -->
+<!-- CART OVERLAY -->
 <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
 
-<!-- Cart Panel -->
+<!-- CART PANEL -->
 <div class="cart-panel" id="cartPanel">
   <div class="cart-header">
     <h2>🛒 Mi Orden</h2>
@@ -225,15 +619,13 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:60px
     <div class="cart-empty">
       <div class="cart-empty-icon">🍔</div>
       <span>Tu carrito está vacío</span>
-      <small style="color:var(--muted);font-size:0.75rem">Agrega algo delicioso</small>
+      <small style="color:var(--mist);font-size:0.75rem;margin-top:4px">Agrega algo delicioso</small>
     </div>
   </div>
   <div class="cart-footer" id="cartFooter" style="display:none">
     <div class="cart-subtotal"><span>Subtotal</span><span id="cartSubtotal">$0.00</span></div>
-    <div class="cart-total"><span>Total</span><span id="cartTotal">$0.00</span></div>
-    <button class="checkout-btn" onclick="checkout()">
-      Ordenar Ahora 🔥
-    </button>
+    <div class="cart-total-row"><span>Total</span><span id="cartTotal">$0.00</span></div>
+    <button class="checkout-btn" onclick="checkout()">Ordenar Ahora 🔥</button>
     <button class="whatsapp-btn" onclick="orderWhatsApp()">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
       Pedir por WhatsApp
@@ -243,52 +635,67 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:60px
 
 <!-- NAV -->
 <nav id="navbar">
-  <a href="#" class="nav-logo">
-    <span class="logo-flame">🔥</span>
-    <span class="logo-wordmark">FLAMAS_SV</span>
+  <a href="index.html" class="logo-container">
+    <img src="img/logoperron.png" alt="Logo" class="logo-icon">
+    <div class="logo-text">
+      <span class="logo-main">FLAMAS_SV</span>
+      <span class="logo-sub">La Mejor Hamburguesa</span>
+    </div>
   </a>
-  <ul class="nav-links">
-    <li><a href="#">Inicio</a></li>
-    <li><a href="#menu" class="active">Menú</a></li>
-    <li><a href="#">Historia</a></li>
-    <li><a href="#">Galería</a></li>
-    <li><a href="#">Ubicación</a></li>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Inicio</a></li>
+    <li><a href="Menú.html" class="active">Menú</a></li>
+    <li><a href="historia.html">Historia</a></li>
+    <li><a href="Galeria.html">Galería</a></li>
+    <li><a href="ubicacion.html">Ubicación</a></li>
+    <li><a href="Ordenar.html" class="order-btn">🛒 Ordenar</a></li>
   </ul>
-  <div class="nav-right">
-    <button class="cart-btn" onclick="openCart()">
+  <div style="display:flex;align-items:center;gap:0.8rem;">
+    <button class="cart-nav-btn" onclick="openCart()">
       🛒 Carrito
-      <span class="cart-count" id="cartCount">0</span>
+      <span class="cart-nav-count" id="cartCount">0</span>
     </button>
+    <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
   </div>
 </nav>
+<div class="nav-overlay" id="navOverlay" onclick="toggleMenu()"></div>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
   <div class="hero-grid"></div>
-  <div class="hero-tag">🔥 Hamburguesas Artesanales · Jucuapa, SV</div>
-  <h1>NUESTRO<br><em>MENÚ</em></h1>
-  <p class="hero-sub">Ingredientes frescos, sabor que no se olvida. Cada hamburguesa hecha con obsesión por el detalle.</p>
-  <div class="hero-ctas">
-    <a href="#menu" class="btn-primary">Ver el Menú 🍔</a>
-    <a href="#" class="btn-outline" onclick="openCart()">Ver mi Orden</a>
-  </div>
-  <div class="hero-scroll">
-    Scroll
-    <div class="scroll-line"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="hero-dot"></span>
+      🔥 Hamburguesas Artesanales · Jucuapa, SV
+    </div>
+    <h1 class="hero-title">
+      <span class="line1">NUESTRO</span>
+      <span class="line2">MENÚ</span>
+    </h1>
+    <p class="hero-desc">Ingredientes frescos, sabor que no se olvida. Cada hamburguesa hecha con obsesión por el detalle.</p>
   </div>
 </section>
 
 <!-- STATS -->
-<div class="stats">
-  <div class="stat"><div class="stat-num">30+</div><div class="stat-label">Items en menú</div></div>
-  <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Artesanal</div></div>
-  <div class="stat"><div class="stat-num">3</div><div class="stat-label">Años de sabor</div></div>
-  <div class="stat"><div class="stat-num">⭐ 5.0</div><div class="stat-label">Rating promedio</div></div>
+<div class="stats-wrap">
+  <div class="stats-bar">
+    <div class="stat-item"><div class="stat-num">30+</div><div class="stat-label">Items en menú</div></div>
+    <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label">Artesanal</div></div>
+    <div class="stat-item"><div class="stat-num">3</div><div class="stat-label">Años de sabor</div></div>
+    <div class="stat-item"><div class="stat-num">⭐ 5.0</div><div class="stat-label">Rating promedio</div></div>
+  </div>
 </div>
 
 <!-- MENU -->
 <div class="menu-wrap" id="menu">
+  <div class="section-header fade-in">
+    <div class="section-tag">Especialidades</div>
+    <h2>Todo el <span class="accent">Menú</span></h2>
+    <p>Filtra por categoría y arma tu orden perfecta</p>
+  </div>
 
   <!-- FILTER BAR -->
   <div class="filter-bar" id="filterBar">
@@ -312,60 +719,48 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:60px
       <span class="section-count">4 items</span>
     </div>
     <div class="products-grid">
-      <div class="product-card" onclick="addToCart('Pan con Ajo',2.50,'https://kimi-web-img.moonshot.cn/img/www.shutterstock.com/2d089680ad2f1bd0d92b3ada02a995c8f2ae431e.jpg',this)">
+      <div class="product-card" onclick="addToCart('Pan con Ajo',2.50,'🧄',this)">
         <span class="badge badge-popular">Popular</span>
         <div class="product-img-wrap">
-          <img src="https://kimi-web-img.moonshot.cn/img/www.shutterstock.com/2d089680ad2f1bd0d92b3ada02a995c8f2ae431e.jpg" class="product-img" alt="Pan con Ajo">
+          <div class="product-img-placeholder">🧄</div>
           <div class="product-img-overlay"></div>
-          <button class="quick-add">+ Agregar al carrito</button>
+          <button class="quick-add" onclick="event.stopPropagation();addToCart('Pan con Ajo',2.50,'🧄',this.closest('.product-card'))">+ Agregar</button>
         </div>
         <div class="product-info">
-          <div class="product-top">
-            <span class="product-name">Pan con Ajo</span>
-            <span class="product-price">$2.50</span>
-          </div>
+          <div class="product-top"><span class="product-name">Pan con Ajo</span><span class="product-price">$2.50</span></div>
           <p class="product-desc">Pan artesanal tostado con mantequilla y ajo fresco (4 unidades)</p>
         </div>
       </div>
-      <div class="product-card" onclick="addToCart('Papas Sazonadas',2.50,'https://kimi-web-img.moonshot.cn/img/static.vecteezy.com/058d52fb51abb15a64e04a12ced90368a96d1c72.jpeg',this)">
+      <div class="product-card" onclick="addToCart('Papas Sazonadas',2.50,'🍟',this)">
         <div class="product-img-wrap">
-          <img src="https://kimi-web-img.moonshot.cn/img/static.vecteezy.com/058d52fb51abb15a64e04a12ced90368a96d1c72.jpeg" class="product-img" alt="Papas Sazonadas">
+          <div class="product-img-placeholder">🍟</div>
           <div class="product-img-overlay"></div>
-          <button class="quick-add">+ Agregar al carrito</button>
+          <button class="quick-add" onclick="event.stopPropagation();addToCart('Papas Sazonadas',2.50,'🍟',this.closest('.product-card'))">+ Agregar</button>
         </div>
         <div class="product-info">
-          <div class="product-top">
-            <span class="product-name">Papas Sazonadas</span>
-            <span class="product-price">$2.50</span>
-          </div>
+          <div class="product-top"><span class="product-name">Papas Sazonadas</span><span class="product-price">$2.50</span></div>
           <p class="product-desc">Crujientes papas fritas con especias especiales</p>
         </div>
       </div>
-      <div class="product-card" onclick="addToCart('Dedos de Queso',3.00,'https://kimi-web-img.moonshot.cn/img/static.vecteezy.com/cd146f3c65f301aa1511cdd72742a375e294c39e.png',this)">
+      <div class="product-card" onclick="addToCart('Dedos de Queso',3.00,'🧀',this)">
         <div class="product-img-wrap">
-          <img src="https://kimi-web-img.moonshot.cn/img/static.vecteezy.com/cd146f3c65f301aa1511cdd72742a375e294c39e.png" class="product-img" alt="Dedos de Queso">
+          <div class="product-img-placeholder">🧀</div>
           <div class="product-img-overlay"></div>
-          <button class="quick-add">+ Agregar al carrito</button>
+          <button class="quick-add" onclick="event.stopPropagation();addToCart('Dedos de Queso',3.00,'🧀',this.closest('.product-card'))">+ Agregar</button>
         </div>
         <div class="product-info">
-          <div class="product-top">
-            <span class="product-name">Dedos de Queso</span>
-            <span class="product-price">$3.00</span>
-          </div>
+          <div class="product-top"><span class="product-name">Dedos de Queso</span><span class="product-price">$3.00</span></div>
           <p class="product-desc">Empanizados y crujientes (5 unidades)</p>
         </div>
       </div>
-      <div class="product-card" onclick="addToCart('Aros de Cebolla',2.50,'https://kimi-web-img.moonshot.cn/img/img.freepik.com/8afa66acbdd020fae9b7afe02db807f531dd6ee8.jpg',this)">
+      <div class="product-card" onclick="addToCart('Aros de Cebolla',2.50,'🧅',this)">
         <div class="product-img-wrap">
-          <img src="https://kimi-web-img.moonshot.cn/img/img.freepik.com/8afa66acbdd020fae9b7afe02db807f531dd6ee8.jpg" class="product-img" alt="Aros de Cebolla">
+          <div class="product-img-placeholder">🧅</div>
           <div class="product-img-overlay"></div>
-          <button class="quick-add">+ Agregar al carrito</button>
+          <button class="quick-add" onclick="event.stopPropagation();addToCart('Aros de Cebolla',2.50,'🧅',this.closest('.product-card'))">+ Agregar</button>
         </div>
         <div class="product-info">
-          <div class="product-top">
-            <span class="product-name">Aros de Cebolla</span>
-            <span class="product-price">$2.50</span>
-          </div>
+          <div class="product-top"><span class="product-name">Aros de Cebolla</span><span class="product-price">$2.50</span></div>
           <p class="product-desc">Crujientes por fuera, tiernos por dentro (8 unidades)</p>
         </div>
       </div>
@@ -381,50 +776,20 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:60px
       <span class="section-count">3 items</span>
     </div>
     <div class="products-grid">
-      <div class="product-card" onclick="addToCart('La Pió',5.00,'https://kimi-web-img.moonshot.cn/img/www.shutterstock.com/64373a1083889230b3a8b927b127535ac2e27235.jpg',this)">
-        <div class="product-img-wrap">
-          <img src="https://kimi-web-img.moonshot.cn/img/www.shutterstock.com/64373a1083889230b3a8b927b127535ac2e27235.jpg" class="product-img" alt="La Pió">
-          <div class="product-img-overlay"></div>
-          <button class="quick-add">+ Agregar al carrito</button>
-        </div>
-        <div class="product-info">
-          <div class="product-top">
-            <span class="product-name">La Pió</span>
-            <span class="product-price">$5.00</span>
-          </div>
-          <p class="product-desc">Pollo crujiente, queso, cebolla caramelizada, lechuga y tomate</p>
-        </div>
+      <div class="product-card" onclick="addToCart('La Pió',5.00,'🍗',this)">
+        <div class="product-img-wrap"><div class="product-img-placeholder">🍗</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Pió',5.00,'🍗',this.closest('.product-card'))">+ Agregar</button></div>
+        <div class="product-info"><div class="product-top"><span class="product-name">La Pió</span><span class="product-price">$5.00</span></div><p class="product-desc">Pollo crujiente, queso, cebolla caramelizada, lechuga y tomate</p></div>
       </div>
-      <div class="product-card" onclick="addToCart('La Chipotle',6.00,'https://kimi-web-img.moonshot.cn/img/st2.depositphotos.com/bf7e97c4a2c9cd897915d92fe4e8fa600682bb2f.jpg',this)">
-        <div class="product-img-wrap">
-          <img src="https://kimi-web-img.moonshot.cn/img/st2.depositphotos.com/bf7e97c4a2c9cd897915d92fe4e8fa600682bb2f.jpg" class="product-img" alt="La Chipotle">
-          <div class="product-img-overlay"></div>
-          <button class="quick-add">+ Agregar al carrito</button>
-        </div>
-        <div class="product-info">
-          <div class="product-top">
-            <span class="product-name">La Chipotle</span>
-            <span class="product-price">$6.00</span>
-          </div>
-          <p class="product-desc">Pollo crujiente bañado en salsa chipotle, queso, cebolla caramelizada</p>
-        </div>
+      <div class="product-card" onclick="addToCart('La Chipotle',6.00,'🌶️',this)">
+        <div class="product-img-wrap"><div class="product-img-placeholder">🌶️</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Chipotle',6.00,'🌶️',this.closest('.product-card'))">+ Agregar</button></div>
+        <div class="product-info"><div class="product-top"><span class="product-name">La Chipotle</span><span class="product-price">$6.00</span></div><p class="product-desc">Pollo crujiente bañado en salsa chipotle, queso, cebolla caramelizada</p></div>
       </div>
-      <div class="product-card" onclick="addToCart('La Barbie',6.00,'https://kimi-web-img.moonshot.cn/img/media-cdn.tripadvisor.com/a53f745635628d5fa58e620459378d667a31f031.jpg',this)">
-        <div class="product-img-wrap">
-          <img src="https://kimi-web-img.moonshot.cn/img/media-cdn.tripadvisor.com/a53f745635628d5fa58e620459378d667a31f031.jpg" class="product-img" alt="La Barbie">
-          <div class="product-img-overlay"></div>
-          <button class="quick-add">+ Agregar al carrito</button>
-        </div>
-        <div class="product-info">
-          <div class="product-top">
-            <span class="product-name">La Barbie</span>
-            <span class="product-price">$6.00</span>
-          </div>
-          <p class="product-desc">Pollo crujiente bañado en salsa barbacoa, queso, cebolla caramelizada</p>
-        </div>
+      <div class="product-card" onclick="addToCart('La Barbie',6.00,'🍗',this)">
+        <div class="product-img-wrap"><div class="product-img-placeholder">🍗</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Barbie',6.00,'🍗',this.closest('.product-card'))">+ Agregar</button></div>
+        <div class="product-info"><div class="product-top"><span class="product-name">La Barbie</span><span class="product-price">$6.00</span></div><p class="product-desc">Pollo crujiente bañado en salsa barbacoa, queso, cebolla caramelizada</p></div>
       </div>
     </div>
-    <div class="note">🍟 Todas incluyen papas fritas</div>
+    <div class="products-grid" style="margin-top:0.5rem"><div class="note">🍟 Todas incluyen papas fritas</div></div>
   </section>
 
   <!-- RES -->
@@ -436,37 +801,15 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:60px
       <span class="section-count">7 items</span>
     </div>
     <div class="products-grid">
-      <div class="product-card" onclick="addToCart('La Facilota',5.00,'https://kimi-web-img.moonshot.cn/img/static.vecteezy.com/c8229cea149cfc03249ffc054b5a049ba9d603a7.jpg',this)">
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/static.vecteezy.com/c8229cea149cfc03249ffc054b5a049ba9d603a7.jpg" class="product-img" alt="La Facilota"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">La Facilota</span><span class="product-price">$5.00</span></div><p class="product-desc">Carne de res, lechuga, queso, tomate, cebolla caramelizada</p></div>
-      </div>
-      <div class="product-card" onclick="addToCart('La Cheese',5.00,'https://kimi-web-img.moonshot.cn/img/www.shutterstock.com/216f30341e01a32e46f5347d973c6a04053b7efb.jpg',this)">
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/www.shutterstock.com/216f30341e01a32e46f5347d973c6a04053b7efb.jpg" class="product-img" alt="La Cheese"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">La Cheese</span><span class="product-price">$5.00</span></div><p class="product-desc">Carne de res, queso americano y queso cheddar</p></div>
-      </div>
-      <div class="product-card" onclick="addToCart('La Honguito',6.00,'https://kimi-web-img.moonshot.cn/img/t3.ftcdn.net/f694e05a90bc2e75f1645c6bff51ca0d482345de.jpg',this)">
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/t3.ftcdn.net/f694e05a90bc2e75f1645c6bff51ca0d482345de.jpg" class="product-img" alt="La Honguito"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">La Honguito</span><span class="product-price">$6.00</span></div><p class="product-desc">Carne, hongos en salsa de la casa, queso, cebolla caramelizada</p></div>
-      </div>
-      <div class="product-card" onclick="addToCart('La Tropical',6.00,'https://kimi-web-img.moonshot.cn/img/media.istockphoto.com/3faa8670db50c5b4411d89a2dd5ba225979e7297.jpg',this)">
-        <span class="badge badge-new">Nuevo</span>
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/media.istockphoto.com/3faa8670db50c5b4411d89a2dd5ba225979e7297.jpg" class="product-img" alt="La Tropical"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">La Tropical</span><span class="product-price">$6.00</span></div><p class="product-desc">Carne, piña, tocino, lechuga, queso, tomate, cebolla caramelizada</p></div>
-      </div>
-      <div class="product-card" onclick="addToCart('La Bacon Cheese',6.00,'https://kimi-web-img.moonshot.cn/img/t4.ftcdn.net/56e7246a658f27d5527506800e193ce001f74c42.jpg',this)">
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/t4.ftcdn.net/56e7246a658f27d5527506800e193ce001f74c42.jpg" class="product-img" alt="La Bacon Cheese"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">La Bacon Cheese</span><span class="product-price">$6.00</span></div><p class="product-desc">Carne, queso americano, queso cheddar, pepinillos, tocino</p></div>
-      </div>
-      <div class="product-card" onclick="addToCart('La Ahuevada',6.00,'https://kimi-web-img.moonshot.cn/img/theheirloompantry.co/173d5753ce69d84f53971a0626a7b24a57067a6f.jpg',this)">
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/theheirloompantry.co/173d5753ce69d84f53971a0626a7b24a57067a6f.jpg" class="product-img" alt="La Ahuevada"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">La Ahuevada</span><span class="product-price">$6.00</span></div><p class="product-desc">Carne, huevo estrellado, tocino, lechuga, queso, tomate</p></div>
-      </div>
-      <div class="product-card" onclick="addToCart('La Guacamole',6.00,'https://kimi-web-img.moonshot.cn/img/californiaavocado.com/62eda50f1ac85a56630fb1ddf9cde7c3afb8c234.jpeg',this)">
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/californiaavocado.com/62eda50f1ac85a56630fb1ddf9cde7c3afb8c234.jpeg" class="product-img" alt="La Guacamole"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">La Guacamole</span><span class="product-price">$6.00</span></div><p class="product-desc">Carne, aguacate, tocino, lechuga, queso, tomate, cebolla morada</p></div>
-      </div>
+      <div class="product-card" onclick="addToCart('La Facilota',5.00,'🍔',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🍔</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Facilota',5.00,'🍔',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Facilota</span><span class="product-price">$5.00</span></div><p class="product-desc">Carne de res, lechuga, queso, tomate, cebolla caramelizada</p></div></div>
+      <div class="product-card" onclick="addToCart('La Cheese',5.00,'🧀',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🧀</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Cheese',5.00,'🧀',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Cheese</span><span class="product-price">$5.00</span></div><p class="product-desc">Carne de res, queso americano y queso cheddar</p></div></div>
+      <div class="product-card" onclick="addToCart('La Honguito',6.00,'🍄',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🍄</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Honguito',6.00,'🍄',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Honguito</span><span class="product-price">$6.00</span></div><p class="product-desc">Carne, hongos en salsa de la casa, queso, cebolla caramelizada</p></div></div>
+      <div class="product-card" onclick="addToCart('La Tropical',6.00,'🍍',this)"><span class="badge badge-new">Nuevo</span><div class="product-img-wrap"><div class="product-img-placeholder">🍍</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Tropical',6.00,'🍍',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Tropical</span><span class="product-price">$6.00</span></div><p class="product-desc">Carne, piña, tocino, lechuga, queso, tomate, cebolla caramelizada</p></div></div>
+      <div class="product-card" onclick="addToCart('La Bacon Cheese',6.00,'🥓',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🥓</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Bacon Cheese',6.00,'🥓',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Bacon Cheese</span><span class="product-price">$6.00</span></div><p class="product-desc">Carne, queso americano, queso cheddar, pepinillos, tocino</p></div></div>
+      <div class="product-card" onclick="addToCart('La Ahuevada',6.00,'🍳',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🍳</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Ahuevada',6.00,'🍳',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Ahuevada</span><span class="product-price">$6.00</span></div><p class="product-desc">Carne, huevo estrellado, tocino, lechuga, queso, tomate</p></div></div>
+      <div class="product-card" onclick="addToCart('La Guacamole',6.00,'🥑',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🥑</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Guacamole',6.00,'🥑',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Guacamole</span><span class="product-price">$6.00</span></div><p class="product-desc">Carne, aguacate, tocino, lechuga, queso, tomate, cebolla morada</p></div></div>
     </div>
-    <div class="note">🍟 Todas incluyen papas fritas</div>
+    <div class="products-grid" style="margin-top:0.5rem"><div class="note">🍟 Todas incluyen papas fritas</div></div>
   </section>
 
   <!-- PREMIUM -->
@@ -478,21 +821,11 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:60px
       <span class="section-count">3 items</span>
     </div>
     <div class="products-grid">
-      <div class="product-card" onclick="addToCart('La Bañada',7.50,'https://kimi-web-img.moonshot.cn/img/img.freepik.com/70be7b451aadab7806516ce63d6652947095ba9f.jpg',this)">
-        <span class="badge badge-top">Top</span>
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/img.freepik.com/70be7b451aadab7806516ce63d6652947095ba9f.jpg" class="product-img" alt="La Bañada"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">La Bañada</span><span class="product-price">$7.50</span></div><p class="product-desc">Bañada en queso cheddar, carne, tocino, lechuga, tomate</p></div>
-      </div>
-      <div class="product-card" onclick="addToCart('La Engañosa',7.50,'https://kimi-web-img.moonshot.cn/img/img.freepik.com/bf26fff541b793e73f86816f20eba56c895eefbd.jpg',this)">
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/img.freepik.com/bf26fff541b793e73f86816f20eba56c895eefbd.jpg" class="product-img" alt="La Engañosa"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">La Engañosa</span><span class="product-price">$7.50</span></div><p class="product-desc">Servida en cama de queso cheddar, carne, lechuga, tomate</p></div>
-      </div>
-      <div class="product-card" onclick="addToCart('La Doble Carne',7.50,'https://kimi-web-img.moonshot.cn/img/t4.ftcdn.net/5aa738363c28fc6cc1754edd7045cd25beaccd2a.jpg',this)">
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/t4.ftcdn.net/5aa738363c28fc6cc1754edd7045cd25beaccd2a.jpg" class="product-img" alt="La Doble Carne"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">La Doble Carne</span><span class="product-price">$7.50</span></div><p class="product-desc">Doble carne, tocino, lechuga, queso, tomate, cebolla caramelizada</p></div>
-      </div>
+      <div class="product-card" onclick="addToCart('La Bañada',7.50,'🧀',this)"><span class="badge badge-top">Top</span><div class="product-img-wrap"><div class="product-img-placeholder">🧀</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Bañada',7.50,'🧀',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Bañada</span><span class="product-price">$7.50</span></div><p class="product-desc">Bañada en queso cheddar, carne, tocino, lechuga, tomate</p></div></div>
+      <div class="product-card" onclick="addToCart('La Engañosa',7.50,'💎',this)"><div class="product-img-wrap"><div class="product-img-placeholder">💎</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Engañosa',7.50,'💎',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Engañosa</span><span class="product-price">$7.50</span></div><p class="product-desc">Servida en cama de queso cheddar, carne, lechuga, tomate</p></div></div>
+      <div class="product-card" onclick="addToCart('La Doble Carne',7.50,'🥩',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🥩</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Doble Carne',7.50,'🥩',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Doble Carne</span><span class="product-price">$7.50</span></div><p class="product-desc">Doble carne, tocino, lechuga, queso, tomate, cebolla caramelizada</p></div></div>
     </div>
-    <div class="note">🍟 Todas incluyen papas fritas</div>
+    <div class="products-grid" style="margin-top:0.5rem"><div class="note">🍟 Todas incluyen papas fritas</div></div>
   </section>
 
   <!-- ESPECIALIDADES -->
@@ -504,25 +837,12 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:60px
       <span class="section-count">4 items</span>
     </div>
     <div class="products-grid">
-      <div class="product-card" onclick="addToCart('La Mar y Tierra',8.00,'https://kimi-web-img.moonshot.cn/img/www.primeshrimp.com/80cc510103dfcc06061462ae463b49a65cb434af.jpg',this)">
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/www.primeshrimp.com/80cc510103dfcc06061462ae463b49a65cb434af.jpg" class="product-img" alt="La Mar y Tierra"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">La Mar y Tierra</span><span class="product-price">$8.00</span></div><p class="product-desc">Carne, camarones empanizados, queso, tocino, lechuga, tomate</p></div>
-      </div>
-      <div class="product-card" onclick="addToCart('La Castrosa',8.00,'https://kimi-web-img.moonshot.cn/img/groundbeefrecipes.com/df3612000b6d2eb31a5543b6d421b5812ab8be32.jpg',this)">
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/groundbeefrecipes.com/df3612000b6d2eb31a5543b6d421b5812ab8be32.jpg" class="product-img" alt="La Castrosa"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">La Castrosa</span><span class="product-price">$8.00</span></div><p class="product-desc">Doble carne, queso americano, tocino, costa de queso</p></div>
-      </div>
-      <div class="product-card" onclick="addToCart('La Argentina',8.00,'https://kimi-web-img.moonshot.cn/img/people.com/8c3d914e388683b8777a4f04a4350de26a7368f5.jpg',this)">
-        <span class="badge badge-top">Top</span>
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/people.com/8c3d914e388683b8777a4f04a4350de26a7368f5.jpg" class="product-img" alt="La Argentina"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">La Argentina</span><span class="product-price">$8.00</span></div><p class="product-desc">Carne, chorizo argentino, aguacate, tocino, aderezo especial</p></div>
-      </div>
-      <div class="product-card" onclick="addToCart('La Triple Carne',8.50,'https://kimi-web-img.moonshot.cn/img/mxriyum.com/282d809fa1826b463b21480064501ff6bfae9465.jpeg',this)">
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/mxriyum.com/282d809fa1826b463b21480064501ff6bfae9465.jpeg" class="product-img" alt="La Triple Carne"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">La Triple Carne</span><span class="product-price">$8.50</span></div><p class="product-desc">Triple carne, tocino, lechuga, queso, tomate, cebolla caramelizada</p></div>
-      </div>
+      <div class="product-card" onclick="addToCart('La Mar y Tierra',8.00,'🦐',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🦐</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Mar y Tierra',8.00,'🦐',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Mar y Tierra</span><span class="product-price">$8.00</span></div><p class="product-desc">Carne, camarones empanizados, queso, tocino, lechuga, tomate</p></div></div>
+      <div class="product-card" onclick="addToCart('La Castrosa',8.00,'🔥',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🔥</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Castrosa',8.00,'🔥',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Castrosa</span><span class="product-price">$8.00</span></div><p class="product-desc">Doble carne, queso americano, tocino, costa de queso</p></div></div>
+      <div class="product-card" onclick="addToCart('La Argentina',8.00,'🌭',this)"><span class="badge badge-top">Top</span><div class="product-img-wrap"><div class="product-img-placeholder">🌭</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Argentina',8.00,'🌭',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Argentina</span><span class="product-price">$8.00</span></div><p class="product-desc">Carne, chorizo argentino, aguacate, tocino, aderezo especial</p></div></div>
+      <div class="product-card" onclick="addToCart('La Triple Carne',8.50,'👑',this)"><div class="product-img-wrap"><div class="product-img-placeholder">👑</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Triple Carne',8.50,'👑',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Triple Carne</span><span class="product-price">$8.50</span></div><p class="product-desc">Triple carne, tocino, lechuga, queso, tomate, cebolla caramelizada</p></div></div>
     </div>
-    <div class="note">🍟 Todas incluyen papas fritas</div>
+    <div class="products-grid" style="margin-top:0.5rem"><div class="note">🍟 Todas incluyen papas fritas</div></div>
   </section>
 
   <!-- PAPAS -->
@@ -534,27 +854,11 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:60px
       <span class="section-count">5 items</span>
     </div>
     <div class="products-grid">
-      <div class="product-card" onclick="addToCart('Papas Mexicanas',6.00,'https://kimi-web-img.moonshot.cn/img/carlsbadcravings.com/ef1a93c41c199a1ab0f7932dc4d9da75893b3c09.jpg',this)">
-        <span class="badge badge-top">Top</span>
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/carlsbadcravings.com/ef1a93c41c199a1ab0f7932dc4d9da75893b3c09.jpg" class="product-img" alt="Papas Mexicanas"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">Papas Mexicanas</span><span class="product-price">$6.00</span></div><p class="product-desc">Carne asada, chirmol, aguacate, jalapeños, queso</p></div>
-      </div>
-      <div class="product-card" onclick="addToCart('Salchipapa',5.50,'https://kimi-web-img.moonshot.cn/img/n5s3k8m4.delivery.rocketcdn.me/e1d3b860cc36a1080b8f827c63b5479eaa9233ca.jpg',this)">
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/n5s3k8m4.delivery.rocketcdn.me/e1d3b860cc36a1080b8f827c63b5479eaa9233ca.jpg" class="product-img" alt="Salchipapa"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">Salchipapa</span><span class="product-price">$5.50</span></div><p class="product-desc">Salchicha, queso y aderezo</p></div>
-      </div>
-      <div class="product-card" onclick="addToCart('Papas Bacon',5.50,'https://kimi-web-img.moonshot.cn/img/thumbs.dreamstime.com/47abe65ae3d826735de66a873adc4a5b9f4c9b15.jpg',this)">
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/thumbs.dreamstime.com/47abe65ae3d826735de66a873adc4a5b9f4c9b15.jpg" class="product-img" alt="Papas Bacon"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">Papas Bacon</span><span class="product-price">$5.50</span></div><p class="product-desc">Queso y tocino</p></div>
-      </div>
-      <div class="product-card" onclick="addToCart('Papas Chicken',5.50,'https://kimi-web-img.moonshot.cn/img/www.shutterstock.com/a399f15a4d5adf447a73dc71b6d7e81640ea489e.jpg',this)">
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/www.shutterstock.com/a399f15a4d5adf447a73dc71b6d7e81640ea489e.jpg" class="product-img" alt="Papas Chicken"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">Papas Chicken</span><span class="product-price">$5.50</span></div><p class="product-desc">Pechuga empanizada, queso y aderezo</p></div>
-      </div>
-      <div class="product-card" onclick="addToCart('Papas Chili',5.50,'https://kimi-web-img.moonshot.cn/img/thumbs.dreamstime.com/41bde6ed3bb7880d6f25aba5e4e8cdabd5b44ff0.jpg',this)">
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/thumbs.dreamstime.com/41bde6ed3bb7880d6f25aba5e4e8cdabd5b44ff0.jpg" class="product-img" alt="Papas Chili"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">Papas Chili</span><span class="product-price">$5.50</span></div><p class="product-desc">Chili de la casa, queso y jalapeños</p></div>
-      </div>
+      <div class="product-card" onclick="addToCart('Papas Mexicanas',6.00,'🌮',this)"><span class="badge badge-top">Top</span><div class="product-img-wrap"><div class="product-img-placeholder">🌮</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('Papas Mexicanas',6.00,'🌮',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">Papas Mexicanas</span><span class="product-price">$6.00</span></div><p class="product-desc">Carne asada, chirmol, aguacate, jalapeños, queso</p></div></div>
+      <div class="product-card" onclick="addToCart('Salchipapa',5.50,'🌭',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🌭</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('Salchipapa',5.50,'🌭',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">Salchipapa</span><span class="product-price">$5.50</span></div><p class="product-desc">Salchicha, queso y aderezo</p></div></div>
+      <div class="product-card" onclick="addToCart('Papas Bacon',5.50,'🥓',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🥓</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('Papas Bacon',5.50,'🥓',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">Papas Bacon</span><span class="product-price">$5.50</span></div><p class="product-desc">Queso y tocino</p></div></div>
+      <div class="product-card" onclick="addToCart('Papas Chicken',5.50,'🍗',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🍗</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('Papas Chicken',5.50,'🍗',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">Papas Chicken</span><span class="product-price">$5.50</span></div><p class="product-desc">Pechuga empanizada, queso y aderezo</p></div></div>
+      <div class="product-card" onclick="addToCart('Papas Chili',5.50,'🌶️',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🌶️</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('Papas Chili',5.50,'🌶️',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">Papas Chili</span><span class="product-price">$5.50</span></div><p class="product-desc">Chili de la casa, queso y jalapeños</p></div></div>
     </div>
   </section>
 
@@ -568,33 +872,15 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:60px
     </div>
     <div class="sub-cat">🍗 Alitas</div>
     <div class="products-grid">
-      <div class="product-card" onclick="addToCart('5 Alitas + Papas',6.00,'https://kimi-web-img.moonshot.cn/img/static.vecteezy.com/2fe31eebdd083dcb4c54308f4d0c8a4dbc430fb5.jpg',this)">
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/static.vecteezy.com/2fe31eebdd083dcb4c54308f4d0c8a4dbc430fb5.jpg" class="product-img" alt="5 Alitas"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">5 Alitas + Papas</span><span class="product-price">$6.00</span></div></div>
-      </div>
-      <div class="product-card" onclick="addToCart('10 Alitas + Papas',8.00,'https://kimi-web-img.moonshot.cn/img/www.shutterstock.com/1521137ed4085506380ec1685301c617a816a47b.jpg',this)">
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/www.shutterstock.com/1521137ed4085506380ec1685301c617a816a47b.jpg" class="product-img" alt="10 Alitas"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">10 Alitas + Papas</span><span class="product-price">$8.00</span></div></div>
-      </div>
-      <div class="product-card" onclick="addToCart('15 Alitas + Papas',12.00,'https://kimi-web-img.moonshot.cn/img/www.shutterstock.com/cdb4913c17cb87b3c24754743a6e01e2788d9998.jpg',this)">
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/www.shutterstock.com/cdb4913c17cb87b3c24754743a6e01e2788d9998.jpg" class="product-img" alt="15 Alitas"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">15 Alitas + Papas</span><span class="product-price">$12.00</span></div></div>
-      </div>
+      <div class="product-card" onclick="addToCart('5 Alitas + Papas',6.00,'🍗',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🍗</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('5 Alitas + Papas',6.00,'🍗',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">5 Alitas + Papas</span><span class="product-price">$6.00</span></div></div></div>
+      <div class="product-card" onclick="addToCart('10 Alitas + Papas',8.00,'🍗',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🍗</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('10 Alitas + Papas',8.00,'🍗',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">10 Alitas + Papas</span><span class="product-price">$8.00</span></div></div></div>
+      <div class="product-card" onclick="addToCart('15 Alitas + Papas',12.00,'🍗',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🍗</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('15 Alitas + Papas',12.00,'🍗',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">15 Alitas + Papas</span><span class="product-price">$12.00</span></div></div></div>
     </div>
-    <div class="sub-cat">🍗 Chunks</div>
+    <div class="sub-cat" style="margin-top:1.5rem">🍗 Chunks</div>
     <div class="products-grid">
-      <div class="product-card" onclick="addToCart('8 Chunks + Papas',5.00,'https://kimi-web-img.moonshot.cn/img/www.queensleeappetit.com/742d82f78f0c298efd1e1f29c43b0a096231b062.jpg',this)">
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/www.queensleeappetit.com/742d82f78f0c298efd1e1f29c43b0a096231b062.jpg" class="product-img" alt="8 Chunks"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">8 Chunks + Papas</span><span class="product-price">$5.00</span></div></div>
-      </div>
-      <div class="product-card" onclick="addToCart('16 Chunks + Papas',8.00,'https://kimi-web-img.moonshot.cn/img/www.queensleeappetit.com/4bd6a30d225ec2f70a09c2de88af07173ad69a51.jpg',this)">
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/www.queensleeappetit.com/4bd6a30d225ec2f70a09c2de88af07173ad69a51.jpg" class="product-img" alt="16 Chunks"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">16 Chunks + Papas</span><span class="product-price">$8.00</span></div></div>
-      </div>
-      <div class="product-card" onclick="addToCart('25 Chunks + Papas',15.00,'https://kimi-web-img.moonshot.cn/img/www.bidfood.co.uk/fe2e96b5e597f364417abf88d1d22102a8fcaf8d.jpg',this)">
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/www.bidfood.co.uk/fe2e96b5e597f364417abf88d1d22102a8fcaf8d.jpg" class="product-img" alt="25 Chunks"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">25 Chunks + Papas</span><span class="product-price">$15.00</span></div></div>
-      </div>
+      <div class="product-card" onclick="addToCart('8 Chunks + Papas',5.00,'🍖',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🍖</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('8 Chunks + Papas',5.00,'🍖',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">8 Chunks + Papas</span><span class="product-price">$5.00</span></div></div></div>
+      <div class="product-card" onclick="addToCart('16 Chunks + Papas',8.00,'🍖',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🍖</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('16 Chunks + Papas',8.00,'🍖',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">16 Chunks + Papas</span><span class="product-price">$8.00</span></div></div></div>
+      <div class="product-card" onclick="addToCart('25 Chunks + Papas',15.00,'🍖',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🍖</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('25 Chunks + Papas',15.00,'🍖',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">25 Chunks + Papas</span><span class="product-price">$15.00</span></div></div></div>
     </div>
   </section>
 
@@ -608,218 +894,221 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:60px
     </div>
     <div class="sub-cat">🍧 Frozen</div>
     <div class="products-grid">
-      <div class="product-card" onclick="addToCart('Frozen',2.50,'https://images.unsplash.com/photo-1553530979-7ee52a2670c4?w=400&h=300&fit=crop',this)">
-        <div class="product-img-wrap"><img src="https://images.unsplash.com/photo-1553530979-7ee52a2670c4?w=400&h=300&fit=crop" class="product-img" alt="Frozen"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">Frozen</span><span class="product-price">$2.50</span></div><p class="product-desc">Fresa · Piña · Maracuyá · Limón</p></div>
-      </div>
+      <div class="product-card" onclick="addToCart('Frozen',2.50,'🍧',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🍧</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('Frozen',2.50,'🍧',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">Frozen</span><span class="product-price">$2.50</span></div><p class="product-desc">Fresa · Piña · Maracuyá · Limón</p></div></div>
     </div>
-    <div class="sub-cat">🥤 Malteadas</div>
+    <div class="sub-cat" style="margin-top:1.5rem">🥤 Malteadas</div>
     <div class="products-grid">
-      <div class="product-card" onclick="addToCart('Malteada',3.50,'https://kimi-web-img.moonshot.cn/img/static.vecteezy.com/cca98cffef6f414c9449c2f1dcbbce6acbb4c519.jpeg',this)">
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/static.vecteezy.com/cca98cffef6f414c9449c2f1dcbbce6acbb4c519.jpeg" class="product-img" alt="Malteadas"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">Malteadas</span><span class="product-price">$3.50</span></div><p class="product-desc">Fresa · Oreo · Chocolate · Café · Coco</p></div>
-      </div>
+      <div class="product-card" onclick="addToCart('Malteada',3.50,'🥛',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🥛</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('Malteada',3.50,'🥛',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">Malteadas</span><span class="product-price">$3.50</span></div><p class="product-desc">Fresa · Oreo · Chocolate · Café · Coco</p></div></div>
     </div>
-    <div class="sub-cat">🍋 Limonadas</div>
+    <div class="sub-cat" style="margin-top:1.5rem">🍋 Limonadas</div>
     <div class="products-grid">
-      <div class="product-card" onclick="addToCart('Limonada',3.50,'https://kimi-web-img.moonshot.cn/img/c8.alamy.com/38c38c6e082a4cac7c771db8871360c4b0ee4705.jpg',this)">
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/c8.alamy.com/38c38c6e082a4cac7c771db8871360c4b0ee4705.jpg" class="product-img" alt="Limonadas"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">Limonadas</span><span class="product-price">$3.50</span></div><p class="product-desc">Fresa · Hierbabuena · Piña · Cherry · Azul · Maracuyá</p></div>
-      </div>
+      <div class="product-card" onclick="addToCart('Limonada',3.50,'🍋',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🍋</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('Limonada',3.50,'🍋',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">Limonadas</span><span class="product-price">$3.50</span></div><p class="product-desc">Fresa · Hierbabuena · Piña · Cherry · Azul · Maracuyá</p></div></div>
     </div>
-    <div class="sub-cat">🥤 Sodas</div>
+    <div class="sub-cat" style="margin-top:1.5rem">🥤 Sodas</div>
     <div class="products-grid">
-      <div class="product-card" onclick="addToCart('Soda',1.50,'https://kimi-web-img.moonshot.cn/img/img.freepik.com/ec088f81b449ccc9e472cff6e1fd328165a8032c.jpg',this)">
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/img.freepik.com/ec088f81b449ccc9e472cff6e1fd328165a8032c.jpg" class="product-img" alt="Sodas"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">Sodas</span><span class="product-price">$1.50</span></div><p class="product-desc">Coca Cola · Coca 0 · Uva · Fanta · Sprite</p></div>
-      </div>
+      <div class="product-card" onclick="addToCart('Soda',1.50,'🥤',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🥤</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('Soda',1.50,'🥤',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">Sodas</span><span class="product-price">$1.50</span></div><p class="product-desc">Coca Cola · Coca 0 · Uva · Fanta · Sprite</p></div></div>
     </div>
-    <div class="sub-cat">☕ Café</div>
+    <div class="sub-cat" style="margin-top:1.5rem">☕ Café</div>
     <div class="products-grid">
-      <div class="product-card" onclick="addToCart('Café Caliente',1.00,'https://kimi-web-img.moonshot.cn/img/static.vecteezy.com/8726db1a382aa9b1bbf54f419f4dd8f77fe31662.jpeg',this)">
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/static.vecteezy.com/8726db1a382aa9b1bbf54f419f4dd8f77fe31662.jpeg" class="product-img" alt="Café Caliente"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">Café Caliente</span><span class="product-price">$1.00</span></div></div>
-      </div>
-      <div class="product-card" onclick="addToCart('Café con Leche',1.25,'https://kimi-web-img.moonshot.cn/img/www.shutterstock.com/ec01fbc91b5478597f27e69828d354781735ec9d.jpg',this)">
-        <div class="product-img-wrap"><img src="https://kimi-web-img.moonshot.cn/img/www.shutterstock.com/ec01fbc91b5478597f27e69828d354781735ec9d.jpg" class="product-img" alt="Café con Leche"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">Café con Leche</span><span class="product-price">$1.25</span></div></div>
-      </div>
-      <div class="product-card" onclick="addToCart('Iced Coffee',2.50,'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&h=300&fit=crop',this)">
-        <div class="product-img-wrap"><img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&h=300&fit=crop" class="product-img" alt="Iced Coffee"><div class="product-img-overlay"></div><button class="quick-add">+ Agregar al carrito</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">Iced Coffee</span><span class="product-price">$2.50</span></div></div>
-      </div>
+      <div class="product-card" onclick="addToCart('Café Caliente',1.00,'☕',this)"><div class="product-img-wrap"><div class="product-img-placeholder">☕</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('Café Caliente',1.00,'☕',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">Café Caliente</span><span class="product-price">$1.00</span></div></div></div>
+      <div class="product-card" onclick="addToCart('Café con Leche',1.25,'☕',this)"><div class="product-img-wrap"><div class="product-img-placeholder">☕</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('Café con Leche',1.25,'☕',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">Café con Leche</span><span class="product-price">$1.25</span></div></div></div>
+      <div class="product-card" onclick="addToCart('Iced Coffee',2.50,'🧊',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🧊</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('Iced Coffee',2.50,'🧊',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">Iced Coffee</span><span class="product-price">$2.50</span></div></div></div>
     </div>
   </section>
-
 </div>
 
 <!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
+<footer id="contacto">
+  <div class="footer-grid">
     <div>
-      <div class="footer-brand-name">🔥 FLAMAS_SV</div>
+      <div class="footer-brand-logo">
+        <img src="img/logoperron.png" alt="Logo">
+        <span class="footer-logo-main">FLAMAS_SV</span>
+      </div>
       <p class="footer-desc">Las mejores hamburguesas artesanales de Jucuapa. Hechas con amor, pasión y los mejores ingredientes locales.</p>
-      <div class="socials">
-        <a class="social-link" href="#" title="WhatsApp">💬</a>
-        <a class="social-link" href="#" title="Facebook">📘</a>
-        <a class="social-link" href="#" title="Instagram">📸</a>
-        <a class="social-link" href="#" title="Twitter">🐦</a>
+      <div class="social-row">
+        <a href="https://wa.me/50375416644" target="_blank" class="social-btn" title="WhatsApp">
+          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </a>
+        <a href="#" class="social-btn" title="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+        <a href="#" class="social-btn" title="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
       </div>
     </div>
     <div class="footer-col">
       <h4>Horario</h4>
       <ul>
-        <li><a href="#">Lun–Mar: 12:00–17:00</a></li>
-        <li><a href="#">Jue–Sáb: 12:00–17:00</a></li>
-        <li><a href="#">Domingo: 12:00–17:30</a></li>
+        <li><a href="#">Lun – Mar: 11am – 9pm</a></li>
+        <li><a href="#">Jue – Sáb: 11am – 9pm</a></li>
+        <li><a href="#">Domingo: 11am – 9pm</a></li>
       </ul>
     </div>
     <div class="footer-col">
       <h4>Contacto</h4>
-      <ul>
-        <li><a href="#">📍 Plaza, Jucuapa</a></li>
-        <li><a href="#">📱 7067-1505</a></li>
-        <li><a href="#">✉️ hola@flamassv.com</a></li>
-      </ul>
+      <div class="footer-contact-item">📍 Plaza, Jucuapa</div>
+      <div class="footer-contact-item">📱 7067-1505</div>
+      <div class="footer-contact-item">✉️ flamassv@gmail.com</div>
     </div>
     <div class="footer-col">
       <h4>Links</h4>
       <ul>
-        <li><a href="#">→ Menú</a></li>
-        <li><a href="#">→ Historia</a></li>
-        <li><a href="#">→ Galería</a></li>
-        <li><a href="#">→ Ubicación</a></li>
+        <li><a href="index.html">→ Inicio</a></li>
+        <li><a href="historia.html">→ Historia</a></li>
+        <li><a href="Galeria.html">→ Galería</a></li>
+        <li><a href="ubicacion.html">→ Ubicación</a></li>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
     <span>© 2025 Flama's SV · Todos los derechos reservados</span>
-    <span>Hecho con 🔥 en El Salvador</span>
+    <div class="footer-bottom-links">
+      <a href="#">Privacidad</a>
+      <a href="#">Términos</a>
+    </div>
   </div>
 </footer>
 
 <script>
-// CURSOR
-const cursor=document.getElementById('cursor');
-const trail=document.getElementById('cursorTrail');
-let mx=0,my=0,tx=0,ty=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx-6+'px';cursor.style.top=my-6+'px'});
-setInterval(()=>{tx+=(mx-tx)*0.12;ty+=(my-ty)*0.12;trail.style.left=tx-16+'px';trail.style.top=ty-16+'px'},16);
-
 // LOADER
-window.addEventListener('load',()=>setTimeout(()=>document.getElementById('loader').classList.add('out'),1800));
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loader').classList.add('hidden'), 1000);
+});
 
 // NAVBAR
-window.addEventListener('scroll',()=>{document.getElementById('navbar').classList.toggle('scrolled',scrollY>60)});
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// MOBILE MENU
+function toggleMenu() {
+  const links = document.getElementById('navLinks');
+  const toggle = document.getElementById('menuToggle');
+  const overlay = document.getElementById('navOverlay');
+  links.classList.toggle('active');
+  toggle.classList.toggle('active');
+  overlay.classList.toggle('active');
+}
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => {
+    document.getElementById('navLinks').classList.remove('active');
+    document.getElementById('menuToggle').classList.remove('active');
+    document.getElementById('navOverlay').classList.remove('active');
+  });
+});
 
 // SCROLL ANIMATIONS
-const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.08});
-document.querySelectorAll('.fade-s').forEach(el=>obs.observe(el));
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fade-s, .fade-in').forEach(el => observer.observe(el));
 
 // FILTERS
-document.querySelectorAll('.filter-pill').forEach(pill=>{
-  pill.addEventListener('click',()=>{
-    document.querySelectorAll('.filter-pill').forEach(p=>p.classList.remove('active'));
+document.querySelectorAll('.filter-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
     pill.classList.add('active');
-    const f=pill.dataset.filter;
-    document.querySelectorAll('.menu-section').forEach(sec=>{
-      if(f==='all'||sec.dataset.category===f){sec.style.display='';setTimeout(()=>sec.classList.add('visible'),10)}
-      else{sec.style.display='none'}
+    const f = pill.dataset.filter;
+    document.querySelectorAll('.menu-section').forEach(sec => {
+      if (f === 'all' || sec.dataset.category === f) {
+        sec.style.display = '';
+        setTimeout(() => sec.classList.add('visible'), 10);
+      } else {
+        sec.style.display = 'none';
+      }
     });
   });
 });
 
-// CART STATE
-let cart=[];
+// CART
+let cart = [];
 
-function addToCart(name,price,img,cardEl){
-  const existing=cart.find(i=>i.name===name);
-  if(existing){existing.qty++}
-  else{cart.push({name,price,img,qty:1})}
+function addToCart(name, price, emoji, cardEl) {
+  const existing = cart.find(i => i.name === name);
+  if (existing) { existing.qty++; }
+  else { cart.push({ name, price, emoji, qty: 1 }); }
   updateCartUI();
-  showToast('🔥 '+name+' agregado');
-  // card pulse
-  cardEl.style.transform='scale(0.96)';
-  setTimeout(()=>cardEl.style.transform='',150);
+  showToast('🔥 ' + name + ' agregado');
+  if (cardEl) {
+    cardEl.style.transform = 'scale(0.96)';
+    setTimeout(() => cardEl.style.transform = '', 150);
+  }
 }
 
-function updateCartUI(){
-  const total=cart.reduce((s,i)=>s+i.price*i.qty,0);
-  const count=cart.reduce((s,i)=>s+i.qty,0);
-  // count badge
-  const badge=document.getElementById('cartCount');
-  badge.textContent=count;
+function updateCartUI() {
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const count = cart.reduce((s, i) => s + i.qty, 0);
+  const badge = document.getElementById('cartCount');
+  badge.textContent = count;
   badge.classList.add('bump');
-  setTimeout(()=>badge.classList.remove('bump'),300);
-  // body
-  const body=document.getElementById('cartBody');
-  const footer=document.getElementById('cartFooter');
-  if(cart.length===0){
-    body.innerHTML='<div class="cart-empty"><div class="cart-empty-icon">🍔</div><span>Tu carrito está vacío</span><small style="color:var(--muted);font-size:0.75rem">Agrega algo delicioso</small></div>';
-    footer.style.display='none';return;
+  setTimeout(() => badge.classList.remove('bump'), 300);
+
+  const body = document.getElementById('cartBody');
+  const footer = document.getElementById('cartFooter');
+  if (cart.length === 0) {
+    body.innerHTML = '<div class="cart-empty"><div class="cart-empty-icon">🍔</div><span>Tu carrito está vacío</span><small style="color:var(--mist);font-size:0.75rem;margin-top:4px">Agrega algo delicioso</small></div>';
+    footer.style.display = 'none'; return;
   }
-  footer.style.display='block';
-  body.innerHTML=cart.map((item,idx)=>`
+  footer.style.display = 'block';
+  body.innerHTML = cart.map((item, idx) => `
     <div class="cart-item">
-      <img src="${item.img}" alt="${item.name}" class="cart-item-img" onerror="this.src='https://via.placeholder.com/64x64/111/666?text=🍔'">
+      <div style="width:60px;height:60px;border-radius:10px;background:var(--ash);display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0">${item.emoji}</div>
       <div class="cart-item-info">
         <div class="cart-item-name">${item.name}</div>
-        <div class="cart-item-price">$${(item.price*item.qty).toFixed(2)}</div>
+        <div class="cart-item-price">$${(item.price * item.qty).toFixed(2)}</div>
         <div class="cart-item-controls">
           <button class="qty-btn" onclick="changeQty(${idx},-1)">−</button>
           <span class="qty-num">${item.qty}</span>
           <button class="qty-btn" onclick="changeQty(${idx},1)">+</button>
-          <button class="cart-item-remove" onclick="removeItem(${idx})" title="Quitar">✕</button>
+          <button class="cart-item-remove" onclick="removeItem(${idx})">✕</button>
         </div>
       </div>
     </div>
   `).join('');
-  document.getElementById('cartSubtotal').textContent='$'+total.toFixed(2);
-  document.getElementById('cartTotal').textContent='$'+total.toFixed(2);
+  document.getElementById('cartSubtotal').textContent = '$' + total.toFixed(2);
+  document.getElementById('cartTotal').textContent = '$' + total.toFixed(2);
 }
 
-function changeQty(idx,delta){
-  cart[idx].qty+=delta;
-  if(cart[idx].qty<=0)cart.splice(idx,1);
+function changeQty(idx, delta) {
+  cart[idx].qty += delta;
+  if (cart[idx].qty <= 0) cart.splice(idx, 1);
   updateCartUI();
 }
-function removeItem(idx){
-  cart.splice(idx,1);
-  updateCartUI();
-}
-function openCart(){
+function removeItem(idx) { cart.splice(idx, 1); updateCartUI(); }
+function openCart() {
   document.getElementById('cartOverlay').classList.add('open');
   document.getElementById('cartPanel').classList.add('open');
-  document.body.style.overflow='hidden';
+  document.body.style.overflow = 'hidden';
 }
-function closeCart(){
+function closeCart() {
   document.getElementById('cartOverlay').classList.remove('open');
   document.getElementById('cartPanel').classList.remove('open');
-  document.body.style.overflow='';
+  document.body.style.overflow = '';
 }
-function checkout(){
-  if(!cart.length)return;
-  alert('¡Gracias por tu orden! En un momento te contactaremos. 🔥');
+function checkout() {
+  if (!cart.length) return;
+  window.location.href = 'Ordenar.html';
 }
-function orderWhatsApp(){
-  if(!cart.length)return;
-  const lines=cart.map(i=>`• ${i.qty}x ${i.name} - $${(i.price*i.qty).toFixed(2)}`).join('%0A');
-  const total=cart.reduce((s,i)=>s+i.price*i.qty,0).toFixed(2);
-  const msg=`🔥 *Pedido Flama's SV*%0A%0A${lines}%0A%0A*Total: $${total}*`;
-  window.open(`https://wa.me/50370671505?text=${msg}`,'_blank');
+function orderWhatsApp() {
+  if (!cart.length) return;
+  const lines = cart.map(i => `• ${i.qty}x ${i.name} - $${(i.price * i.qty).toFixed(2)}`).join('%0A');
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0).toFixed(2);
+  const msg = `🔥 *Pedido Flama's SV*%0A%0A${lines}%0A%0A*Total: $${total}*`;
+  window.open(`https://wa.me/50375416644?text=${msg}`, '_blank');
 }
 
 // TOAST
 let toastTimer;
-function showToast(msg){
-  const t=document.getElementById('toast');
-  document.getElementById('toastMsg').textContent=msg;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
   t.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>t.classList.remove('show'),2500);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// Init
 updateCartUI();
 </script>
 </body>

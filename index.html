@@ -37,7 +37,6 @@
             line-height: 1.6;
         }
 
-        /* Noise */
         body::after {
             content: '';
             position: fixed;
@@ -202,7 +201,7 @@
             transform: scale(1.05);
             animation: slow-zoom 20s ease-in-out infinite alternate;
         }
-        .hero-bg video {
+        .hero-bg img {
             position: absolute;
             inset: 0;
             width: 100%;
@@ -845,9 +844,7 @@
         .fade-in { opacity:0; transform:translateY(32px); transition:opacity 0.9s cubic-bezier(0.4,0,0.2,1), transform 0.9s cubic-bezier(0.4,0,0.2,1); }
         .fade-in.visible { opacity:1; transform:translateY(0); }
 
-        /* ── RESPONSIVE EXHAUSTIVO ── */
-
-        /* 2560px+ Ultra Wide */
+        /* ── RESPONSIVE ── */
         @media(min-width:2560px) {
             html { font-size: 18px; }
             nav { max-width: 1800px; }
@@ -858,24 +855,18 @@
             .hero-content { max-width: 1200px; }
             .features-wrap { padding: 0 4%; }
         }
-
-        /* 1920px Full HD grande */
         @media(min-width:1920px) and (max-width:2559px) {
             nav { max-width: 1600px; }
             .features-bar, .categories-grid, .promos-grid,
             .testimonials-grid, .footer-grid, .mvv-inner { max-width: 1600px; }
             .hero-title { font-size: clamp(5rem, 9vw, 9rem); }
         }
-
-        /* 1440px Desktop estándar */
         @media(max-width:1440px) {
             nav { width: 94%; }
             .categories-grid { gap: 1rem; }
             .promos-grid { gap: 1rem; }
             .footer-grid { gap: 3rem; }
         }
-
-        /* 1200px Desktop pequeño / Laptop */
         @media(max-width:1200px) {
             .categories-grid { grid-template-columns: repeat(2,1fr); }
             .category-card { height: 320px; }
@@ -883,8 +874,6 @@
             .promos-grid { grid-template-columns: repeat(3,1fr); }
             .footer-grid { gap: 2.5rem; }
         }
-
-        /* 1024px Tablet landscape / iPad Pro */
         @media(max-width:1024px) {
             nav { width: 96%; padding: 0.8rem 1.4rem; }
             .nav-links a { padding: 0.45rem 0.7rem; font-size: 0.8rem; }
@@ -898,8 +887,6 @@
             .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
             .hero-content { padding-top: 100px; }
         }
-
-        /* 968px Tablet */
         @media(max-width:968px) {
             nav { width: 96%; }
             .menu-toggle { display: flex; }
@@ -930,12 +917,9 @@
             .tab-btn { padding: 0.7rem 1.6rem; font-size: 0.9rem; white-space: nowrap; flex-shrink: 0; min-height: 44px; }
             .mvv-card { padding: 2.5rem; }
         }
-
-        /* 768px Tablet pequeña / Mobile grande */
         @media(max-width:768px) {
             html, body { overflow-x: hidden; }
             .hero { min-height: 100svh; min-height: 100vh; }
-            .hero-bg { background-attachment: scroll; }
             nav { width: 94%; padding: 0.75rem 1.2rem; top: 12px; }
             .logo-icon { width: 36px; height: 36px; }
             .logo-main { font-size: 1.4rem; }
@@ -961,8 +945,6 @@
             .mvv-section, .promos, .testimonials { padding: clamp(4rem,8vw,8rem) 5%; }
             footer { padding: 4rem 5% 2rem; }
         }
-
-        /* 640px Mobile grande */
         @media(max-width:640px) {
             .categories { padding: 4rem 4% 3rem; }
             .mvv-section, .promos, .testimonials { padding: 4rem 4%; }
@@ -978,8 +960,6 @@
             .category-number { font-size: 3.5rem; }
             footer { padding: 3.5rem 4% 1.5rem; }
         }
-
-        /* 480px Mobile estándar */
         @media(max-width:480px) {
             nav { width: 92%; padding: 0.7rem 1rem; }
             .logo-sub { display: none; }
@@ -1005,8 +985,6 @@
             .testimonials-grid, .promos-grid { gap: 1rem; }
             .categories, .mvv-section, .promos, .testimonials { padding: 3rem 4%; }
         }
-
-        /* 390px iPhone 14 / Mobile moderno */
         @media(max-width:390px) {
             html { font-size: 14px; }
             nav { width: 95%; top: 10px; padding: 0.65rem 1rem; }
@@ -1028,8 +1006,6 @@
             .categories, .mvv-section, .promos, .testimonials { padding: 3rem 3.5%; }
             footer { padding: 3rem 3.5% 1.5rem; }
         }
-
-        /* 320px Mobile pequeño legacy */
         @media(max-width:320px) {
             html { font-size: 13px; }
             nav { width: 96%; padding: 0.6rem 0.9rem; top: 8px; }
@@ -1058,7 +1034,6 @@
             .section-header { margin-bottom: 2rem; }
         }
 
-        /* Nav overlay para cerrar al clic fuera */
         .nav-overlay {
             display: none;
             position: fixed; inset: 0;
@@ -1068,7 +1043,6 @@
         }
         .nav-overlay.active { display: block; }
     </style>
-<base target="_blank">
 </head>
 <body>
 
@@ -1102,12 +1076,26 @@
     </div>
 </nav>
 
-<!-- HERO -->
+<!-- HERO — IMAGEN DE FONDO (igual a la captura) -->
 <section class="hero" id="inicio">
     <div class="hero-bg">
-        <video autoplay muted loop playsinline poster="img/hero-poster.jpg">
-            <source src="video/videodeflamas.mp4" type="video/mp4">
-        </video>
+        <img src="img/hero-poster.jpg" alt="Flama's Jucuapa">
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+        <div class="hero-eyebrow">
+            <span class="hero-dot"></span>
+            🔥 Nuevo Menú 2026
+        </div>
+        <h1 class="hero-title">
+            <span class="line1">LA MEJOR</span>
+            <span class="line2">HAMBURGUESA</span>
+        </h1>
+        <p class="hero-desc">Carne 100% de res, pan recién horneado y ingredientes frescos seleccionados para ti</p>
+    <div class="hero-scroll">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
     </div>
 </section>
 
@@ -1138,7 +1126,7 @@
         <div class="feature-item">
             <div class="feature-icon">🎁</div>
             <div class="feature-text">
-                <strong>15% OFF</strong>
+                <strong>5% OFF</strong>
                 <span>Primera orden</span>
             </div>
         </div>
@@ -1329,18 +1317,15 @@
             </ul>
         </div>
     </div>
-    </div>
 </footer>
 
 <script>
-    // Loader
     window.addEventListener('load', () => {
         setTimeout(() => {
             document.getElementById('loader').classList.add('hidden');
         }, 1000);
     });
 
-    // Toggle menu
     function toggleMenu() {
         const navLinks = document.getElementById('navLinks');
         const toggle = document.getElementById('menuToggle');
@@ -1348,7 +1333,6 @@
         toggle.classList.toggle('active');
     }
 
-    // Close menu on link click
     document.querySelectorAll('.nav-links a').forEach(link => {
         link.addEventListener('click', () => {
             document.getElementById('navLinks').classList.remove('active');
@@ -1356,13 +1340,11 @@
         });
     });
 
-    // Navbar scroll
     window.addEventListener('scroll', () => {
         const nav = document.getElementById('navbar');
         nav.classList.toggle('scrolled', window.scrollY > 50);
     });
 
-    // Intersection Observer
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -1373,22 +1355,14 @@
 
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-    // Tab switching
     function switchTab(tabName, btnEl) {
-        // Hide all panels
-        document.querySelectorAll('.tab-panel').forEach(p => {
-            p.classList.remove('active');
-        });
-        // Remove active from all buttons
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        // Show selected panel
         const panel = document.getElementById('tab-' + tabName);
         if (panel) panel.classList.add('active');
-        // Activate button
         if (btnEl) btnEl.classList.add('active');
     }
 
-    // Smooth scroll for anchors
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
