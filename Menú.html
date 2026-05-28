@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Flama's | Menú</title>
 <link rel="icon" href="img/logoperron.png" type="image/png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="" href="img/exterior letrero.jpeg">
+ <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -257,7 +257,6 @@ nav.scrolled {
 /* ── MENU MAIN ── */
 .menu-wrap { max-width: 1380px; margin: 0 auto; padding: 6rem 5%; }
 
-/* SECTION HEADER */
 .section-header { text-align: center; margin-bottom: 4rem; }
 .section-tag {
   display: inline-block;
@@ -365,11 +364,17 @@ nav.scrolled {
 }
 .product-card:hover .product-img-overlay { opacity: 1; }
 
-/* SVG placeholder image */
+/* Image with fallback emoji */
 .product-img-placeholder {
   width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
   font-size: 3rem; background: linear-gradient(135deg, var(--ash) 0%, var(--smoke) 100%);
 }
+
+.product-img-real {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+.product-card:hover .product-img-real { transform: scale(1.08); }
 
 .quick-add {
   position: absolute; bottom: 10px; left: 50%;
@@ -442,7 +447,11 @@ nav.scrolled {
 .cart-empty-icon { font-size: 3rem; opacity: 0.4; }
 .cart-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); animation: slideIn 0.3s ease; }
 @keyframes slideIn { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
-.cart-item-img { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
+.cart-item-thumb {
+  width: 60px; height: 60px; border-radius: 10px; flex-shrink: 0;
+  background: var(--ash); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; overflow: hidden;
+}
+.cart-item-thumb img { width: 100%; height: 100%; object-fit: cover; }
 .cart-item-info { flex: 1; min-width: 0; }
 .cart-item-name { font-weight: 600; font-size: 0.88rem; margin-bottom: 3px; }
 .cart-item-price { font-size: 0.8rem; color: var(--fire); }
@@ -551,7 +560,6 @@ footer::before {
 .footer-bottom-links a { color: var(--fog); text-decoration: none; transition: color 0.3s; }
 .footer-bottom-links a:hover { color: var(--fire); }
 
-/* FADE IN */
 .fade-in { opacity: 0; transform: translateY(32px); transition: opacity 0.9s cubic-bezier(0.4,0,0.2,1), transform 0.9s cubic-bezier(0.4,0,0.2,1); }
 .fade-in.visible { opacity: 1; transform: translateY(0); }
 
@@ -575,7 +583,6 @@ footer::before {
   nav { width: 94%; padding: 0.75rem 1.2rem; top: 12px; }
   .logo-icon { width: 36px; height: 36px; }
   .logo-main { font-size: 1.4rem; }
-  .stats-bar { grid-template-columns: repeat(2,1fr); }
   .products-grid { grid-template-columns: 1fr 1fr; }
   .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
   .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
@@ -648,16 +655,14 @@ footer::before {
     <li><a href="historia.html">Historia</a></li>
     <li><a href="Galeria.html">Galería</a></li>
     <li><a href="ubicacion.html">Ubicación</a></li>
-    <li><a href="Ordenar.html" class="order-btn">🛒 Ordenar</a></li>
+    <li>
+      <button class="order-btn cart-nav-btn" onclick="openCart()" style="border:none;cursor:pointer;">
+        🛒 Ordenar <span class="cart-nav-count" id="cartCount">0</span>
+      </button>
+    </li>
   </ul>
-  <div style="display:flex;align-items:center;gap:0.8rem;">
-    <button class="cart-nav-btn" onclick="openCart()">
-      🛒 Carrito
-      <span class="cart-nav-count" id="cartCount">0</span>
-    </button>
-    <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
-      <span></span><span></span><span></span>
-    </div>
+  <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
   </div>
 </nav>
 <div class="nav-overlay" id="navOverlay" onclick="toggleMenu()"></div>
@@ -669,7 +674,7 @@ footer::before {
   <div class="hero-content">
     <div class="hero-eyebrow">
       <span class="hero-dot"></span>
-      🔥 Hamburguesas Artesanales · Jucuapa, SV
+       Hamburguesas Artesanales · Jucuapa, SV
     </div>
     <h1 class="hero-title">
       <span class="line1">NUESTRO</span>
@@ -679,15 +684,7 @@ footer::before {
   </div>
 </section>
 
-<!-- STATS -->
-<div class="stats-wrap">
-  <div class="stats-bar">
-    <div class="stat-item"><div class="stat-num">30+</div><div class="stat-label">Items en menú</div></div>
-    <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label">Artesanal</div></div>
-    <div class="stat-item"><div class="stat-num">3</div><div class="stat-label">Años de sabor</div></div>
-    <div class="stat-item"><div class="stat-num">⭐ 5.0</div><div class="stat-label">Rating promedio</div></div>
-  </div>
-</div>
+
 
 <!-- MENU -->
 <div class="menu-wrap" id="menu">
@@ -699,222 +696,23 @@ footer::before {
 
   <!-- FILTER BAR -->
   <div class="filter-bar" id="filterBar">
-    <button class="filter-pill active" data-filter="all">🍽️ Todo</button>
-    <button class="filter-pill" data-filter="entradas">🥖 Para Empezar</button>
-    <button class="filter-pill" data-filter="pollo">🍗 Pollo</button>
-    <button class="filter-pill" data-filter="res">🥩 Res</button>
-    <button class="filter-pill" data-filter="premium">💎 Premium</button>
-    <button class="filter-pill" data-filter="especialidades">👑 Especialidades</button>
-    <button class="filter-pill" data-filter="papas">🍟 Papas</button>
-    <button class="filter-pill" data-filter="alitas">🔥 Alitas</button>
-    <button class="filter-pill" data-filter="bebidas">🥤 Bebidas</button>
+    <button class="filter-pill active" data-filter="all"> Todo</button>
+    <button class="filter-pill" data-filter="carnudas"> Las Carnudas</button>
+    <button class="filter-pill" data-filter="mar"> Mar y Granja</button>
+    <button class="filter-pill" data-filter="joyitas"> Las Joyitas</button>
+    <button class="filter-pill" data-filter="bestias"> Las Bestias</button>
+    <button class="filter-pill" data-filter="pechugonas"> Las Pechugonas</button>
+    <button class="filter-pill" data-filter="crujientes"> Las Crujientes</button>
+    <button class="filter-pill" data-filter="paponas"> Las Paponas</button>
+    <button class="filter-pill" data-filter="leve"> Algo Leve</button>
+    <button class="filter-pill" data-filter="combos"> Para Compartir</button>
+    <button class="filter-pill" data-filter="motores"> Pa' Calentar</button>
+    <button class="filter-pill" data-filter="bebidas"> Bebidas</button>
+    <button class="filter-pill" data-filter="extras"> Extras</button>
   </div>
 
-  <!-- ENTRADAS -->
-  <section class="menu-section fade-s" data-category="entradas">
-    <div class="section-label">
-      <span class="section-emoji">🥖</span>
-      <span class="section-title">Para Empezar</span>
-      <div class="section-line"></div>
-      <span class="section-count">4 items</span>
-    </div>
-    <div class="products-grid">
-      <div class="product-card" onclick="addToCart('Pan con Ajo',2.50,'🧄',this)">
-        <span class="badge badge-popular">Popular</span>
-        <div class="product-img-wrap">
-          <div class="product-img-placeholder">🧄</div>
-          <div class="product-img-overlay"></div>
-          <button class="quick-add" onclick="event.stopPropagation();addToCart('Pan con Ajo',2.50,'🧄',this.closest('.product-card'))">+ Agregar</button>
-        </div>
-        <div class="product-info">
-          <div class="product-top"><span class="product-name">Pan con Ajo</span><span class="product-price">$2.50</span></div>
-          <p class="product-desc">Pan artesanal tostado con mantequilla y ajo fresco (4 unidades)</p>
-        </div>
-      </div>
-      <div class="product-card" onclick="addToCart('Papas Sazonadas',2.50,'🍟',this)">
-        <div class="product-img-wrap">
-          <div class="product-img-placeholder">🍟</div>
-          <div class="product-img-overlay"></div>
-          <button class="quick-add" onclick="event.stopPropagation();addToCart('Papas Sazonadas',2.50,'🍟',this.closest('.product-card'))">+ Agregar</button>
-        </div>
-        <div class="product-info">
-          <div class="product-top"><span class="product-name">Papas Sazonadas</span><span class="product-price">$2.50</span></div>
-          <p class="product-desc">Crujientes papas fritas con especias especiales</p>
-        </div>
-      </div>
-      <div class="product-card" onclick="addToCart('Dedos de Queso',3.00,'🧀',this)">
-        <div class="product-img-wrap">
-          <div class="product-img-placeholder">🧀</div>
-          <div class="product-img-overlay"></div>
-          <button class="quick-add" onclick="event.stopPropagation();addToCart('Dedos de Queso',3.00,'🧀',this.closest('.product-card'))">+ Agregar</button>
-        </div>
-        <div class="product-info">
-          <div class="product-top"><span class="product-name">Dedos de Queso</span><span class="product-price">$3.00</span></div>
-          <p class="product-desc">Empanizados y crujientes (5 unidades)</p>
-        </div>
-      </div>
-      <div class="product-card" onclick="addToCart('Aros de Cebolla',2.50,'🧅',this)">
-        <div class="product-img-wrap">
-          <div class="product-img-placeholder">🧅</div>
-          <div class="product-img-overlay"></div>
-          <button class="quick-add" onclick="event.stopPropagation();addToCart('Aros de Cebolla',2.50,'🧅',this.closest('.product-card'))">+ Agregar</button>
-        </div>
-        <div class="product-info">
-          <div class="product-top"><span class="product-name">Aros de Cebolla</span><span class="product-price">$2.50</span></div>
-          <p class="product-desc">Crujientes por fuera, tiernos por dentro (8 unidades)</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- POLLO -->
-  <section class="menu-section fade-s" data-category="pollo">
-    <div class="section-label">
-      <span class="section-emoji">🍗</span>
-      <span class="section-title">Hamburguesas de Pollo</span>
-      <div class="section-line"></div>
-      <span class="section-count">3 items</span>
-    </div>
-    <div class="products-grid">
-      <div class="product-card" onclick="addToCart('La Pió',5.00,'🍗',this)">
-        <div class="product-img-wrap"><div class="product-img-placeholder">🍗</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Pió',5.00,'🍗',this.closest('.product-card'))">+ Agregar</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">La Pió</span><span class="product-price">$5.00</span></div><p class="product-desc">Pollo crujiente, queso, cebolla caramelizada, lechuga y tomate</p></div>
-      </div>
-      <div class="product-card" onclick="addToCart('La Chipotle',6.00,'🌶️',this)">
-        <div class="product-img-wrap"><div class="product-img-placeholder">🌶️</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Chipotle',6.00,'🌶️',this.closest('.product-card'))">+ Agregar</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">La Chipotle</span><span class="product-price">$6.00</span></div><p class="product-desc">Pollo crujiente bañado en salsa chipotle, queso, cebolla caramelizada</p></div>
-      </div>
-      <div class="product-card" onclick="addToCart('La Barbie',6.00,'🍗',this)">
-        <div class="product-img-wrap"><div class="product-img-placeholder">🍗</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Barbie',6.00,'🍗',this.closest('.product-card'))">+ Agregar</button></div>
-        <div class="product-info"><div class="product-top"><span class="product-name">La Barbie</span><span class="product-price">$6.00</span></div><p class="product-desc">Pollo crujiente bañado en salsa barbacoa, queso, cebolla caramelizada</p></div>
-      </div>
-    </div>
-    <div class="products-grid" style="margin-top:0.5rem"><div class="note">🍟 Todas incluyen papas fritas</div></div>
-  </section>
-
-  <!-- RES -->
-  <section class="menu-section fade-s" data-category="res">
-    <div class="section-label">
-      <span class="section-emoji">🥩</span>
-      <span class="section-title">Hamburguesas de Res</span>
-      <div class="section-line"></div>
-      <span class="section-count">7 items</span>
-    </div>
-    <div class="products-grid">
-      <div class="product-card" onclick="addToCart('La Facilota',5.00,'🍔',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🍔</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Facilota',5.00,'🍔',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Facilota</span><span class="product-price">$5.00</span></div><p class="product-desc">Carne de res, lechuga, queso, tomate, cebolla caramelizada</p></div></div>
-      <div class="product-card" onclick="addToCart('La Cheese',5.00,'🧀',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🧀</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Cheese',5.00,'🧀',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Cheese</span><span class="product-price">$5.00</span></div><p class="product-desc">Carne de res, queso americano y queso cheddar</p></div></div>
-      <div class="product-card" onclick="addToCart('La Honguito',6.00,'🍄',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🍄</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Honguito',6.00,'🍄',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Honguito</span><span class="product-price">$6.00</span></div><p class="product-desc">Carne, hongos en salsa de la casa, queso, cebolla caramelizada</p></div></div>
-      <div class="product-card" onclick="addToCart('La Tropical',6.00,'🍍',this)"><span class="badge badge-new">Nuevo</span><div class="product-img-wrap"><div class="product-img-placeholder">🍍</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Tropical',6.00,'🍍',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Tropical</span><span class="product-price">$6.00</span></div><p class="product-desc">Carne, piña, tocino, lechuga, queso, tomate, cebolla caramelizada</p></div></div>
-      <div class="product-card" onclick="addToCart('La Bacon Cheese',6.00,'🥓',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🥓</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Bacon Cheese',6.00,'🥓',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Bacon Cheese</span><span class="product-price">$6.00</span></div><p class="product-desc">Carne, queso americano, queso cheddar, pepinillos, tocino</p></div></div>
-      <div class="product-card" onclick="addToCart('La Ahuevada',6.00,'🍳',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🍳</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Ahuevada',6.00,'🍳',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Ahuevada</span><span class="product-price">$6.00</span></div><p class="product-desc">Carne, huevo estrellado, tocino, lechuga, queso, tomate</p></div></div>
-      <div class="product-card" onclick="addToCart('La Guacamole',6.00,'🥑',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🥑</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Guacamole',6.00,'🥑',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Guacamole</span><span class="product-price">$6.00</span></div><p class="product-desc">Carne, aguacate, tocino, lechuga, queso, tomate, cebolla morada</p></div></div>
-    </div>
-    <div class="products-grid" style="margin-top:0.5rem"><div class="note">🍟 Todas incluyen papas fritas</div></div>
-  </section>
-
-  <!-- PREMIUM -->
-  <section class="menu-section fade-s" data-category="premium">
-    <div class="section-label">
-      <span class="section-emoji">💎</span>
-      <span class="section-title">Premium</span>
-      <div class="section-line"></div>
-      <span class="section-count">3 items</span>
-    </div>
-    <div class="products-grid">
-      <div class="product-card" onclick="addToCart('La Bañada',7.50,'🧀',this)"><span class="badge badge-top">Top</span><div class="product-img-wrap"><div class="product-img-placeholder">🧀</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Bañada',7.50,'🧀',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Bañada</span><span class="product-price">$7.50</span></div><p class="product-desc">Bañada en queso cheddar, carne, tocino, lechuga, tomate</p></div></div>
-      <div class="product-card" onclick="addToCart('La Engañosa',7.50,'💎',this)"><div class="product-img-wrap"><div class="product-img-placeholder">💎</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Engañosa',7.50,'💎',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Engañosa</span><span class="product-price">$7.50</span></div><p class="product-desc">Servida en cama de queso cheddar, carne, lechuga, tomate</p></div></div>
-      <div class="product-card" onclick="addToCart('La Doble Carne',7.50,'🥩',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🥩</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Doble Carne',7.50,'🥩',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Doble Carne</span><span class="product-price">$7.50</span></div><p class="product-desc">Doble carne, tocino, lechuga, queso, tomate, cebolla caramelizada</p></div></div>
-    </div>
-    <div class="products-grid" style="margin-top:0.5rem"><div class="note">🍟 Todas incluyen papas fritas</div></div>
-  </section>
-
-  <!-- ESPECIALIDADES -->
-  <section class="menu-section fade-s" data-category="especialidades">
-    <div class="section-label">
-      <span class="section-emoji">👑</span>
-      <span class="section-title">Especialidades</span>
-      <div class="section-line"></div>
-      <span class="section-count">4 items</span>
-    </div>
-    <div class="products-grid">
-      <div class="product-card" onclick="addToCart('La Mar y Tierra',8.00,'🦐',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🦐</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Mar y Tierra',8.00,'🦐',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Mar y Tierra</span><span class="product-price">$8.00</span></div><p class="product-desc">Carne, camarones empanizados, queso, tocino, lechuga, tomate</p></div></div>
-      <div class="product-card" onclick="addToCart('La Castrosa',8.00,'🔥',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🔥</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Castrosa',8.00,'🔥',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Castrosa</span><span class="product-price">$8.00</span></div><p class="product-desc">Doble carne, queso americano, tocino, costa de queso</p></div></div>
-      <div class="product-card" onclick="addToCart('La Argentina',8.00,'🌭',this)"><span class="badge badge-top">Top</span><div class="product-img-wrap"><div class="product-img-placeholder">🌭</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Argentina',8.00,'🌭',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Argentina</span><span class="product-price">$8.00</span></div><p class="product-desc">Carne, chorizo argentino, aguacate, tocino, aderezo especial</p></div></div>
-      <div class="product-card" onclick="addToCart('La Triple Carne',8.50,'👑',this)"><div class="product-img-wrap"><div class="product-img-placeholder">👑</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('La Triple Carne',8.50,'👑',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">La Triple Carne</span><span class="product-price">$8.50</span></div><p class="product-desc">Triple carne, tocino, lechuga, queso, tomate, cebolla caramelizada</p></div></div>
-    </div>
-    <div class="products-grid" style="margin-top:0.5rem"><div class="note">🍟 Todas incluyen papas fritas</div></div>
-  </section>
-
-  <!-- PAPAS -->
-  <section class="menu-section fade-s" data-category="papas">
-    <div class="section-label">
-      <span class="section-emoji">🍟</span>
-      <span class="section-title">Papas Preparadas</span>
-      <div class="section-line"></div>
-      <span class="section-count">5 items</span>
-    </div>
-    <div class="products-grid">
-      <div class="product-card" onclick="addToCart('Papas Mexicanas',6.00,'🌮',this)"><span class="badge badge-top">Top</span><div class="product-img-wrap"><div class="product-img-placeholder">🌮</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('Papas Mexicanas',6.00,'🌮',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">Papas Mexicanas</span><span class="product-price">$6.00</span></div><p class="product-desc">Carne asada, chirmol, aguacate, jalapeños, queso</p></div></div>
-      <div class="product-card" onclick="addToCart('Salchipapa',5.50,'🌭',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🌭</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('Salchipapa',5.50,'🌭',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">Salchipapa</span><span class="product-price">$5.50</span></div><p class="product-desc">Salchicha, queso y aderezo</p></div></div>
-      <div class="product-card" onclick="addToCart('Papas Bacon',5.50,'🥓',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🥓</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('Papas Bacon',5.50,'🥓',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">Papas Bacon</span><span class="product-price">$5.50</span></div><p class="product-desc">Queso y tocino</p></div></div>
-      <div class="product-card" onclick="addToCart('Papas Chicken',5.50,'🍗',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🍗</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('Papas Chicken',5.50,'🍗',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">Papas Chicken</span><span class="product-price">$5.50</span></div><p class="product-desc">Pechuga empanizada, queso y aderezo</p></div></div>
-      <div class="product-card" onclick="addToCart('Papas Chili',5.50,'🌶️',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🌶️</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('Papas Chili',5.50,'🌶️',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">Papas Chili</span><span class="product-price">$5.50</span></div><p class="product-desc">Chili de la casa, queso y jalapeños</p></div></div>
-    </div>
-  </section>
-
-  <!-- ALITAS -->
-  <section class="menu-section fade-s" data-category="alitas">
-    <div class="section-label">
-      <span class="section-emoji">🔥</span>
-      <span class="section-title">Alitas y Chunks</span>
-      <div class="section-line"></div>
-      <span class="section-count">6 items</span>
-    </div>
-    <div class="sub-cat">🍗 Alitas</div>
-    <div class="products-grid">
-      <div class="product-card" onclick="addToCart('5 Alitas + Papas',6.00,'🍗',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🍗</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('5 Alitas + Papas',6.00,'🍗',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">5 Alitas + Papas</span><span class="product-price">$6.00</span></div></div></div>
-      <div class="product-card" onclick="addToCart('10 Alitas + Papas',8.00,'🍗',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🍗</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('10 Alitas + Papas',8.00,'🍗',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">10 Alitas + Papas</span><span class="product-price">$8.00</span></div></div></div>
-      <div class="product-card" onclick="addToCart('15 Alitas + Papas',12.00,'🍗',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🍗</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('15 Alitas + Papas',12.00,'🍗',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">15 Alitas + Papas</span><span class="product-price">$12.00</span></div></div></div>
-    </div>
-    <div class="sub-cat" style="margin-top:1.5rem">🍗 Chunks</div>
-    <div class="products-grid">
-      <div class="product-card" onclick="addToCart('8 Chunks + Papas',5.00,'🍖',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🍖</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('8 Chunks + Papas',5.00,'🍖',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">8 Chunks + Papas</span><span class="product-price">$5.00</span></div></div></div>
-      <div class="product-card" onclick="addToCart('16 Chunks + Papas',8.00,'🍖',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🍖</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('16 Chunks + Papas',8.00,'🍖',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">16 Chunks + Papas</span><span class="product-price">$8.00</span></div></div></div>
-      <div class="product-card" onclick="addToCart('25 Chunks + Papas',15.00,'🍖',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🍖</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('25 Chunks + Papas',15.00,'🍖',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">25 Chunks + Papas</span><span class="product-price">$15.00</span></div></div></div>
-    </div>
-  </section>
-
-  <!-- BEBIDAS -->
-  <section class="menu-section fade-s" data-category="bebidas">
-    <div class="section-label">
-      <span class="section-emoji">🥤</span>
-      <span class="section-title">Bebidas</span>
-      <div class="section-line"></div>
-      <span class="section-count">Variedad</span>
-    </div>
-    <div class="sub-cat">🍧 Frozen</div>
-    <div class="products-grid">
-      <div class="product-card" onclick="addToCart('Frozen',2.50,'🍧',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🍧</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('Frozen',2.50,'🍧',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">Frozen</span><span class="product-price">$2.50</span></div><p class="product-desc">Fresa · Piña · Maracuyá · Limón</p></div></div>
-    </div>
-    <div class="sub-cat" style="margin-top:1.5rem">🥤 Malteadas</div>
-    <div class="products-grid">
-      <div class="product-card" onclick="addToCart('Malteada',3.50,'🥛',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🥛</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('Malteada',3.50,'🥛',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">Malteadas</span><span class="product-price">$3.50</span></div><p class="product-desc">Fresa · Oreo · Chocolate · Café · Coco</p></div></div>
-    </div>
-    <div class="sub-cat" style="margin-top:1.5rem">🍋 Limonadas</div>
-    <div class="products-grid">
-      <div class="product-card" onclick="addToCart('Limonada',3.50,'🍋',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🍋</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('Limonada',3.50,'🍋',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">Limonadas</span><span class="product-price">$3.50</span></div><p class="product-desc">Fresa · Hierbabuena · Piña · Cherry · Azul · Maracuyá</p></div></div>
-    </div>
-    <div class="sub-cat" style="margin-top:1.5rem">🥤 Sodas</div>
-    <div class="products-grid">
-      <div class="product-card" onclick="addToCart('Soda',1.50,'🥤',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🥤</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('Soda',1.50,'🥤',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">Sodas</span><span class="product-price">$1.50</span></div><p class="product-desc">Coca Cola · Coca 0 · Uva · Fanta · Sprite</p></div></div>
-    </div>
-    <div class="sub-cat" style="margin-top:1.5rem">☕ Café</div>
-    <div class="products-grid">
-      <div class="product-card" onclick="addToCart('Café Caliente',1.00,'☕',this)"><div class="product-img-wrap"><div class="product-img-placeholder">☕</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('Café Caliente',1.00,'☕',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">Café Caliente</span><span class="product-price">$1.00</span></div></div></div>
-      <div class="product-card" onclick="addToCart('Café con Leche',1.25,'☕',this)"><div class="product-img-wrap"><div class="product-img-placeholder">☕</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('Café con Leche',1.25,'☕',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">Café con Leche</span><span class="product-price">$1.25</span></div></div></div>
-      <div class="product-card" onclick="addToCart('Iced Coffee',2.50,'🧊',this)"><div class="product-img-wrap"><div class="product-img-placeholder">🧊</div><div class="product-img-overlay"></div><button class="quick-add" onclick="event.stopPropagation();addToCart('Iced Coffee',2.50,'🧊',this.closest('.product-card'))">+ Agregar</button></div><div class="product-info"><div class="product-top"><span class="product-name">Iced Coffee</span><span class="product-price">$2.50</span></div></div></div>
-    </div>
-  </section>
+  <!-- Sections rendered by JS -->
+  <div id="menuContainer"></div>
 </div>
 
 <!-- FOOTER -->
@@ -972,74 +770,184 @@ footer::before {
 </footer>
 
 <script>
-// LOADER
-window.addEventListener('load', () => {
-  setTimeout(() => document.getElementById('loader').classList.add('hidden'), 1000);
-});
+// ── PRODUCT DATA (from Ordenar.html) ──
+const products = [
+  // LAS CARNUDAS
+  { id:1,  name:"La Facilota",         price:5.00, category:"carnudas",   image:"img/carnuda1.png",    emoji:"🍔", badge:"", desc:"Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate y Cebolla Caramelizada" },
+  { id:2,  name:"La Cheese",            price:5.00, category:"carnudas",   image:"img/carnuda2.png",    emoji:"🧀", badge:"", desc:"Pan Artesanal, Carne de Res, Queso Americano y Queso Cheddar" },
+  { id:3,  name:"La Honguito",          price:6.00, category:"carnudas",   image:"img/carnuda3.png",    emoji:"🍄", badge:"", desc:"Pan Artesanal, Carne de Res, Lechuga, Tomate, Queso, Cebolla Caramelizada y Hongos en Salsa de la Casa" },
+  { id:4,  name:"La Tropical",          price:6.00, category:"carnudas",   image:"img/carnuda4.png",    emoji:"🍍", badge:"new", desc:"Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada, Piña y Tocino" },
+  { id:5,  name:"La Bacon Cheese",      price:6.00, category:"carnudas",   image:"img/carnuda5.png",    emoji:"🥓", badge:"", desc:"Pan Artesanal, Carne de Res, Queso Americano, Queso Cheddar, Pepinillos y Tocino" },
+  { id:6,  name:"La Ahuevada",          price:6.00, category:"carnudas",   image:"img/carnuda6.png",    emoji:"🍳", badge:"", desc:"Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada, Huevo Estrellado y Tocino" },
+  { id:7,  name:"La Guacamole",         price:6.00, category:"carnudas",   image:"img/carnuda7.png",    emoji:"🥑", badge:"", desc:"Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Morada, Aguacate y Tocino" },
+  // DEL MAR Y LA GRANJA
+  { id:8,  name:"La Camarón",           price:6.00, category:"mar",        image:"img/mar1.png",        emoji:"🦐", badge:"", desc:"Pan Artesanal, Camarones Empanizados, Queso, Cebolla Caramelizada, Lechuga y Tomate" },
+  { id:9,  name:"La Porky",             price:6.00, category:"mar",        image:"img/mar2.png",        emoji:"🐷", badge:"", desc:"Pan Artesanal, Chicharrones de Cerdo, Queso, Cebolla Caramelizada, Lechuga, Tomate y Tocino" },
+  // LAS JOYITAS
+  { id:10, name:"La Bañada",            price:7.50, category:"joyitas",    image:"img/joyitas1.png",    emoji:"🧀", badge:"top", desc:"Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada, Bañada en Queso Cheddar y Tocino" },
+  { id:11, name:"La Engañosa",          price:7.50, category:"joyitas",    image:"img/joyitas2.png",    emoji:"💎", badge:"", desc:"Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada, Servida en Cama de Queso Cheddar" },
+  { id:12, name:"La Doble Carne",       price:7.50, category:"joyitas",    image:"img/joyitas3.png",    emoji:"🥩", badge:"", desc:"Pan Artesanal, Doble Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada y Tocino" },
+  { id:13, name:"La Vacunada",          price:7.50, category:"joyitas",    image:"img/joyitas4.png",    emoji:"💉", badge:"new", desc:"Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada y Una Inyección de Queso Cheddar" },
+  // LAS BESTIAS
+  { id:14, name:"La Mar y Tierra",      price:8.00, category:"bestias",    image:"img/bestia1.png",     emoji:"🦐", badge:"", desc:"Pan Artesanal, Carne de Res, Camarones Empanizados, Lechuga, Queso, Tomate, Cebolla y Tocino" },
+  { id:15, name:"La Castrosa",          price:8.00, category:"bestias",    image:"img/bestia2.png",     emoji:"🔥", badge:"", desc:"Pan Artesanal, Doble Carne de Res, Queso Americano, Tocino, Cubierta de Costra de Queso" },
+  { id:16, name:"La Bacon Cheese Doble",price:8.00, category:"bestias",    image:"img/bestia3.png",     emoji:"🥓", badge:"", desc:"Pan Artesanal, Doble Carne de Res, Queso Americano, Queso Cheddar, Pepinillos y Tocino" },
+  { id:17, name:"La Argentina",         price:8.00, category:"bestias",    image:"img/bestia4.png",     emoji:"🌭", badge:"top", desc:"Pan Artesanal, Carne de Res, Tomate, Cebolla, Pepinillos, Aderezo de la Casa, Aguacate, Tocino y Chorizo Argentino" },
+  { id:18, name:"La Atascada",          price:8.50, category:"bestias",    image:"img/bestia5.png",     emoji:"🍔", badge:"", desc:"Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla, Dedos de Queso, Tocino y Aros de Cebolla" },
+  { id:19, name:"La Triple Carne",      price:8.50, category:"bestias",    image:"img/bestia6.png",     emoji:"👑", badge:"", desc:"Pan Artesanal, Triple Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada y Tocino" },
+  // LAS PECHUGONAS
+  { id:20, name:"La Pió",               price:5.00, category:"pechugonas", image:"img/Pechugonas1.png", emoji:"🍗", badge:"popular", desc:"Pan Artesanal, Pollo Crujiente, Queso, Cebolla Caramelizada, Lechuga y Tomate" },
+  { id:21, name:"La Chipotle",          price:6.00, category:"pechugonas", image:"img/Pechugonas2.png", emoji:"🌶️", badge:"", desc:"Pan Artesanal, Pollo Crujiente Bañado en Salsa Chipotle, Queso, Cebolla Caramelizada, Lechuga y Tomate" },
+  { id:22, name:"La Barbie",            price:6.00, category:"pechugonas", image:"img/Pechugonas3.png", emoji:"🍗", badge:"", desc:"Pan Artesanal, Pollo Crujiente Bañado en Salsa Barbacoa, Queso, Cebolla Caramelizada, Lechuga y Tomate" },
+  // LAS CRUJIENTES
+  { id:23, name:"5 Wings + Papas",      price:6.00,  category:"crujientes", image:"img/5wings.png",    emoji:"🍗", badge:"", desc:"5 Alitas crujientes acompañadas de papas fritas" },
+  { id:24, name:"10 Wings + Papas",     price:8.00,  category:"crujientes", image:"img/10wings.png",   emoji:"🍗", badge:"", desc:"10 Alitas crujientes acompañadas de papas fritas" },
+  { id:25, name:"15 Wings + Papas",     price:12.00, category:"crujientes", image:"img/15wings.png",   emoji:"🍗", badge:"", desc:"15 Alitas crujientes acompañadas de papas fritas" },
+  { id:26, name:"20 Wings + Papas",     price:18.00, category:"crujientes", image:"img/20wings.png",   emoji:"🍗", badge:"", desc:"20 Alitas crujientes acompañadas de papas fritas" },
+  { id:27, name:"8 Chunks + Papas",     price:5.00,  category:"crujientes", image:"img/chunks1.png",   emoji:"🍖", badge:"", desc:"8 Chunks de pollo crujiente acompañados de papas fritas" },
+  { id:28, name:"16 Chunks + Papas",    price:8.00,  category:"crujientes", image:"img/chunks2.png",   emoji:"🍖", badge:"", desc:"16 Chunks de pollo crujiente acompañados de papas fritas" },
+  { id:29, name:"25 Chunks + Papas",    price:15.00, category:"crujientes", image:"img/chunks3.png",   emoji:"🍖", badge:"", desc:"25 Chunks de pollo crujiente acompañados de papas fritas" },
+  { id:30, name:"Nuggets",              price:4.50,  category:"crujientes", image:"img/nuggets.png",   emoji:"🍗", badge:"new", desc:"6 Nuggets bañados en tu salsa preferida (Barbacoa, Chipotle o Buffalo) acompañados de papas fritas" },
+  // LAS PAPONAS
+  { id:31, name:"Papas Mexicanas",      price:6.00, category:"paponas",    image:"img/paponas1.png",   emoji:"🌮", badge:"top", desc:"Papas Fritas con Carne de Res Asada, Chirimol, Aguacate, Jalapeños, Aderezo, Queso y Salsa de la Casa" },
+  { id:32, name:"Salchipapa",           price:5.50, category:"paponas",    image:"img/paponas2.png",   emoji:"🌭", badge:"", desc:"Papas Fritas con Salchicha, Queso y Aderezo" },
+  { id:33, name:"Papas Bacon",          price:5.50, category:"paponas",    image:"img/paponas3.png",   emoji:"🥓", badge:"", desc:"Papas fritas con queso y tocino" },
+  { id:34, name:"Papas Chicken",        price:5.50, category:"paponas",    image:"img/paponas4.png",   emoji:"🍗", badge:"", desc:"Papas Fritas con Pechuga de Pollo Empanizado, Queso y Aderezo de la Casa" },
+  { id:35, name:"Papas Chili",          price:5.50, category:"paponas",    image:"img/paponas5.png",   emoji:"🌶️", badge:"", desc:"Papas Fritas con Chili de la Casa, Queso y Jalapeños" },
+  // ALGO LEVE
+  { id:36, name:"Chili Dog",            price:4.00, category:"leve",       image:"img/leve3.png",      emoji:"🌭", badge:"", desc:"Pan Artesanal, Salchicha, Chili de la Casa, Queso y Jalapeños" },
+  { id:37, name:"Bacon Dog",            price:4.00, category:"leve",       image:"img/leve1.png",      emoji:"🥓", badge:"", desc:"Pan Artesanal, Salchicha, Aderezo, Queso y Baño de Tocino" },
+  { id:38, name:"Mexican Dog",          price:4.50, category:"leve",       image:"img/leve2.png",      emoji:"🌮", badge:"", desc:"Pan Artesanal, Salchicha Envuelta en Tocino, Aderezo, Cebolla Morada, Aguacate y Jalapeños" },
+  // PARA COMPARTIR
+  { id:39, name:"Pa' Uno",              price:5.50,  category:"combos",    image:"img/pa1.png",        emoji:"🤝", badge:"", desc:"1 Hamburguesa (Facilota, Cheese o Pió) + 1 Soda · Válido Lun–Jue" },
+  { id:40, name:"Pa' Dos",              price:15.00, category:"combos",    image:"img/pa2.png",        emoji:"🤝", badge:"", desc:"2 Hamburguesas + Papas Preparadas + 2 Sodas · Válido Lun–Jue" },
+  { id:41, name:"Pa' Todos",            price:25.00, category:"combos",    image:"img/pa3.png",        emoji:"🎉", badge:"top", desc:"4 Hamburguesas + 4 Papas + 1 Chunks + Dedos de Queso + Coca 1.5L · Válido Lun–Jue" },
+  // PA' CALENTAR MOTORES
+  { id:42, name:"Pan con Ajo",          price:2.50, category:"motores",    image:"img/calentar1.png",  emoji:"🧄", badge:"popular", desc:"Pan Artesanal Tostado con Mantequilla y Ajo Fresco, Sazonado con Hierbas (4 piezas)" },
+  { id:43, name:"Papas Sazonadas",      price:2.50, category:"motores",    image:"img/calentar2.png",  emoji:"🍟", badge:"", desc:"Crujientes Papas Fritas Sazonadas a la Perfección con Mezcla Especial" },
+  { id:44, name:"Dedos de Queso",       price:3.00, category:"motores",    image:"img/calentar3.png",  emoji:"🧀", badge:"", desc:"Dedos de Queso Empanizados y Crujientes (5 piezas)" },
+  { id:45, name:"Aros de Cebolla",      price:2.50, category:"motores",    image:"img/calentar4.png",  emoji:"🧅", badge:"", desc:"Aros de Cebolla Empanizados, Crujientes por Fuera y Tiernos por Dentro (8 piezas)" },
+  // BEBIDAS
+  { id:46, name:"Frozen",              price:2.50, category:"bebidas",    image:"img/frozen.png",     emoji:"🍧", badge:"", desc:"Fresa · Piña · Maracuyá · Limón" },
+  { id:47, name:"Malteada",            price:3.50, category:"bebidas",    image:"img/malteadas.png",  emoji:"🥛", badge:"", desc:"Fresa · Oreo · Chocolate · Café · Coco" },
+  { id:48, name:"Limonada con Boba",   price:3.50, category:"bebidas",    image:"img/limonada.png",   emoji:"🍋", badge:"", desc:"Fresa · Hierbabuena · Piña · Cherry · Azul · Maracuyá (con bobas)" },
+  { id:49, name:"Refrescante",         price:2.50, category:"bebidas",    image:"img/refrescos.png",  emoji:"🥤", badge:"", desc:"Horchata de Maní · Limonada Natural" },
+  { id:50, name:"Café Caliente",       price:1.00, category:"bebidas",    image:"img/cafe.png",       emoji:"☕", badge:"", desc:"Café negro caliente" },
+  { id:51, name:"Café con Leche",      price:1.25, category:"bebidas",    image:"img/cafe_leche.png", emoji:"☕", badge:"", desc:"Café con leche caliente" },
+  { id:52, name:"Iced Coffee",         price:2.50, category:"bebidas",    image:"img/cafe_ice.png",   emoji:"🧊", badge:"", desc:"Café helado con jellys de café" },
+  { id:53, name:"Soda",               price:1.25, category:"bebidas",    image:"img/sodas.png",      emoji:"🥤", badge:"", desc:"Coca Cola · Coca Cola 0 · Uva · Fanta · Sprite · Té de Frambuesa · Té de Durazno" },
+  { id:54, name:"Agua",               price:1.00, category:"bebidas",    image:"img/agua.png",       emoji:"💧", badge:"", desc:"Botella de agua natural" },
+  // EXTRAS
+  { id:55, name:"Carne Extra",         price:1.50, category:"extras",     image:"img/extra1.png",     emoji:"🥩", badge:"", desc:"Porción extra de carne de res" },
+  { id:56, name:"Aderezo Extra",       price:0.50, category:"extras",     image:"img/extra2.png",     emoji:"🍶", badge:"", desc:"Porción extra de aderezo de la casa" },
+  { id:57, name:"Queso Cheddar Extra", price:1.50, category:"extras",     image:"img/extra3.png",     emoji:"🧀", badge:"", desc:"Porción extra de queso cheddar" },
+  { id:58, name:"Agrandado de Papas",  price:1.50, category:"extras",     image:"img/extra4.png",     emoji:"🍟", badge:"", desc:"Agrandado de papas fritas en tu orden" },
+  { id:59, name:"Papas Preparadas",    price:1.50, category:"extras",     image:"img/calentar2.png",  emoji:"🍟", badge:"", desc:"Cambio de papas normales a papas preparadas" },
+  { id:60, name:"Tocino Extra",        price:0.50, category:"extras",     image:"img/extra5.png",     emoji:"🥓", badge:"", desc:"Porción extra de tocino crujiente" },
+];
 
-// NAVBAR
-window.addEventListener('scroll', () => {
-  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
-});
+const categoryConfig = {
+  carnudas:   { emoji:'', title:'Las Carnudas',          note:' Todas incluyen papas fritas' },
+  mar:        { emoji:'', title:'Del Mar y la Granja',    note:' Todas incluyen papas fritas' },
+  joyitas:    { emoji:'', title:"Las Joyitas Flama's",    note:' Todas incluyen papas fritas' },
+  bestias:    { emoji:'', title:'Las Bestias',            note:' Todas incluyen papas fritas' },
+  pechugonas: { emoji:'', title:'Las Pechugonas',         note:' Todas incluyen papas fritas' },
+  crujientes: { emoji:'', title:'Las Crujientes',         note:null },
+  paponas:    { emoji:'', title:'Las Paponas',            note:null },
+  leve:       { emoji:'', title:'Algo Leve',              note:null },
+  combos:     { emoji:'', title:'Para Compartir',         note:'📅 Válido únicamente de Lunes a Jueves' },
+  motores:    { emoji:'', title:"Pa' Calentar Motores",   note:null },
+  bebidas:    { emoji:'', title:"Bebidas Flama's",        note:null },
+  extras:     { emoji:'', title:'Extras',                 note:null },
+};
 
-// MOBILE MENU
-function toggleMenu() {
-  const links = document.getElementById('navLinks');
-  const toggle = document.getElementById('menuToggle');
-  const overlay = document.getElementById('navOverlay');
-  links.classList.toggle('active');
-  toggle.classList.toggle('active');
-  overlay.classList.toggle('active');
-}
-document.querySelectorAll('.nav-links a').forEach(link => {
-  link.addEventListener('click', () => {
-    document.getElementById('navLinks').classList.remove('active');
-    document.getElementById('menuToggle').classList.remove('active');
-    document.getElementById('navOverlay').classList.remove('active');
+const catOrder = ['carnudas','mar','joyitas','bestias','pechugonas','crujientes','paponas','leve','combos','motores','bebidas','extras'];
+
+// ── RENDER ──
+function renderMenu(filter = 'all') {
+  const container = document.getElementById('menuContainer');
+  container.innerHTML = '';
+
+  const cats = filter === 'all' ? catOrder : [filter];
+
+  cats.forEach(cat => {
+    const items = products.filter(p => p.category === cat);
+    if (!items.length) return;
+    const cfg = categoryConfig[cat];
+
+    const sec = document.createElement('section');
+    sec.className = 'menu-section fade-s';
+    sec.dataset.category = cat;
+
+    sec.innerHTML = `
+      <div class="section-label">
+        <span class="section-emoji">${cfg.emoji}</span>
+        <span class="section-title">${cfg.title}</span>
+        <div class="section-line"></div>
+        <span class="section-count">${items.length} item${items.length>1?'s':''}</span>
+      </div>
+      <div class="products-grid">
+        ${items.map(p => buildCard(p)).join('')}
+        ${cfg.note ? `<div class="note">${cfg.note}</div>` : ''}
+      </div>
+    `;
+
+    container.appendChild(sec);
+    setTimeout(() => sec.classList.add('visible'), 50);
   });
-});
+}
 
-// SCROLL ANIMATIONS
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.08 });
-document.querySelectorAll('.fade-s, .fade-in').forEach(el => observer.observe(el));
+function buildCard(p) {
+  const badgeHTML = p.badge === 'popular' ? '<span class="badge badge-popular">Popular</span>'
+    : p.badge === 'new' ? '<span class="badge badge-new">Nuevo</span>'
+    : p.badge === 'top' ? '<span class="badge badge-top">Top</span>'
+    : '';
 
-// FILTERS
+  return `
+    <div class="product-card" onclick="addToCart(${p.id})">
+      ${badgeHTML}
+      <div class="product-img-wrap">
+        <img class="product-img-real" src="${p.image}" alt="${p.name}"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="product-img-placeholder" style="display:none">${p.emoji}</div>
+        <div class="product-img-overlay"></div>
+        <button class="quick-add" onclick="event.stopPropagation();addToCart(${p.id})">+ Agregar</button>
+      </div>
+      <div class="product-info">
+        <div class="product-top">
+          <span class="product-name">${p.name}</span>
+          <span class="product-price">$${p.price.toFixed(2)}</span>
+        </div>
+        <p class="product-desc">${p.desc}</p>
+      </div>
+    </div>
+  `;
+}
+
+// ── FILTERS ──
 document.querySelectorAll('.filter-pill').forEach(pill => {
   pill.addEventListener('click', () => {
     document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
     pill.classList.add('active');
-    const f = pill.dataset.filter;
-    document.querySelectorAll('.menu-section').forEach(sec => {
-      if (f === 'all' || sec.dataset.category === f) {
-        sec.style.display = '';
-        setTimeout(() => sec.classList.add('visible'), 10);
-      } else {
-        sec.style.display = 'none';
-      }
-    });
+    renderMenu(pill.dataset.filter);
   });
 });
 
-// CART
+// ── CART ──
 let cart = [];
 
-function addToCart(name, price, emoji, cardEl) {
-  const existing = cart.find(i => i.name === name);
-  if (existing) { existing.qty++; }
-  else { cart.push({ name, price, emoji, qty: 1 }); }
+function addToCart(id) {
+  const p = products.find(x => x.id === id);
+  const ex = cart.find(x => x.id === id);
+  if (ex) ex.qty++;
+  else cart.push({ ...p, qty: 1 });
   updateCartUI();
-  showToast('🔥 ' + name + ' agregado');
-  if (cardEl) {
-    cardEl.style.transform = 'scale(0.96)';
-    setTimeout(() => cardEl.style.transform = '', 150);
-  }
+  showToast('🔥 ' + p.name + ' agregado');
 }
 
 function updateCartUI() {
-  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
-  const count = cart.reduce((s, i) => s + i.qty, 0);
+  const total = cart.reduce((s,i) => s + i.price * i.qty, 0);
+  const count = cart.reduce((s,i) => s + i.qty, 0);
   const badge = document.getElementById('cartCount');
   badge.textContent = count;
   badge.classList.add('bump');
@@ -1047,14 +955,18 @@ function updateCartUI() {
 
   const body = document.getElementById('cartBody');
   const footer = document.getElementById('cartFooter');
-  if (cart.length === 0) {
+
+  if (!cart.length) {
     body.innerHTML = '<div class="cart-empty"><div class="cart-empty-icon">🍔</div><span>Tu carrito está vacío</span><small style="color:var(--mist);font-size:0.75rem;margin-top:4px">Agrega algo delicioso</small></div>';
     footer.style.display = 'none'; return;
   }
+
   footer.style.display = 'block';
   body.innerHTML = cart.map((item, idx) => `
     <div class="cart-item">
-      <div style="width:60px;height:60px;border-radius:10px;background:var(--ash);display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0">${item.emoji}</div>
+      <div class="cart-item-thumb">
+        <img src="${item.image}" alt="${item.name}" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\\'font-size:1.6rem\\'>${item.emoji}</span>'">
+      </div>
       <div class="cart-item-info">
         <div class="cart-item-name">${item.name}</div>
         <div class="cart-item-price">$${(item.price * item.qty).toFixed(2)}</div>
@@ -1067,6 +979,7 @@ function updateCartUI() {
       </div>
     </div>
   `).join('');
+
   document.getElementById('cartSubtotal').textContent = '$' + total.toFixed(2);
   document.getElementById('cartTotal').textContent = '$' + total.toFixed(2);
 }
@@ -1094,12 +1007,12 @@ function checkout() {
 function orderWhatsApp() {
   if (!cart.length) return;
   const lines = cart.map(i => `• ${i.qty}x ${i.name} - $${(i.price * i.qty).toFixed(2)}`).join('%0A');
-  const total = cart.reduce((s, i) => s + i.price * i.qty, 0).toFixed(2);
-  const msg = `🔥 *Pedido Flama's SV*%0A%0A${lines}%0A%0A*Total: $${total}*`;
+  const total = cart.reduce((s,i) => s + i.price * i.qty, 0).toFixed(2);
+  const msg = ` *Pedido Flama's SV*%0A%0A${lines}%0A%0A*Total: $${total}*`;
   window.open(`https://wa.me/50375416644?text=${msg}`, '_blank');
 }
 
-// TOAST
+// ── TOAST ──
 let toastTimer;
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -1109,6 +1022,44 @@ function showToast(msg) {
   toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
 }
 
+// ── NAV MOBILE ──
+function toggleMenu() {
+  const links = document.getElementById('navLinks');
+  const toggle = document.getElementById('menuToggle');
+  const overlay = document.getElementById('navOverlay');
+  links.classList.toggle('active');
+  toggle.classList.toggle('active');
+  overlay.classList.toggle('active');
+}
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => {
+    document.getElementById('navLinks').classList.remove('active');
+    document.getElementById('menuToggle').classList.remove('active');
+    document.getElementById('navOverlay').classList.remove('active');
+  });
+});
+
+// ── LOADER ──
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loader').classList.add('hidden'), 1000);
+});
+
+// ── NAV SCROLL ──
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// ── SCROLL ANIMATIONS ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.05 });
+const observeFadeIns = () => {
+  document.querySelectorAll('.fade-s, .fade-in').forEach(el => observer.observe(el));
+};
+
+// ── INIT ──
+renderMenu();
+observeFadeIns();
 updateCartUI();
 </script>
 </body>

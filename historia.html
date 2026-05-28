@@ -6,7 +6,7 @@
     <title>Flama's Jucuapa </title>
     <link rel="icon" href="img/logoperron.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- ✅ SE ELIMINÓ <base target="_blank"> QUE CAUSABA EL ERROR -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.31.0/dist/tabler-icons.min.css">
     <style>
         * {
             margin: 0;
@@ -59,9 +59,7 @@
             z-index: 9999;
         }
 
-        /* ==========================================
-           LOADER
-           ========================================== */
+        /* LOADER */
         .loader {
             position: fixed;
             top: 0;
@@ -92,9 +90,7 @@
             50% { transform: translateY(-20px); }
         }
 
-        /* ==========================================
-           NAVBAR
-           ========================================== */
+        /* NAVBAR */
         nav {
             position: fixed;
             top: 20px;
@@ -276,9 +272,7 @@
             transform: rotate(-45deg) translate(7px, -6px);
         }
 
-        /* ==========================================
-           HERO HISTORIA — ✅ CORREGIDO
-           ========================================== */
+        /* HERO */
         .hero-historia {
             min-height: 100vh;
             background: 
@@ -350,9 +344,7 @@
             letter-spacing: 2px;
         }
 
-        /* ==========================================
-           CONTENIDO PRINCIPAL
-           ========================================== */
+        /* CONTENIDO PRINCIPAL */
         main {
             max-width: 1200px;
             margin: 0 auto;
@@ -436,7 +428,9 @@
             pointer-events: none;
         }
 
-        /* Misión, Visión, Valores */
+        /* ==========================================
+           MISIÓN, VISIÓN, VALORES — ICONOS MINIMALISTAS
+           ========================================== */
         .mvv-section {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -460,16 +454,27 @@
         }
 
         .mvv-icon {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, rgba(255,77,0,0.1), rgba(255,140,0,0.05));
-            border-radius: 50%;
+            width: 64px;
+            height: 64px;
+            border: 1px solid rgba(255, 77, 0, 0.25);
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 20px;
-            font-size: 2rem;
-            border: 1px solid rgba(255,77,0,0.3);
+            color: var(--primary);
+            font-size: 28px;
+            background: rgba(255, 77, 0, 0.05);
+            transition: all 0.3s;
+        }
+
+        .mvv-card:hover .mvv-icon {
+            background: rgba(255, 77, 0, 0.1);
+            border-color: rgba(255, 77, 0, 0.5);
+        }
+
+        .mvv-icon i {
+            line-height: 1;
         }
 
         .mvv-card h3 {
@@ -486,7 +491,7 @@
             font-size: 0.9rem;
         }
 
-        /* Timeline */
+        /* TIMELINE */
         .timeline-section {
             background: var(--gray);
             border-radius: 30px;
@@ -553,9 +558,7 @@
             color: var(--text-muted);
         }
 
-        /* ==========================================
-           FOOTER
-           ========================================== */
+        /* FOOTER */
         footer {
             background: var(--dark);
             color: white;
@@ -717,9 +720,7 @@
             align-items: center;
         }
 
-        /* ==========================================
-           ANIMATIONS
-           ========================================== */
+        /* ANIMATIONS */
         .fade-up {
             opacity: 0;
             transform: translateY(30px);
@@ -731,9 +732,7 @@
             transform: translateY(0);
         }
 
-        /* ==========================================
-           RESPONSIVE
-           ========================================== */
+        /* RESPONSIVE */
         @media (max-width: 968px) {
             .mvv-section {
                 grid-template-columns: 1fr;
@@ -812,7 +811,7 @@
             <img src="/DS3M1EIGM/img/logoperron.png" alt="Logo" class="logo-icon"/>
             <div class="logo-text">
                 <span class="logo-main">FLAMAS_SV</span>
-                <span class="logo-sub">La Mejor Hamburguesa</span> 
+                <span class="logo-sub">La Mejor Hamburguesa</span>
             </div>
         </a>
         <ul class="nav-links" id="navLinks">
@@ -834,7 +833,6 @@
     <section class="hero-historia">
         <div class="hero-grid"></div>
         <div class="hero-content">
-            <div class="hero-badge">🔥 Desde 2024</div>
             <h1>NUESTRA HISTORIA</h1>
             <p>El origen de la llama que encendió la pasión por las mejores hamburguesas de Jucuapa</p>
         </div>
@@ -846,15 +844,15 @@
             <div class="historia-grid">
                 <div class="historia-text">
                     <h2>El Nacimiento de FLAMA'S</h2>
-                    <p>Corría el año 2024 en la tranquila ciudad de Jucuapa, cuando un joven emprendedor llamado Alejandro "Alex" Flores decidió seguir su sueño más grande: crear la mejor hamburguesa que su ciudad natal hubiera probado jamás.</p>
-                    <p>Después de años trabajando en restaurantes de renombre y perfeccionando recetas secretas en su pequeña cocina, Alex descubrió que el verdadero secreto no estaba solo en los ingredientes, sino en la <strong>pasión</strong> con la que se preparaba cada platillo. Así nació FLAMA'S, un nombre que representa el fuego interior que impulsa a su equipo a dar lo mejor cada día.</p>
-                    <p>Lo que comenzó como un pequeño local de 4 mesas en el corazón de Jucuapa, rápidamente se convirtió en el punto de encuentro favorito de los amantes de las buenas hamburguesas. El boca a boca y la calidad inigualable hicieron que FLAMA'S creciera, pero nunca perdió su esencia: <strong>sabor auténtico, ingredientes frescos y atención personalizada</strong>.</p>
+                    <p>Corría el año 2024 en la tranquila ciudad de Jucuapa, cuando un joven emprendedor llamado Luis Alberto Mendez Zelaya decidió seguir su sueño más grande: crear la mejor hamburguesa que su ciudad natal hubiera probado jamás.</p>
+                    <p>Después de años trabajando, Luis descubrió que el verdadero secreto no estaba solo en los ingredientes, sino en la <strong>pasión</strong> con la que se preparaba cada hamburguesa. Así nació FLAMA'S, un nombre que representa el fuego interior que impulsa a su equipo a dar lo mejor cada día.</p>
+                    <p>Lo que comenzó como un sueño en el corazón de Jucuapa, rápidamente se convirtió en el punto de encuentro favorito de los amantes de las buenas hamburguesas. El boca a boca y la calidad inigualable hicieron que FLAMA'S creciera, pero nunca perdió su esencia: <strong>sabor auténtico, ingredientes frescos y atención personalizada</strong>.</p>
                     <div class="fecha-destacada">
-                        📍 Jucuapa, El Salvador | Fundado: 15 de marzo de 2024
+                        📍 Jucuapa, El Salvador | Fundado: 2024
                     </div>
                 </div>
                 <div class="historia-image">
-                    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600" alt="Nuestro primer local">
+                    <img src="img/exterior letrero.jpeg" alt="Nuestro primer local">
                 </div>
             </div>
         </div>
@@ -862,17 +860,23 @@
         <!-- Misión, Visión, Valores -->
         <div class="mvv-section">
             <div class="mvv-card fade-up">
-                <div class="mvv-icon">🎯</div>
+                <div class="mvv-icon" aria-hidden="true">
+                    <i class="ti ti-target"></i>
+                </div>
                 <h3>Misión</h3>
                 <p>Brindar una experiencia única a través de nuestras alitas, hamburguesas y bebidas, ofreciendo sabor, calidad y un ambiente auténtico donde cada cliente disfrute momentos especiales con atención cercana y productos preparados con pasión.</p>
             </div>
             <div class="mvv-card fade-up">
-                <div class="mvv-icon">👁️</div>
+                <div class="mvv-icon" aria-hidden="true">
+                    <i class="ti ti-eye"></i>
+                </div>
                 <h3>Visión</h3>
                 <p>Ser una de las marcas de comida rápida más reconocidas y queridas en El Salvador, destacándonos por nuestra creatividad, sabor inigualable y conexión con nuestros clientes, llevando la esencia de Flama's a más personas cada día.</p>
             </div>
             <div class="mvv-card fade-up">
-                <div class="mvv-icon">💎</div>
+                <div class="mvv-icon" aria-hidden="true">
+                    <i class="ti ti-diamond"></i>
+                </div>
                 <h3>Valores</h3>
                 <p>Calidad, pasión, creatividad, compromiso, responsabilidad, trabajo en equipo y autenticidad. Estos son los pilares que guían cada decisión y cada hamburguesa que sale de nuestra cocina.</p>
             </div>
@@ -887,23 +891,17 @@
             <div class="timeline">
                 <div class="timeline-item">
                     <div class="timeline-year">2024</div>
-                    <div class="timeline-text">Fundación de FLAMA'S en Jucuapa</div>
+                    <div class="timeline-text">Fundación y apertura de FLAMA'S en Jucuapa</div>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-year">2024</div>
-                    <div class="timeline-text">Apertura del primer local</div>
-                </div>
+                
                 <div class="timeline-item">
                     <div class="timeline-year">2025</div>
-                    <div class="timeline-text">Lanzamiento del menú Premium</div>
+                    <div class="timeline-text">Lanzamiento de nuevos productos</div>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-year">2025</div>
-                    <div class="timeline-text">+10,000 clientes felices</div>
-                </div>
+
                 <div class="timeline-item">
                     <div class="timeline-year">2026</div>
-                    <div class="timeline-text">Expansión y nuevo concepto</div>
+                    <div class="timeline-text">Incremento de popularidad en la localidad</div>
                 </div>
             </div>
         </div>
@@ -954,7 +952,6 @@
     </footer>
 
     <script>
-        // Loader
         window.addEventListener('load', () => {
             const loader = document.getElementById('loader');
             if (loader) {
@@ -964,7 +961,6 @@
             }
         });
 
-        // Toggle menu móvil
         function toggleMenu() {
             const navLinks = document.getElementById('navLinks');
             const menuToggle = document.querySelector('.menu-toggle');
@@ -972,7 +968,6 @@
             menuToggle.classList.toggle('active');
         }
 
-        // Cerrar menú al hacer clic en un enlace
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => {
                 document.getElementById('navLinks')?.classList.remove('active');
@@ -980,7 +975,6 @@
             });
         });
 
-        // Navbar scroll effect
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
             if (window.scrollY > 50) {
@@ -990,7 +984,6 @@
             }
         });
 
-        // Intersection Observer para animaciones
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
