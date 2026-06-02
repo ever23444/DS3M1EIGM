@@ -15,6 +15,10 @@
   --light: #fafafa; --fire-glow: rgba(255, 77, 0, 0.4);
   --glass: rgba(255, 255, 255, 0.03);
   --glass-border: rgba(255, 255, 255, 0.1);
+  --primary: #FF4D00;
+  --secondary: #FF6B1A;
+  --text-muted: #888888;
+  --primary-glow: rgba(255, 77, 0, 0.4);
 }
 html { scroll-behavior: smooth; overflow-x: hidden; }
 body {
@@ -39,55 +43,55 @@ body::before {
 
 /* LOADER */
 #loader {
-  position: fixed;
-  inset: 0;
+  position: fixed; inset: 0;
   background: var(--void);
-  z-index: 10000;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.6s ease, visibility 0.6s ease;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  z-index: 99999;
+  transition: opacity 0.7s ease, visibility 0.7s ease;
 }
 #loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-.loader-ring {
-  width: 120px; height: 120px;
-  border: 3px solid transparent;
-  border-top-color: var(--ember);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+.loader-logo-wrap {
   position: relative;
+  width: 110px; height: 110px;
+  display: flex; align-items: center; justify-content: center;
 }
-.loader-ring::before {
+.loader-logo-wrap::before {
   content: '';
-  position: absolute;
-  inset: 8px;
-  border: 3px solid transparent;
-  border-top-color: var(--gold);
+  position: absolute; inset: 0;
   border-radius: 50%;
-  animation: spin 1.5s linear infinite reverse;
+  border: 2px solid transparent;
+  border-top-color: var(--fire);
+  border-right-color: var(--ember);
+  animation: spin 1.2s linear infinite;
 }
-.loader-logo {
-  position: absolute;
-  width: 64px; height: 64px;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  animation: pulse-scale 1.5s ease-in-out infinite;
+.loader-logo-wrap::after {
+  content: '';
+  position: absolute; inset: 6px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,77,0,0.15);
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+.loader-logo {
+  width: 72px; height: 72px;
+  object-fit: contain;
+  border-radius: 50%;
+  animation: pulse-scale 1.4s ease-in-out infinite;
+  filter: drop-shadow(0 0 16px rgba(255,77,0,0.4));
+}
 @keyframes pulse-scale {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); }
-  50% { transform: translate(-50%, -50%) scale(1.15); }
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.08); filter: drop-shadow(0 0 24px rgba(255,77,0,0.6)); }
 }
 .loader-text {
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   font-family: 'Bebas Neue', cursive;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   letter-spacing: 6px;
-  color: var(--fire);
-  animation: blink 1.2s ease-in-out infinite;
+  color: var(--mist);
+  animation: blink 1.4s ease-in-out infinite;
 }
-@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+@keyframes blink { 0%,100%{opacity:0.4} 50%{opacity:1} }
 
 /* NAVBAR */
 nav {
@@ -233,7 +237,7 @@ nav.scrolled {
   background: radial-gradient(ellipse at 20% 50%, rgba(255, 77, 0, 0.15) 0%, transparent 50%),
               radial-gradient(ellipse at 80% 80%, rgba(255, 140, 0, 0.1) 0%, transparent 50%),
               linear-gradient(to bottom, rgba(5,5,5,0.3), rgba(5,5,5,0.9)),
-              url('img/horno.jpg');
+              url('https://drive.google.com/thumbnail?id=1a4WQvnHV9xE8NTnc4zL9IrZNNatlPGYH&sz=w1920');
   background-size: cover;
   background-position: center;
   background-attachment: scroll;
@@ -751,10 +755,7 @@ footer::before {
   line-height: 1.8;
   margin-bottom: 2rem;
 }
-.social-links {
-  display: flex;
-  gap: 1rem;
-}
+.social-links { display: flex; gap: 1rem; }
 .social-links a {
   width: 45px; height: 45px;
   background: var(--glass);
@@ -778,7 +779,6 @@ footer::before {
   transition: transform 0.3s;
 }
 .social-links a:hover img { transform: scale(1.2); }
-
 .footer-section h3 {
   font-family: 'Bebas Neue', cursive;
   font-size: 1.3rem;
@@ -796,11 +796,7 @@ footer::before {
   align-items: center;
   gap: 0.5rem;
 }
-.footer-section a:hover {
-  color: var(--fire);
-  transform: translateX(5px);
-  text-shadow: 0 0 10px var(--fire-glow);
-}
+.footer-section a:hover { color: var(--fire); transform: translateX(5px); }
 .footer-contact p {
   display: flex;
   align-items: center;
@@ -811,40 +807,113 @@ footer::before {
 }
 .footer-contact img { width: 18px; opacity: 0.7; }
 .footer-bottom {
-  text-align: center;
   padding-top: 3rem;
   border-top: 1px solid var(--glass-border);
-  color: var(--mist);
-  font-size: 0.9rem;
-  max-width: 1400px;
-  margin: 0 auto;
+  max-width: 1400px; margin: 0 auto;
+  display: flex; justify-content: space-between; align-items: flex-start;
+}
+.footer-credits { display: flex; flex-direction: column; gap: 0.3rem; }
+.footer-credits span { color: var(--mist); font-size: 0.85rem; line-height: 1.4; }
+.footer-bottom-links { display: flex; gap: 2rem; align-items: center; }
+.footer-bottom-links a { color: var(--mist); text-decoration: none; transition: color 0.3s; font-size: 0.9rem; }
+.footer-bottom-links a:hover { color: var(--fire); }
+
+/* VIDEO SECTION */
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #000;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+.video-wrapper video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  max-height: 65vh;
+  object-fit: cover;
+}
+.video-overlay-play {
+  position: absolute;
+  inset: 0;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.45);
+  cursor: pointer;
+  transition: background 0.35s;
+  z-index: 2;
+}
+.video-overlay-play:hover { background: rgba(0,0,0,0.25); }
+.video-overlay-play.hidden { display: none; }
+.play-btn-circle {
+  width: 84px; height: 84px;
+  background: linear-gradient(135deg, var(--fire), var(--ember));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 12px rgba(255,77,0,0.18), 0 0 40px rgba(255,77,0,0.35);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.video-overlay-play:hover .play-btn-circle {
+  transform: scale(1.1);
+  box-shadow: 0 0 0 18px rgba(255,77,0,0.15), 0 0 55px rgba(255,77,0,0.4);
+}
+.play-btn-circle svg {
+  width: 34px; height: 34px;
+  fill: white;
+  margin-left: 5px;
+}
+.video-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+.video-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255,77,0,0.1);
+  border: 1px solid rgba(255,77,0,0.3);
+  padding: 0.45rem 1.1rem;
+  border-radius: 50px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--fire);
+}
+.video-badge::before {
+  content: '';
+  width: 7px; height: 7px;
+  background: var(--fire);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+.video-desc-text {
+  color: var(--mist);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  flex: 1;
+  min-width: 200px;
+}
+
+/* RESPONSIVE VIDEO */
+@media (max-width: 768px) {
+  .video-wrapper video { max-height: 55vw; }
+  .play-btn-circle { width: 66px; height: 66px; }
+  .play-btn-circle svg { width: 26px; height: 26px; }
 }
 
 /* RESPONSIVE */
-@media (min-width: 2560px) {
-  html { font-size: 18px; }
-  .mini-page, .footer-content, .footer-bottom { max-width: 1800px; }
-  .gallery-hero h1 { font-size: clamp(4rem, 8vw, 9rem); }
-  .five-grid { grid-template-rows: 400px 300px; gap: 16px; }
-  .gallery-item-overlay h4 { font-size: 1.8rem; }
-}
-@media (min-width: 1920px) {
-  .mini-page, .footer-content, .footer-bottom { max-width: 1600px; }
-  .gallery-hero h1 { font-size: clamp(3.5rem, 7vw, 7.5rem); }
-  .five-grid { grid-template-rows: 350px 270px; }
-}
-@media (max-width: 1440px) {
-  .footer-content { grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; }
-  .five-grid { grid-template-rows: 280px 220px; }
-}
 @media (max-width: 1200px) {
   .footer-content { grid-template-columns: 2fr 1fr 1fr; gap: 2.5rem; }
   .five-grid { grid-template-rows: 260px 200px; }
-  .gallery-hero h1 { font-size: clamp(2.8rem, 8vw, 5rem); }
-  .nav-links a { padding: 0.5rem 1rem; font-size: 0.85rem; }
 }
 @media (max-width: 1024px) {
   .footer-content { grid-template-columns: 1fr 1fr; gap: 2rem; }
@@ -891,98 +960,29 @@ footer::before {
   }
   .slot-a, .slot-b, .slot-c, .slot-d, .slot-e { grid-column: 1; grid-row: auto; }
   .footer-content { grid-template-columns: 1fr; gap: 2rem; }
-  .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+  .footer-bottom { flex-direction: column; gap: 1rem; }
   .lightbox-nav { width: 45px; height: 45px; font-size: 1.2rem; }
   .lightbox-prev { left: 10px; }
   .lightbox-next { right: 10px; }
   .section-tag::before, .section-tag::after { display: none; }
 }
-@media (max-width: 640px) {
-  .gallery-section { padding: 4rem 4%; }
-  .gallery-hero { padding: 80px 4% 4rem; }
-  .gallery-hero-badge { font-size: 0.7rem; padding: 0.4rem 0.8rem; }
-  .mini-page { border-radius: 16px; }
-  .mini-page-header { padding: 1.5rem 1.2rem 1.2rem; }
-  .mini-page-body { padding: 1rem 0.8rem 1.2rem; }
-  .five-grid { grid-template-rows: repeat(5, 180px); gap: 8px; }
-  .gallery-item-overlay { padding: 1rem 1.2rem; }
-  .gallery-item-overlay h4 { font-size: 1.2rem; }
-  .view-icon { width: 40px; height: 40px; }
-  .view-icon svg { width: 18px; height: 18px; }
-  footer { padding: 3rem 4% 1.5rem; }
-}
 @media (max-width: 480px) {
-  .gallery-section { padding: 3rem 5%; }
-  .gallery-hero { padding: 80px 5% 3rem; }
-  .gallery-hero p { font-size: 0.9rem; }
-  .gallery-tabs-container { padding: 1rem; top: 75px; }
-  .gallery-tab { padding: 0.5rem 1rem; font-size: 0.8rem; }
-  .mini-page-header { padding: 1.2rem 1rem 1rem; }
-  .mini-page-title { font-size: clamp(2rem, 8vw, 2.5rem); }
-  .mini-page-body { padding: 0.8rem 0.6rem 1rem; }
-  .five-grid { grid-template-rows: repeat(5, 160px); gap: 6px; }
-  .gallery-item { border-radius: 10px; }
-  .mini-page-footer { padding: 1rem; flex-direction: column; gap: 1rem; }
-  .mini-page-footer-bar { width: 100%; height: 3px; }
   .logo-sub { display: none; }
   .logo-main { font-size: 1.5rem; }
   .logo-icon { width: 40px; height: 40px; }
-  .footer-bottom { flex-direction: column; text-align: center; }
+  .footer-bottom { flex-direction: column; }
   .social-links { justify-content: center; }
-  .lightbox-close { top: 10px; right: 10px; width: 44px; height: 44px; }
-  .lightbox-caption { font-size: 0.85rem; padding: 0.6rem 1.2rem; }
-}
-@media (max-width: 390px) {
-  html { font-size: 14px; }
-  .gallery-hero h1 { font-size: 2.8rem; }
-  .gallery-tab { padding: 0.5rem 0.9rem; font-size: 0.75rem; }
-  .five-grid { grid-template-rows: repeat(5, 150px); }
-  .gallery-item-overlay h4 { font-size: 1.1rem; }
-  .loader-logo { width: 56px; height: 56px; }
-  nav { width: 95%; }
-  .order-btn { padding: 0.5rem 1rem; font-size: 0.85rem; }
-}
-@media (max-width: 320px) {
-  .gallery-hero h1 { font-size: 2.2rem; }
-  .gallery-hero p { font-size: 0.85rem; }
-  .gallery-tab { padding: 0.4rem 0.7rem; font-size: 0.7rem; }
-  .five-grid { grid-template-rows: repeat(5, 130px); gap: 4px; }
-  .mini-page-title { font-size: 1.8rem; }
-  .mini-page-label { font-size: 0.6rem; }
-  .gallery-item-overlay { padding: 0.8rem 1rem; }
-  .gallery-item-overlay h4 { font-size: 1rem; }
-  .gallery-item-overlay p { font-size: 0.75rem; }
-  .view-icon { width: 36px; height: 36px; }
-  .view-icon svg { width: 16px; height: 16px; }
-  .mini-page-footer p { font-size: 0.85rem; }
-  footer { padding: 2rem 5% 1rem; }
-  .footer-section h3 { font-size: 1.1rem; }
-  .footer-section a, .footer-contact p { font-size: 0.85rem; }
-  .social-links a { width: 40px; height: 40px; }
-  .social-links a img { width: 18px; height: 18px; }
-  .loader-logo { width: 48px; height: 48px; }
-  .loader-text { font-size: 1.2rem; letter-spacing: 4px; }
-  .lightbox-nav { width: 40px; height: 40px; font-size: 1rem; }
-  .lightbox-prev { left: 5px; }
-  .lightbox-next { right: 5px; }
-}
-@media (max-width: 768px) {
-  .gallery-tab, .lightbox-nav, .lightbox-close, .view-icon, .menu-toggle {
-    min-width: 44px;
-    min-height: 44px;
-  }
 }
 </style>
-<base target="_blank">
 </head>
 <body>
 
 <!-- LOADER -->
 <div id="loader">
-  <div class="loader-ring">
-    <img src="img/logoperron.png" alt="Logo" class="loader-logo">
+  <div class="loader-logo-wrap">
+    <img class="loader-logo" src="img/logoperron.png" alt="Flama's">
   </div>
-  <div class="loader-text">FLAMA'S</div>
+  <div class="loader-text">Flama's</div>
 </div>
 
 <!-- NAVIGATION -->
@@ -990,17 +990,17 @@ footer::before {
   <a href="index.html" class="logo-container">
     <img src="img/logoperron.png" alt="Logo" class="logo-icon"/>
     <div class="logo-text">
-      <span class="logo-main">FLAMA'S</span>
+      <span class="logo-main">FLAMAS_SV</span>
       <span class="logo-sub">La Mejor Hamburguesa</span>
     </div>
   </a>
   <ul class="nav-links" id="navLinks">
     <li><a href="index.html">Inicio</a></li>
-    <li><a href="menu.html">Men&uacute;</a></li>
+    <li><a href="Menú.html">Menú</a></li>
     <li><a href="historia.html">Historia</a></li>
-    <li><a href="galeria.html" class="active">Galer&iacute;a</a></li>
-    <li><a href="ubicacion.html">Ubicaci&oacute;n</a></li>
-    <li><a href="ordenar.html" class="order-btn">&#128722; Ordenar</a></li>
+    <li><a href="Galeria.html" class="active">Galería</a></li>
+    <li><a href="ubicacion.html">Ubicación</a></li>
+    <li><a href="Ordenar.html" class="order-btn">🛒 Ordenar</a></li>
   </ul>
   <div class="menu-toggle" onclick="toggleMenu()">
     <span></span>
@@ -1013,15 +1013,7 @@ footer::before {
 <section class="gallery-hero">
   <div class="gallery-hero-grid"></div>
   <div class="gallery-hero-content">
-    <div class="gallery-hero-badge">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;">
-        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-        <circle cx="12" cy="13" r="4"></circle>
-      </svg>
-      Conoce Nuestro Espacio
-    </div>
     <h1>NUESTRAS <span>INSTALACIONES</span></h1>
-    <p>Un ambiente &uacute;nico dise&ntilde;ado para que disfrutes de la mejor experiencia gastron&oacute;mica. Descubre cada rinc&oacute;n de Flama's.</p>
   </div>
 </section>
 
@@ -1055,6 +1047,15 @@ footer::before {
       </span>
       Cocina
     </button>
+    <button class="gallery-tab" onclick="switchGallery('videos', this)">
+      <span class="tab-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="23 7 16 12 23 17 23 7"></polygon>
+          <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+        </svg>
+      </span>
+      Video
+    </button>
   </div>
 </div>
 
@@ -1063,7 +1064,7 @@ footer::before {
   <div class="mini-page fade-in">
     <div class="mini-page-header">
       <div>
-        <div class="mini-page-label">Galer&iacute;a &mdash; 01 / 03</div>
+        <div class="mini-page-label">Galería — 01 / 03</div>
         <div class="mini-page-title">Exteriores</div>
       </div>
       <p class="mini-page-subtitle">Nuestra fachada y espacios al aire libre, el primer impacto de Flama's en Jucuapa.</p>
@@ -1071,45 +1072,35 @@ footer::before {
     <div class="mini-page-body">
       <div class="five-grid">
         <div class="gallery-item slot-a" onclick="openLightbox(this)">
-          <img src="img/exterior_1.jpeg" alt="Fachada Principal">
-          <div class="view-icon">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-          </div>
-          <div class="gallery-item-overlay"><h4>Fachada Principal</h4><p>El coraz&oacute;n de Jucuapa en Flama's</p></div>
+          <img src="img/Flamas.jpeg" alt="Fachada Principal">
+          <div class="view-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg></div>
+          <div class="gallery-item-overlay"><h4>Fachada Principal</h4><p>El corazón de Jucuapa en Flama's</p></div>
         </div>
         <div class="gallery-item slot-b" onclick="openLightbox(this)">
           <img src="img/exterior_2.jpeg" alt="Vista Lateral">
-          <div class="view-icon">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-          </div>
+          <div class="view-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg></div>
           <div class="gallery-item-overlay"><h4>Vista Lateral</h4><p>Colores que nos identifican</p></div>
         </div>
         <div class="gallery-item slot-c" onclick="openLightbox(this)">
           <img src="img/exterior_3.jpeg" alt="Entrada">
-          <div class="view-icon">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-          </div>
+          <div class="view-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg></div>
           <div class="gallery-item-overlay"><h4>Entrada Principal</h4><p>Bienvenidos a la experiencia</p></div>
         </div>
         <div class="gallery-item slot-d" onclick="openLightbox(this)">
           <img src="img/exterior_4.jpeg" alt="Terraza">
-          <div class="view-icon">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-          </div>
+          <div class="view-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg></div>
           <div class="gallery-item-overlay"><h4>Terraza Exterior</h4><p>Disfruta al aire libre</p></div>
         </div>
         <div class="gallery-item slot-e" onclick="openLightbox(this)">
-          <img src="img/exterior_5.jpeg" alt="Vista Completa" style="object-position:center 40%;">
-          <div class="view-icon">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-          </div>
+          <img src="img/exterior 208.jpeg" alt="Vista Completa" style="object-position:center 40%;">
+          <div class="view-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg></div>
           <div class="gallery-item-overlay"><h4>Vista de Nuestro Ambiente</h4><p>Todo el ambiente Flama's</p></div>
         </div>
       </div>
     </div>
     <div class="mini-page-footer">
       <div class="mini-page-footer-bar"></div>
-      <p>La fachada de Flama's es el primer punto de contacto con nuestra experiencia. <strong>Dise&ntilde;ada para impactar desde la calle,</strong> cada detalle exterior refleja la personalidad de nuestro lugar &mdash; c&aacute;lida, vibrante y aut&eacute;ntica.</p>
+      <p>La fachada de Flama's es el primer punto de contacto con nuestra experiencia. <strong>Diseñada para impactar desde la calle,</strong> cada detalle exterior refleja la personalidad de nuestro lugar — cálida, vibrante y auténtica.</p>
     </div>
   </div>
 </section>
@@ -1119,53 +1110,43 @@ footer::before {
   <div class="mini-page fade-in">
     <div class="mini-page-header">
       <div>
-        <div class="mini-page-label">Galer&iacute;a &mdash; 02 / 03</div>
+        <div class="mini-page-label">Galería — 02 / 03</div>
         <div class="mini-page-title">Interiores</div>
       </div>
-      <p class="mini-page-subtitle">Un ambiente c&aacute;lido y moderno donde cada detalle est&aacute; pensado para tu comodidad.</p>
+      <p class="mini-page-subtitle">Un ambiente cálido y moderno donde cada detalle está pensado para tu comodidad.</p>
     </div>
     <div class="mini-page-body">
       <div class="five-grid">
         <div class="gallery-item slot-a" onclick="openLightbox(this)">
           <img src="img/interior_1.jpeg" alt="Sala Principal">
-          <div class="view-icon">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-          </div>
-          <div class="gallery-item-overlay"><h4>Sala Principal</h4><p>El coraz&oacute;n de Flama's</p></div>
+          <div class="view-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg></div>
+          <div class="gallery-item-overlay"><h4>Sala Principal</h4><p>El corazón de Flama's</p></div>
         </div>
         <div class="gallery-item slot-b" onclick="openLightbox(this)">
-          <img src="img/interior_2.jpeg" alt="Decoraci&oacute;n Industrial">
-          <div class="view-icon">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-          </div>
-          <div class="gallery-item-overlay"><h4>Decoraci&oacute;n Industrial</h4><p>Cada rinc&oacute;n cuenta una historia</p></div>
+          <img src="img/interior_2.jpeg" alt="Decoración Industrial">
+          <div class="view-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg></div>
+          <div class="gallery-item-overlay"><h4>Decoración Industrial</h4><p>Cada rincón cuenta una historia</p></div>
         </div>
         <div class="gallery-item slot-c" onclick="openLightbox(this)">
-          <img src="img/interior_3.jpeg" alt="Ne&oacute;n Sign">
-          <div class="view-icon">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-          </div>
+          <img src="img/interior_3.jpeg" alt="Neón Sign">
+          <div class="view-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg></div>
           <div class="gallery-item-overlay"><h4>Decoraciones</h4><p>A falta de amor, una burger</p></div>
         </div>
         <div class="gallery-item slot-d" onclick="openLightbox(this)">
-          <img src="img/interior_4.jpeg" alt="&Aacute;rea de Booths">
-          <div class="view-icon">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-          </div>
-          <div class="gallery-item-overlay"><h4>&Aacute;reas de Comida</h4><p>Comodidad para compartir</p></div>
+          <img src="img/interior_4.jpeg" alt="Área de Booths">
+          <div class="view-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg></div>
+          <div class="gallery-item-overlay"><h4>Áreas de Comida</h4><p>Comodidad para compartir</p></div>
         </div>
         <div class="gallery-item slot-e" onclick="openLightbox(this)">
           <img src="img/interior_5.jpeg" alt="Vista desde Entrada" style="object-position:center 30%;">
-          <div class="view-icon">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-          </div>
-          <div class="gallery-item-overlay"><h4>Vista desde Entrada</h4><p>Iluminaci&oacute;n que enamora</p></div>
+          <div class="view-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg></div>
+          <div class="gallery-item-overlay"><h4>Vista desde Entrada</h4><p>Iluminación que enamora</p></div>
         </div>
       </div>
     </div>
     <div class="mini-page-footer">
       <div class="mini-page-footer-bar"></div>
-      <p>El interior combina <strong>est&eacute;tica industrial con calidez genuina.</strong> Las luces de ne&oacute;n y los detalles decorativos crean un ambiente que invita a quedarse y disfrutar cada momento.</p>
+      <p>El interior combina <strong>estética industrial con calidez genuina.</strong> Las luces de neón y los detalles decorativos crean un ambiente que invita a quedarse y disfrutar cada momento.</p>
     </div>
   </div>
 </section>
@@ -1175,53 +1156,88 @@ footer::before {
   <div class="mini-page fade-in">
     <div class="mini-page-header">
       <div>
-        <div class="mini-page-label">Galer&iacute;a &mdash; 03 / 03</div>
+        <div class="mini-page-label">Galería — 03 / 03</div>
         <div class="mini-page-title">Cocina</div>
       </div>
-      <p class="mini-page-subtitle">Donde la magia sucede. Equipamiento profesional y los m&aacute;s altos est&aacute;ndares de higiene.</p>
+      <p class="mini-page-subtitle">Donde la magia sucede. Equipamiento profesional y los más altos estándares de higiene.</p>
     </div>
     <div class="mini-page-body">
       <div class="five-grid">
         <div class="gallery-item slot-a" onclick="openLightbox(this)">
-          <img src="img/cocina_1.jpeg" alt="L&iacute;nea de Cocina">
-          <div class="view-icon">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-          </div>
-          <div class="gallery-item-overlay"><h4>L&iacute;nea de Cocina</h4><p>Donde nace la magia</p></div>
+          <img src="img/cocina_1.jpeg" alt="Línea de Cocina">
+          <div class="view-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg></div>
+          <div class="gallery-item-overlay"><h4>Línea de Cocina</h4><p>Donde nace la magia</p></div>
         </div>
         <div class="gallery-item slot-b" onclick="openLightbox(this)">
-          <img src="img/cocina_2.jpeg" alt="&Aacute;rea de Preparaci&oacute;n">
-          <div class="view-icon">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-          </div>
-          <div class="gallery-item-overlay"><h4>&Aacute;rea de Preparaci&oacute;n</h4><p>Orden y limpieza garantizados</p></div>
+          <img src="img/cocina_2.jpeg" alt="Área de Preparación">
+          <div class="view-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg></div>
+          <div class="gallery-item-overlay"><h4>Área de Preparación</h4><p>Orden y limpieza garantizados</p></div>
         </div>
         <div class="gallery-item slot-c" onclick="openLightbox(this)">
           <img src="img/cocina_3.jpeg" alt="Plancha">
-          <div class="view-icon">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-          </div>
+          <div class="view-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg></div>
           <div class="gallery-item-overlay"><h4>Plancha</h4><p>La clave de las mejores hamburguesas</p></div>
         </div>
         <div class="gallery-item slot-d" onclick="openLightbox(this)">
-          <img src="img/cocina_4.jpeg" alt="&Aacute;rea de Bebidas">
-          <div class="view-icon">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-          </div>
-          <div class="gallery-item-overlay"><h4>&Aacute;rea de Bebidas</h4><p>Refrescos listos para servir</p></div>
+          <img src="img/cocina_4.jpeg" alt="Área de Bebidas">
+          <div class="view-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg></div>
+          <div class="gallery-item-overlay"><h4>Área de Bebidas</h4><p>Refrescos listos para servir</p></div>
         </div>
         <div class="gallery-item slot-e" onclick="openLightbox(this)">
           <img src="img/cocina_5.jpeg" alt="Vista General Cocina" style="object-position:center 50%;">
-          <div class="view-icon">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-          </div>
+          <div class="view-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg></div>
           <div class="gallery-item-overlay"><h4>Vista General</h4><p>Profesionalismo en cada detalle</p></div>
         </div>
       </div>
     </div>
     <div class="mini-page-footer">
       <div class="mini-page-footer-bar"></div>
-      <p>Trabajamos con <strong>equipamiento profesional y los m&aacute;s altos est&aacute;ndares de higiene.</strong> Cada burger nace aqu&iacute;, donde la plancha, los ingredientes frescos y la t&eacute;cnica se unen para crear algo extraordinario.</p>
+      <p>Trabajamos con <strong>equipamiento profesional y los más altos estándares de higiene.</strong> Cada burger nace aquí, donde la plancha, los ingredientes frescos y la técnica se unen para crear algo extraordinario.</p>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEOS -->
+<section class="gallery-section" id="videos">
+  <div class="mini-page fade-in">
+    <div class="mini-page-header">
+      <div>
+        <div class="mini-page-label">Galería — 04 / 04</div>
+        <div class="mini-page-title">Video</div>
+      </div>
+      <p class="mini-page-subtitle">Un recorrido visual por nuestras instalaciones. Descubre la atmósfera de Flama's en movimiento.</p>
+    </div>
+    <div class="mini-page-body">
+
+      <div class="video-wrapper" id="videoWrapper">
+        <!-- ✅ REEMPLAZA "img/video_restaurante.mp4" con la ruta real de tu video -->
+        <video id="mainVideo" preload="metadata" poster="img/Flamas.jpeg" playsinline>
+          <source src="img/videodeflamas.mp4" type="video/mp4">
+          Tu navegador no soporta la reproducción de video.
+        </video>
+
+        <!-- Overlay de play personalizado -->
+        <div class="video-overlay-play" id="videoPlayOverlay" onclick="playVideo()">
+          <div class="play-btn-circle">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <polygon points="5,3 19,12 5,21"></polygon>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="video-meta-row">
+        <div class="video-badge">Exteriores-Flama's SV</div>
+        <p class="video-desc-text">
+          Un recorrido completo por nuestro local en Jucuapa. Desde nuestra fachada, 
+          vive la experiencia Flama's antes de visitarnos.
+        </p>
+      </div>
+
+    </div>
+    <div class="mini-page-footer">
+      <div class="mini-page-footer-bar"></div>
+      <p>Este video fue grabado en nuestras instalaciones en Jucuapa. <strong>Cada rincón de Flama's</strong> está diseñado para ofrecerte una experiencia única — ven y compruébalo tú mismo.</p>
     </div>
   </div>
 </section>
@@ -1244,112 +1260,78 @@ footer::before {
       <div class="footer-logo">
         <img src="img/logoperron.png" alt="Logo" class="logo-icon"/>
         <div class="footer-logo-text">
-          <span class="main">FLAMA'S</span>
+          <span class="main">FLAMAS_SV</span>
+          <span class="sub">La Mejor Hamburguesa</span>
         </div>
       </div>
-      <p>Las mejores hamburguesas artesanales de Jucuapa. Hechas con amor, pasi&oacute;n y los mejores ingredientes locales.</p>
+      <p>Las mejores hamburguesas artesanales de Jucuapa. Hechas con amor, pasión y los mejores ingredientes locales.</p>
       <div class="social-links">
-        <a href="#"><img src="img/Whatsap-.png" alt="WhatsApp"></a>
-        <a href="#"><img src="img/Facebook-.png" alt="Facebook"></a>
-        <a href="#"><img src="img/Instagram-.png" alt="Instagram"></a>
-        <a href="#"><img src="img/Twitter.jpg" alt="Twitter"></a>
+          <a href="https://wa.me/50370183333" target="_blank"><img src="img/Whatsap-.png" alt="WhatsApp"></a>
+          <a href="https://www.facebook.com/profile.php?id=61577150235322" target="_blank"><img src="img/Facebook-.png" alt="Facebook"></a>
+          <a href="https://www.instagram.com/flamas_sv?igsh=YXY5dWhsb2FkbDNy" target="_blank"><img src="img/Instagram-.png" alt="Instagram"></a>
+          <a href="https://www.tiktok.com/@flamas_sv?_r=1&_t=ZS-96TTacUnWdA" target="_blank"><img src="img/Tiktok (1).png" alt="TikTok"></a>
       </div>
     </div>
-    <div class="footer-col">
-            <h4>Horario</h4>
-            <ul>
-                <li><a href="#">Lun – Mar: 11am – 9pm</a></li>
-                <li><a href="#">Jue – Sáb: 11am – 9pm</a></li>
-                <li><a href="#">Domingo: 11am – 9pm</a></li>
-            </ul>
-        </div>
+    <div class="footer-section">
+      <h3>Horario</h3>
+      <ul>
+        <li>Lun - Mar: 11:00 - 9:00</a></li>
+        <li>Mie - Jue: 11:00 - 9:00</a></li>
+        <li>Vie - Sáb: 11:00 - 9:00</a></li>
+        <li>Dom: 11:00 - 9:00</a></li>
+      </ul>
+    </div>
     <div class="footer-contact footer-section">
       <h3>Contacto</h3>
-      <p><img src="img/Ubicacion-.png" alt=""> Plaza, Jucuapa</p>
-      <p><img src="img/Whatsap-.png" alt=""> 7018-3333</p>
-      <p><img src="img/gmail-.png" alt=""> flamassv@gmail.com</p>
+            <p><img src="img/Ubicacion-.png" alt="Ubicación"> <a href="https://www.google.com/maps/place/Flama's+Burguers/@13.512865,-88.383573,17z/data=!3m1!4b1!4m6!3m5!1s0x8f7b330074995223:0x3f9f31e3298770ed!8m2!3d13.512865!4d-88.383573!16s%2Fg%2F11wc0t7vjf?hl=es-419&entry=ttu&g_ep=EgoyMDI2MDUyNy4wIKXMDSoASAFQAw%3D%3D" target="_blank">Esquina Opuesta De Plaza Gastronomica</a></p>
+            <p><img src="img/Whatsap-.png" alt="WhatsApp"> <a href="https://wa.me/50370183333" target="_blank"> 7018-3333</a></p>
+            <p><img src="img/gmail-.png" alt="Gmail"><a href="https://mail.google.com/mail/?view=cm&fs=1&to=Flamas_sv@gmail.com" target="_blank">Flamas_sv@gmail.com</a></p>
     </div>
     <div class="footer-section">
       <h3>Links</h3>
       <ul>
-        <li><a href="menu.html">&rarr; Men&uacute;</a></li>
-        <li><a href="historia.html">&rarr; Historia</a></li>
-        <li><a href="galeria.html">&rarr; Galer&iacute;a</a></li>
-        <li><a href="ubicacion.html">&rarr; Ubicaci&oacute;n</a></li>
+        <li><a href="index.html">→ Inicio</a></li>
+        <li><a href="Menú.html">→ Menú</a></li>
+        <li><a href="historia.html">→ Historia</a></li>
+        <li><a href="ubicacion.html">→ Ubicación</a></li>
+        <li><a href="Equipodetrabajo.html">→ Desarrolladores</a></li>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
-    <span>&copy; 2026 Flama's. Todos los derechos reservados.</span>
-    <span>Hecho con &#128293; en Jucuapa</span>
+    <div class="footer-credits">
+      <span>© Todos los derechos reservados Flamas_SV - 3° BTV-DS</span>
+    </div>
+    <div class="footer-bottom-links">
+      <a href="#">Privacidad</a>
+      <a href="#">Términos</a>
+    </div>
   </div>
 </footer>
 
 <script>
-// LOADER
 window.addEventListener('load', () => {
   setTimeout(() => {
     document.getElementById('loader').classList.add('hidden');
-  }, 1200);
+  }, 1000);
 });
 
-// NAVBAR
 function toggleMenu() {
-  const navLinks = document.getElementById('navLinks');
-  const menuToggle = document.querySelector('.menu-toggle');
-  navLinks.classList.toggle('active');
-  menuToggle.classList.toggle('active');
-  if (navLinks.classList.contains('active')) {
-    document.body.style.overflow = 'hidden';
-  } else {
-    document.body.style.overflow = '';
-  }
+  document.getElementById('navLinks').classList.toggle('active');
+  document.querySelector('.menu-toggle').classList.toggle('active');
 }
 
-// Close nav on link click
 document.querySelectorAll('.nav-links a').forEach(link => {
   link.addEventListener('click', () => {
     document.getElementById('navLinks').classList.remove('active');
     document.querySelector('.menu-toggle').classList.remove('active');
-    document.body.style.overflow = '';
   });
 });
 
-// Close nav when clicking outside
-const navOverlay = document.createElement('div');
-navOverlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1500;opacity:0;visibility:hidden;transition:all 0.3s;';
-document.body.appendChild(navOverlay);
-
-function updateOverlay() {
-  const navLinks = document.getElementById('navLinks');
-  if (navLinks.classList.contains('active')) {
-    navOverlay.style.opacity = '1';
-    navOverlay.style.visibility = 'visible';
-  } else {
-    navOverlay.style.opacity = '0';
-    navOverlay.style.visibility = 'hidden';
-  }
-}
-
-navOverlay.addEventListener('click', () => {
-  document.getElementById('navLinks').classList.remove('active');
-  document.querySelector('.menu-toggle').classList.remove('active');
-  document.body.style.overflow = '';
-  updateOverlay();
-});
-
-const originalToggleMenu = toggleMenu;
-window.toggleMenu = function() {
-  originalToggleMenu();
-  updateOverlay();
-};
-
-// Navbar scroll effect
 window.addEventListener('scroll', () => {
   document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
 });
 
-// GALLERY TAB SWITCHING
 function switchGallery(sectionId, btn) {
   document.querySelectorAll('.gallery-section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.gallery-tab').forEach(t => t.classList.remove('active'));
@@ -1365,7 +1347,6 @@ function switchGallery(sectionId, btn) {
   document.querySelector('.gallery-tabs-container').scrollIntoView({ behavior: 'smooth' });
 }
 
-// INTERSECTION OBSERVER
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -1377,7 +1358,6 @@ const observer = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-// LIGHTBOX
 let currentIndex = 0;
 let currentItems = [];
 
@@ -1418,16 +1398,22 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowRight') navigateLightbox(1, null);
 });
 
-// SMOOTH SCROLL for anchor links
+function playVideo() {
+  const video = document.getElementById('mainVideo');
+  const overlay = document.getElementById('videoPlayOverlay');
+  video.play();
+  overlay.classList.add('hidden');
+  video.addEventListener('pause', () => overlay.classList.remove('hidden'), { once: false });
+  video.addEventListener('ended', () => overlay.classList.remove('hidden'), { once: false });
+}
+
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', function(e) {
     const href = this.getAttribute('href');
     if (href !== '#') {
       e.preventDefault();
       const target = document.querySelector(href);
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth' });
-      }
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
     }
   });
 });

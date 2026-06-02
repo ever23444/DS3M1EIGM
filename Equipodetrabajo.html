@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipo Dev | Flama's Jucuapa</title>
+    <link rel="icon" href="img/logoperron.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #FF4D00;
+            --primary-glow: rgba(255, 77, 0, 0.4);
+            --secondary: #FF8C00;
+            --dark: #0a0a0a;
+            --darker: #050505;
+            --light: #fafafa;
+            --text-muted: #888;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--dark); }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(var(--primary), var(--secondary)); border-radius: 3px; }
+        body::before {
+            content: '';
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none; z-index: 9999;
+        }
+
+        /* LOADER */
+        #loader {
+            position: fixed; inset: 0; background: var(--darker);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 99999; transition: opacity 0.7s ease, visibility 0.7s ease;
+        }
+        #loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .loader-logo-wrap {
+            position: relative; width: 110px; height: 110px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .loader-logo-wrap::before {
+            content: ''; position: absolute; inset: 0; border-radius: 50%;
+            border: 2px solid transparent; border-top-color: var(--primary); border-right-color: var(--secondary);
+            animation: spin 1.2s linear infinite;
+        }
+        .loader-logo-wrap::after {
+            content: ''; position: absolute; inset: 6px; border-radius: 50%;
+            border: 1px solid rgba(255,77,0,0.15);
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loader-logo {
+            width: 72px; height: 72px; object-fit: contain; border-radius: 50%;
+            animation: pulse-scale 1.4s ease-in-out infinite;
+            filter: drop-shadow(0 0 16px rgba(255,77,0,0.4));
+        }
+        @keyframes pulse-scale {
+            0%,100% { transform: scale(1); }
+            50% { transform: scale(1.08); filter: drop-shadow(0 0 24px rgba(255,77,0,0.6)); }
+        }
+        .loader-text {
+            margin-top: 1.5rem; font-family: 'Bebas Neue', cursive;
+            font-size: 1.4rem; letter-spacing: 6px; color: var(--text-muted);
+            animation: blink 1.4s ease-in-out infinite;
+        }
+        @keyframes blink { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+        /* NAVBAR */
+        nav {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 1400px;
+            background: rgba(10,10,10,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 50px;
+            z-index: 1000; padding: 1rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,77,0,0.1);
+        }
+        nav.scrolled { width: 95%; background: rgba(10,10,10,0.95); }
+        .logo-container { display: flex; align-items: center; gap: 0.8rem; text-decoration: none; }
+        .logo-icon { width: 45px; height: 45px; filter: drop-shadow(0 0 10px var(--primary-glow)); animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+        .logo-text { display: flex; flex-direction: column; line-height: 1; }
+        .logo-main {
+            font-family: 'Bebas Neue', cursive; font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 2px;
+        }
+        .logo-sub { font-size: 0.6rem; color: var(--text-muted); letter-spacing: 4px; text-transform: uppercase; font-weight: 500; }
+        .nav-links { display: flex; list-style: none; gap: 0.5rem; align-items: center; }
+        .nav-links a {
+            color: rgba(255,255,255,0.7); text-decoration: none; font-weight: 500; font-size: 0.9rem;
+            padding: 0.6rem 1.2rem; border-radius: 25px; transition: all 0.3s; position: relative; overflow: hidden;
+        }
+        .nav-links a::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            opacity: 0; transition: opacity 0.3s; z-index: -1; border-radius: 25px;
+        }
+        .nav-links a:hover { color: white; transform: translateY(-2px); }
+        .nav-links a:hover::before { opacity: 1; }
+        .nav-links a.active { color: white; background: linear-gradient(135deg, var(--primary), var(--secondary)); }
+        .order-btn {
+            background: transparent; color: var(--primary); padding: 0.6rem 1.5rem;
+            border-radius: 25px; text-decoration: none; font-weight: 700;
+            border: 2px solid var(--primary); transition: all 0.3s;
+            display: flex; align-items: center; gap: 0.5rem; position: relative; overflow: hidden;
+        }
+        .order-btn::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: var(--primary); transition: left 0.3s; z-index: -1;
+        }
+        .order-btn:hover { color: white; box-shadow: 0 0 30px var(--primary-glow); }
+        .order-btn:hover::before { left: 0; }
+        .menu-toggle { display: none; flex-direction: column; cursor: pointer; gap: 5px; z-index: 1001; }
+        .menu-toggle span { width: 25px; height: 2px; background: white; transition: 0.3s; border-radius: 2px; }
+        .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+        .menu-toggle.active span:nth-child(2) { opacity: 0; }
+        .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(7px,-6px); }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(255,77,0,0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(255,140,0,0.1) 0%, transparent 50%),
+                linear-gradient(to bottom, rgba(5,5,5,0.3), rgba(5,5,5,0.92)),
+                url('https://drive.google.com/thumbnail?id=1a4WQvnHV9xE8NTnc4zL9IrZNNatlPGYH&sz=w1920');
+            background-size: cover; background-position: center; background-attachment: scroll;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; color: white; position: relative; overflow: hidden;
+            padding-top: 120px; padding-bottom: 3rem;
+        }
+        .hero-grid {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 50px 50px; pointer-events: none;
+        }
+        .hero-content { position: relative; z-index: 2; max-width: 900px; padding: 0 2rem; }
+        .hero-eyebrow {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: rgba(255,77,0,0.1); border: 1px solid rgba(255,77,0,0.3);
+            padding: 0.5rem 1.2rem; border-radius: 50px; font-size: 0.8rem;
+            color: var(--primary); margin-bottom: 1.5rem; letter-spacing: 3px; text-transform: uppercase;
+            animation: fadeInDown 1s ease;
+        }
+        .hero-dot { width: 8px; height: 8px; background: var(--primary); border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+        .hero-title {
+            font-family: 'Bebas Neue', cursive; font-size: clamp(3rem, 9vw, 6.5rem);
+            letter-spacing: 2px; animation: fadeInUp 1s ease 0.2s backwards; line-height: 1.05;
+        }
+        .hero-title .line-white { color: white; -webkit-text-fill-color: white; display: block; }
+        .hero-title .line-orange {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: block;
+        }
+        .hero-sub { color: var(--text-muted); font-size: 1.1rem; margin-top: 1.2rem; max-width: 500px; margin-left: auto; margin-right: auto; animation: fadeInUp 1s ease 0.4s backwards; }
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes fadeInDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
+
+        /* PAGE CONTENT */
+        .page-content { padding: 8rem 5% 6rem; background: var(--darker); }
+
+        /* SECTION HEADER */
+        .section-header { text-align: center; margin-bottom: 5rem; }
+        .section-tag {
+            display: inline-flex; align-items: center; gap: 0.8rem;
+            font-size: 0.72rem; letter-spacing: 5px; text-transform: uppercase;
+            color: var(--primary); margin-bottom: 1rem;
+        }
+        .section-tag::before, .section-tag::after {
+            content: ''; width: 36px; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary));
+        }
+        .section-tag::after { background: linear-gradient(270deg, transparent, var(--primary)); }
+        .section-header h2 {
+            font-family: 'Bebas Neue', cursive; font-size: clamp(2.5rem, 5vw, 4.5rem);
+            color: white; letter-spacing: 2px; line-height: 1; display: inline-block; position: relative;
+        }
+        .section-header h2 .accent { color: var(--primary); }
+        .section-header h2::after {
+            content: ''; position: absolute; bottom: -14px; left: 50%; transform: translateX(-50%);
+            width: 50px; height: 3px; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 2px;
+        }
+        .section-header p { color: var(--text-muted); font-size: 1.05rem; max-width: 520px; margin: 2rem auto 0; }
+
+        /* ══════════════════════════════════════
+           MENTOR — diseño cinematográfico
+        ══════════════════════════════════════ */
+        .mentor-wrapper {
+            max-width: 1000px; margin: 0 auto 9rem;
+            position: relative; border-radius: 36px; overflow: hidden;
+        }
+        .mentor-bg {
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, #0f0f0f 0%, #141414 50%, #0a0a0a 100%);
+            border: 1px solid rgba(255,77,0,0.15);
+            border-radius: 36px;
+        }
+        .mentor-bg::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent 0%, var(--primary) 30%, var(--secondary) 70%, transparent 100%);
+        }
+        .mentor-bg::after {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 80% 50%, rgba(255,77,0,0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .mentor-inner {
+            position: relative; z-index: 1;
+            display: flex; gap: 0; align-items: stretch;
+        }
+        .mentor-left {
+            width: 340px; flex-shrink: 0; position: relative; overflow: hidden;
+        }
+        .mentor-left::after {
+            content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 80px;
+            background: linear-gradient(to right, transparent, #111111);
+            z-index: 2;
+        }
+        .mentor-left img {
+            width: 100%; height: 100%; object-fit: cover; object-position: center top;
+            min-height: 360px;
+            filter: grayscale(30%) contrast(1.1);
+            transition: filter 0.5s;
+        }
+        .mentor-wrapper:hover .mentor-left img { filter: grayscale(0%) contrast(1.05); }
+        .mentor-number-bg {
+            position: absolute; bottom: -20px; left: -10px;
+            font-family: 'Bebas Neue', cursive; font-size: 10rem;
+            color: rgba(255,77,0,0.06); line-height: 1; pointer-events: none; z-index: 1;
+            letter-spacing: -5px;
+        }
+        .mentor-right {
+            flex: 1; padding: 3rem 3rem 3rem 2rem;
+            display: flex; flex-direction: column; justify-content: center;
+        }
+        .mentor-tag {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            background: rgba(255,77,0,0.12); border: 1px solid rgba(255,77,0,0.3);
+            color: var(--primary); font-size: 0.68rem; letter-spacing: 3px;
+            text-transform: uppercase; padding: 0.3rem 0.9rem; border-radius: 20px; margin-bottom: 1rem;
+            width: fit-content;
+        }
+        .mentor-tag::before { content: ''; width: 6px; height: 6px; background: var(--primary); border-radius: 50%; animation: pulse 2s infinite; }
+        .mentor-right h3 { font-family: 'Bebas Neue', cursive; font-size: 2.4rem; letter-spacing: 1px; margin-bottom: 0.2rem; color: white; line-height: 1.1; }
+        .mentor-right .subtitle { color: var(--secondary); font-size: 0.82rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1.8rem; }
+        .mentor-quote {
+            position: relative;
+            background: rgba(255,255,255,0.025); border-left: 3px solid var(--primary);
+            padding: 1.2rem 1.4rem 1.2rem 1.8rem; border-radius: 0 16px 16px 0;
+            font-style: italic; color: rgba(255,255,255,0.6); font-size: 0.93rem; line-height: 1.85;
+        }
+        .mentor-quote::before {
+            content: '"'; position: absolute; top: -8px; left: 10px;
+            font-family: Georgia, serif; font-size: 5rem; color: rgba(255,77,0,0.12);
+            line-height: 1; font-style: normal;
+        }
+
+        /* ══════════════════════════════════════
+           TEAM — CARDS FOTO + HOVER REVEAL
+        ══════════════════════════════════════ */
+        .team-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem; max-width: 1200px; margin: 0 auto;
+        }
+
+        .member-card {
+            position: relative; border-radius: 24px; overflow: hidden;
+            aspect-ratio: 3/4; cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.06);
+            transition: transform 0.5s cubic-bezier(0.4,0,0.2,1), box-shadow 0.5s, border-color 0.4s;
+            background: #111;
+        }
+        .member-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            border-color: rgba(255,77,0,0.5);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 40px rgba(255,77,0,0.12);
+        }
+
+        /* Foto de fondo */
+        .member-card .card-photo {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%; object-fit: cover; object-position: center top;
+            transition: transform 0.7s cubic-bezier(0.4,0,0.2,1), filter 0.5s;
+            filter: grayscale(20%);
+        }
+        .member-card:hover .card-photo {
+            transform: scale(1.08);
+            filter: grayscale(0%) brightness(0.45);
+        }
+
+        /* Gradiente base */
+        .member-card::before {
+            content: ''; position: absolute; inset: 0; z-index: 1;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.3) 40%, transparent 70%);
+            transition: opacity 0.4s;
+        }
+
+        /* Overlay hover */
+        .card-hover-overlay {
+            position: absolute; inset: 0; z-index: 2;
+            background: linear-gradient(to top, rgba(0,0,0,0.97) 0%, rgba(10,5,0,0.85) 60%, rgba(255,77,0,0.08) 100%);
+            opacity: 0; transition: opacity 0.45s cubic-bezier(0.4,0,0.2,1);
+            display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+            padding: 2.2rem 1.8rem;
+        }
+        .member-card:hover .card-hover-overlay { opacity: 1; }
+
+        /* Número decorativo */
+        .card-number {
+            position: absolute; top: 1rem; right: 1.2rem; z-index: 3;
+            font-family: 'Bebas Neue', cursive; font-size: 3.5rem;
+            color: rgba(255,255,255,0.08); line-height: 1;
+            transition: color 0.4s, transform 0.4s;
+        }
+        .member-card:hover .card-number { color: rgba(255,77,0,0.15); transform: scale(1.1); }
+
+        /* Nombre siempre visible abajo */
+        .card-name-bar {
+            position: absolute; bottom: 0; left: 0; right: 0; z-index: 3;
+            padding: 1.5rem 1.4rem 1.2rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
+            transition: opacity 0.35s;
+        }
+        .member-card:hover .card-name-bar { opacity: 0; }
+        .card-name-bar h4 {
+            font-family: 'Bebas Neue', cursive; font-size: 1.3rem; letter-spacing: 1px;
+            color: white; line-height: 1.1; margin-bottom: 0.2rem;
+        }
+        .card-name-bar span {
+            color: var(--primary); font-size: 0.68rem; font-weight: 700;
+            letter-spacing: 3px; text-transform: uppercase;
+        }
+
+        /* Contenido hover */
+        .card-hover-content {
+            width: 100%; text-align: center;
+            transform: translateY(16px); opacity: 0;
+            transition: transform 0.4s 0.05s cubic-bezier(0.4,0,0.2,1), opacity 0.4s 0.05s;
+        }
+        .member-card:hover .card-hover-content { transform: translateY(0); opacity: 1; }
+        .card-hover-role {
+            display: inline-block; background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white; font-size: 0.62rem; letter-spacing: 3px; text-transform: uppercase;
+            padding: 0.3rem 1rem; border-radius: 20px; margin-bottom: 1rem;
+        }
+        .card-hover-name {
+            font-family: 'Bebas Neue', cursive; font-size: 1.6rem; letter-spacing: 1px;
+            color: white; line-height: 1.1; margin-bottom: 0.8rem;
+        }
+        .card-hover-desc {
+            color: rgba(255,255,255,0.6); font-size: 0.82rem; line-height: 1.75;
+            margin-bottom: 1.4rem;
+        }
+        .card-hover-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center; }
+        .card-hover-tags span {
+            background: rgba(255,77,0,0.12); border: 1px solid rgba(255,77,0,0.3);
+            color: rgba(255,255,255,0.7); font-size: 0.68rem; padding: 0.25rem 0.7rem; border-radius: 12px;
+        }
+
+        /* Fire line top */
+        .card-fire-line {
+            position: absolute; top: 0; left: 0; right: 0; height: 3px; z-index: 4;
+            background: linear-gradient(90deg, transparent, var(--primary), var(--secondary), transparent);
+            transform: scaleX(0); transform-origin: left;
+            transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+        }
+        .member-card:hover .card-fire-line { transform: scaleX(1); }
+
+        /* ══════════════════════════════════════
+           INJU BANNER
+        ══════════════════════════════════════ */
+        .inju-banner {
+            max-width: 1100px; margin: 8rem auto 0;
+            position: relative; overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,77,0,0.07) 0%, rgba(255,140,0,0.04) 50%, rgba(255,255,255,0.02) 100%);
+            border: 1px solid rgba(255,77,0,0.2); border-radius: 32px;
+            padding: 4rem 3rem; text-align: center;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+        }
+        .inju-banner::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), var(--secondary), transparent);
+        }
+        .inju-glow-left { position: absolute; top: -60px; left: -60px; width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle, rgba(255,77,0,0.09), transparent 70%); pointer-events: none; }
+        .inju-glow-right { position: absolute; bottom: -60px; right: -60px; width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle, rgba(255,140,0,0.07), transparent 70%); pointer-events: none; }
+        .inju-banner-inner { position: relative; z-index: 1; }
+        .inju-eyebrow {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: rgba(255,77,0,0.1); border: 1px solid rgba(255,77,0,0.25);
+            color: var(--primary); font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase;
+            padding: 0.3rem 1rem; border-radius: 20px; margin-bottom: 1.5rem;
+        }
+        .inju-banner h3 { font-family: 'Bebas Neue', cursive; font-size: clamp(2rem, 4vw, 3rem); letter-spacing: 2px; color: white; margin-bottom: 1rem; line-height: 1.1; }
+        .inju-banner h3 span { color: var(--primary); }
+        .inju-banner p { color: var(--text-muted); font-size: 1rem; max-width: 580px; margin: 0 auto; line-height: 1.8; }
+        .inju-divider { width: 60px; height: 2px; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 2px; margin: 2rem auto; }
+        .inju-stats { display: flex; justify-content: center; flex-wrap: wrap; margin-top: 3rem; }
+        .inju-stat { flex: 1; min-width: 140px; padding: 1.5rem 2rem; border-right: 1px solid rgba(255,255,255,0.06); }
+        .inju-stat:last-child { border-right: none; }
+        .inju-stat .number {
+            font-family: 'Bebas Neue', cursive; font-size: 3rem; display: block; line-height: 1; margin-bottom: 0.4rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .inju-stat .label { color: var(--text-muted); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; }
+
+        /* ANIMATIONS */
+        .fade-in { opacity: 0; transform: translateY(32px); transition: opacity 0.9s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1); }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+        .fade-in-delay-1 { transition-delay: 0.1s; }
+        .fade-in-delay-2 { transition-delay: 0.2s; }
+        .fade-in-delay-3 { transition-delay: 0.3s; }
+        .fade-in-delay-4 { transition-delay: 0.4s; }
+
+        /* FOOTER */
+        footer { background: var(--dark); color: white; padding: 5rem 5% 2rem; border-top: 1px solid var(--glass-border); position: relative; }
+        footer::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 1px; background: linear-gradient(90deg, transparent, var(--primary), transparent); opacity: 0.5; }
+        .footer-content { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; max-width: 1400px; margin: 0 auto 4rem; }
+        .footer-brand { max-width: 300px; }
+        .footer-logo { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .footer-logo-text { display: flex; flex-direction: column; }
+        .footer-logo-text .main { font-family: 'Bebas Neue', cursive; font-size: 1.8rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 2px; }
+        .footer-logo-text .sub { font-size: 0.7rem; color: var(--text-muted); letter-spacing: 3px; text-transform: uppercase; }
+        .footer-brand p { color: var(--text-muted); line-height: 1.8; margin-bottom: 2rem; }
+        .social-links { display: flex; gap: 1rem; }
+        .social-links a { width: 45px; height: 45px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 12px; display: flex; align-items: center; justify-content: center; transition: all 0.3s; overflow: hidden; }
+        .social-links a:hover { background: var(--primary); border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 10px 20px var(--primary-glow); }
+        .social-links a img { width: 20px; height: 20px; filter: brightness(0) invert(1); transition: transform 0.3s; }
+        .social-links a:hover img { transform: scale(1.2); }
+        .footer-section h3 { font-family: 'Bebas Neue', cursive; font-size: 1.3rem; margin-bottom: 1.5rem; color: white; letter-spacing: 1px; }
+        .footer-section ul { list-style: none; }
+        .footer-section ul li { margin-bottom: 0.8rem; }
+        .footer-section a { color: var(--text-muted); text-decoration: none; transition: all 0.3s; display: inline-flex; align-items: center; gap: 0.5rem; }
+        .footer-section a:hover { color: var(--primary); transform: translateX(5px); }
+        .footer-contact p { display: flex; align-items: center; gap: 0.8rem; color: var(--text-muted); margin-bottom: 1rem; font-size: 0.95rem; }
+        .footer-contact img { width: 18px; opacity: 0.7; }
+        .footer-bottom { padding-top: 3rem; border-top: 1px solid var(--glass-border); max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; }
+        .footer-credits { display: flex; flex-direction: column; gap: 0.3rem; }
+        .footer-credits span { color: var(--text-muted); font-size: 0.85rem; line-height: 1.4; }
+        .footer-bottom-links { display: flex; gap: 2rem; align-items: center; }
+        .footer-bottom-links a { color: var(--text-muted); text-decoration: none; transition: color 0.3s; font-size: 0.9rem; }
+        .footer-bottom-links a:hover { color: var(--primary); }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .team-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer-content { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+        }
+        @media (max-width: 768px) {
+            nav { width: 95%; padding: 0.8rem 1.5rem; }
+            .nav-links {
+                position: fixed; top: 0; right: -100%; width: 80%; max-width: 400px; height: 100vh;
+                background: rgba(5,5,5,0.98); backdrop-filter: blur(20px);
+                flex-direction: column; padding: 6rem 2rem 2rem;
+                transition: right 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+                border-left: 1px solid var(--glass-border); gap: 1.5rem;
+            }
+            .nav-links.active { right: 0; }
+            .menu-toggle { display: flex; }
+            .team-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+            .mentor-inner { flex-direction: column; }
+            .mentor-left { width: 100%; }
+            .mentor-left img { min-height: 280px; }
+            .mentor-left::after { display: none; }
+            .mentor-right { padding: 2rem; }
+            .footer-content { grid-template-columns: 1fr; gap: 2rem; }
+            .footer-bottom { flex-direction: column; gap: 1.5rem; }
+            .inju-stats { flex-direction: column; align-items: center; }
+            .inju-stat { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); width: 100%; }
+            .inju-stat:last-child { border-bottom: none; }
+        }
+        @media (max-width: 480px) {
+            .team-grid { grid-template-columns: 1fr; max-width: 320px; margin-left: auto; margin-right: auto; }
+            .logo-sub { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="loader-logo-wrap">
+            <img class="loader-logo" src="img/logoperron.png" alt="Flama's">
+        </div>
+        <div class="loader-text">Flama's</div>
+    </div>
+
+    <nav id="navbar">
+        <a href="index.html" class="logo-container">
+            <img src="img/logoperron.png" alt="Logo" class="logo-icon"/>
+            <div class="logo-text">
+                <span class="logo-main">FLAMAS_SV</span>
+                <span class="logo-sub">La Mejor Hamburguesa</span>
+            </div>
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="Menú.html">Menu</a></li>
+            <li><a href="historia.html">Historia</a></li>
+            <li><a href="Galeria.html">Galería</a></li>
+            <li><a href="ubicacion.html">Ubicación</a></li>
+            <li><a href="Ordenar.html" class="order-btn">🛒 Ordenar</a></li>
+        </ul>
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-grid"></div>
+        <div class="hero-content">
+            <div class="hero-eyebrow">
+                <span class="hero-dot"></span>
+                3° BTV-DS · INJU 2026
+            </div>
+            <div class="hero-title">
+                <span class="line-white">CONOCE AL EQUIPO</span>
+                <span class="line-orange">DETRÁS DEL PROYECTO</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="page-content">
+
+        <!-- MENTOR -->
+        <div class="section-header fade-in">
+            <div class="section-tag">Guía del Proyecto</div>
+            <h2>Nuestro <span class="accent">Guía</span></h2>
+            <p>El mentor que hizo posible este proyecto que por muchos años ha formado programadores.</p>
+        </div>
+
+        <div class="mentor-wrapper fade-in">
+            <div class="mentor-bg"></div>
+            <div class="mentor-inner">
+                <div class="mentor-left">
+                    <img src="img/profe.jpeg" alt="Lic. Roberto Antonio García Machado">
+                    <div class="mentor-number-bg">01</div>
+                </div>
+                <div class="mentor-right">
+                    <span class="mentor-tag">Facilitador</span>
+                    <h3>Lic. Roberto Antonio García Machado</h3>
+                    <div class="subtitle">Lic. Informático</div>
+                    <blockquote class="mentor-quote">
+                        "El Profesor Roberto García Machado, con su vasta experiencia en desarrollo de software y su pasión por la enseñanza, ha sido el pilar fundamental que ha guiado a nuestro equipo a lo largo de este proyecto. Su enfoque práctico y su dedicación para compartir conocimientos han sido clave para convertir nuestra visión en una realidad tangible."
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+
+        <!-- TEAM -->
+        <div class="section-header fade-in">
+            <div class="section-tag">El Equipo</div>
+            <h2>Equipo <span class="accent">Desarrollador</span></h2>
+            <p>Cuatro estudiantes de 3° año en Desarrollo de Software, que convirtieron una idea en un sitio web funcional y real.</p>
+        </div>
+
+        <div class="team-grid">
+
+            <div class="member-card fade-in fade-in-delay-1">
+                <div class="card-fire-line"></div>
+                <span class="card-number">01</span>
+                <img src="img/ever.jpeg" alt="Ever Isaí García Machuca" class="card-photo">
+                <div class="card-name-bar">
+                    <h4>Ever Isaí García Machuca</h4>
+                    <span>Programador</span>
+                </div>
+                <div class="card-hover-overlay">
+                    <div class="card-hover-content">
+                        <span class="card-hover-role">Programador</span>
+                        <div class="card-hover-name">Ever Isaí García Machuca</div>
+                        <p class="card-hover-desc">Responsable de la página Inicio y de Ordenar, y editor encargado de la interfaz de todo el sitio web, asegurando que la experiencia fuera fluida e intuitiva para los clientes.</p>
+                        <div class="card-hover-tags">
+                            <span>Página Inicio</span>
+                            <span>Página Ordenar</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="member-card fade-in fade-in-delay-2">
+                <div class="card-fire-line"></div>
+                <span class="card-number">02</span>
+                <img src="img/xiomara.jpeg" alt="Xiomara Yoselin Romero Pineda" class="card-photo">
+                <div class="card-name-bar">
+                    <h4>Xiomara Yoselin Romero Pineda</h4>
+                    <span>Programadora</span>
+                </div>
+                <div class="card-hover-overlay">
+                    <div class="card-hover-content">
+                        <span class="card-hover-role">Programadora</span>
+                        <div class="card-hover-name">Xiomara Yoselin Romero Pineda</div>
+                        <p class="card-hover-desc">Responsable de la página de Ubicación, integrando el mapa interactivo y la información de acceso para que los clientes encuentren Flama's fácilmente.</p>
+                        <div class="card-hover-tags">
+                            <span>Ubicación</span>
+                            <span>Google Maps</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="member-card fade-in fade-in-delay-3">
+                <div class="card-fire-line"></div>
+                <span class="card-number">03</span>
+                <img src="img/brenda.jpg" alt="Brenda de Jesús Martínez Rivera" class="card-photo">
+                <div class="card-name-bar">
+                    <h4>Brenda de Jesús Martínez Rivera</h4>
+                    <span>Programadora</span>
+                </div>
+                <div class="card-hover-overlay">
+                    <div class="card-hover-content">
+                        <span class="card-hover-role">Programadora</span>
+                        <div class="card-hover-name">Brenda de Jesús Martínez Rivera</div>
+                        <p class="card-hover-desc">Encargada y coordinadora del proyecto del sitio, y desarrolladora de la Galería y apoyo en el desarrollo del Menú, cuidando la presentación visual y la experiencia del usuario.</p>
+                        <div class="card-hover-tags">
+                            <span>Galería</span>
+                            <span>Menú (apoyo)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="member-card fade-in fade-in-delay-4">
+                <div class="card-fire-line"></div>
+                <span class="card-number">04</span>
+                <img src="img/anderson.png" alt="Anderson Nehemías López Alvarado" class="card-photo">
+                <div class="card-name-bar">
+                    <h4>Anderson Nehemías López Alvarado</h4>
+                    <span>Programador</span>
+                </div>
+                <div class="card-hover-overlay">
+                    <div class="card-hover-content">
+                        <span class="card-hover-role">Programador</span>
+                        <div class="card-hover-name">Anderson Nehemías López Alvarado</div>
+                        <p class="card-hover-desc">Encargado del desarrollo del Menú y la página de Historia, dando forma al catálogo de productos y a la narrativa de la marca Flama's.</p>
+                        <div class="card-hover-tags">
+                            <span>Menú</span>
+                            <span>Historia</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- INJU BANNER -->
+        <div class="inju-banner fade-in">
+            <div class="inju-glow-left"></div>
+            <div class="inju-glow-right"></div>
+            <div class="inju-banner-inner">
+                <div class="inju-eyebrow">🎓 Institución Educativa</div>
+                <h3>Instituto Nacional de <span>Jucuapa</span></h3>
+                <div class="inju-divider"></div>
+                <p>Institución educativa fundada en 1966 en la ciudad de Jucuapa, donde la especialidad en Desarrollo de Software prepara a los jóvenes para los desafíos del mundo digital a través de proyectos reales como este.</p>
+                <div class="inju-stats">
+                    <div class="inju-stat"><span class="number">1966</span><span class="label">Fundación</span></div>
+                    <div class="inju-stat"><span class="number">5</span><span class="label">Especialidades</span></div>
+                    <div class="inju-stat"><span class="number">100%</span><span class="label">Público Oficial</span></div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <footer id="contacto">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <img src="img/logoperron.png" alt="Logo" class="logo-icon"/>
+                    <div class="footer-logo-text">
+                        <span class="main">FLAMAS_SV</span>
+                        <span class="sub">La Mejor Hamburguesa</span>
+                    </div>
+                </div>
+                <p>Las mejores hamburguesas artesanales de Jucuapa. Hechas con amor, pasión y los mejores ingredientes locales.</p>
+                <div class="social-links">
+                    <a href="https://wa.me/50370183333"><img src="img/Whatsap-.png" alt="WhatsApp"></a>
+                    <a href="https://www.facebook.com/profile.php?id=61577150235322"><img src="img/Facebook-.png" alt="Facebook"></a>
+                    <a href="https://www.instagram.com/flamas_sv?igsh=YXY5dWhsb2FkbDNy"><img src="img/Instagram-.png" alt="Instagram"></a>
+                    <a href="https://www.tiktok.com/@flamas_sv?_r=1&_t=ZS-96TTacUnWdA"><img src="img/Tiktok (1).png" alt="TikTok"></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Horario</h3>
+                <ul>
+                    <li><a href="#">Lun - Mar: 11:00 - 9:00</a></li>
+                    <li><a href="#">Mie - Jue: 11:00 - 9:00</a></li>
+                    <li><a href="#">Vie - Sáb: 11:00 - 9:00</a></li>
+                    <li><a href="#">Dom: 11:00 - 9:00</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact footer-section">
+                <h3>Contacto</h3>
+                <p><img src="img/Ubicacion-.png" alt=""> Esquina Opuesta De Plaza Gastronomica</p>
+                <p><img src="img/Whatsap-.png" alt=""> 7018-3333</p>
+                <p><img src="img/gmail-.png" alt=""> Flamas_sv@gmail.com</p>
+            </div>
+            <div class="footer-section">
+                <h3>Links</h3>
+                <ul>
+                    <li><a href="index.html">→ Inicio</a></li>
+                    <li><a href="Menú.html">→ Menú</a></li>
+                    <li><a href="historia.html">→ Historia</a></li>
+                    <li><a href="Galeria.html">→ Galería</a></li>
+                    <li><a href="ubicacion.html">→ Ubicación</a></li>
+                    <li><a href="EquipoDeTrabajo.html">→ Desarrolladores</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-credits">
+              <span>© Todos los derechos reservados Flamas_SV - 3° BTV-DS</span>
+            </div>
+            <div class="footer-bottom-links">
+                <a href="#">Privacidad</a>
+                <a href="#">Términos</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => document.getElementById('loader').classList.add('hidden'), 1000);
+        });
+        function toggleMenu() {
+            document.getElementById('navLinks').classList.toggle('active');
+            document.querySelector('.menu-toggle').classList.toggle('active');
+        }
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navLinks').classList.remove('active');
+                document.querySelector('.menu-toggle').classList.remove('active');
+            });
+        });
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+        });
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
+
+</body>
+</html>

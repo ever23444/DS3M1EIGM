@@ -3,17 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flama's Jucuapa </title>
+    <title>Flama's Jucuapa</title>
     <link rel="icon" href="img/logoperron.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.31.0/dist/tabler-icons.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
             --primary: #FF4D00;
             --primary-glow: rgba(255, 77, 0, 0.4);
@@ -28,787 +22,321 @@
             --glass: rgba(255, 255, 255, 0.03);
             --glass-border: rgba(255, 255, 255, 0.1);
         }
-
+        html { scroll-behavior: smooth; }
         body {
             font-family: 'Space Grotesk', sans-serif;
             background-color: var(--darker);
             color: var(--light);
             overflow-x: hidden;
         }
-
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--dark);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 4px;
-        }
-
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--dark); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
         body::before {
             content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 9999;
+            pointer-events: none; z-index: 9999;
         }
 
         /* LOADER */
-        .loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+        #loader {
+            position: fixed; inset: 0;
             background: var(--darker);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            transition: opacity 0.5s, visibility 0.5s;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            z-index: 99999;
+            transition: opacity 0.7s ease, visibility 0.7s ease;
         }
-
-        .loader.hidden {
-            opacity: 0;
-            visibility: hidden;
+        #loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .loader-logo-wrap {
+            position: relative;
+            width: 110px; height: 110px;
+            display: flex; align-items: center; justify-content: center;
         }
-
-        .loader-burger {
-            width: 60px;
-            height: 60px;
-            animation: bounce 1s infinite;
+        .loader-logo-wrap::before {
+            content: '';
+            position: absolute; inset: 0;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            border-top-color: var(--primary);
+            border-right-color: var(--secondary);
+            animation: spin 1.2s linear infinite;
         }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+        .loader-logo-wrap::after {
+            content: '';
+            position: absolute; inset: 6px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,77,0,0.15);
         }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loader-logo {
+            width: 72px; height: 72px;
+            object-fit: contain; border-radius: 50%;
+            animation: pulse-scale 1.4s ease-in-out infinite;
+            filter: drop-shadow(0 0 16px rgba(255,77,0,0.4));
+        }
+        @keyframes pulse-scale {
+            0%,100% { transform: scale(1); }
+            50% { transform: scale(1.08); filter: drop-shadow(0 0 24px rgba(255,77,0,0.6)); }
+        }
+        .loader-text {
+            margin-top: 1.5rem;
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.4rem; letter-spacing: 6px;
+            color: var(--text-muted);
+            animation: blink 1.4s ease-in-out infinite;
+        }
+        @keyframes blink { 0%,100%{opacity:0.4} 50%{opacity:1} }
 
         /* NAVBAR */
         nav {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 1400px;
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 1400px;
             background: rgba(10, 10, 10, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 50px;
-            z-index: 1000;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.4s;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 50px;
+            z-index: 1000; padding: 1rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+            transition: all 0.4s; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
-
-        nav.scrolled {
-            width: 95%;
-            background: rgba(10, 10, 10, 0.95);
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            text-decoration: none;
-        }
-
-        .logo-icon {
-            width: 45px;
-            height: 45px;
-            filter: drop-shadow(0 0 10px var(--primary-glow));
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-5px); }
-        }
-
-        .logo-text {
-            display: flex;
-            flex-direction: column;
-            line-height: 1;
-        }
-
+        nav.scrolled { width: 95%; background: rgba(10, 10, 10, 0.95); }
+        .logo-container { display: flex; align-items: center; gap: 0.8rem; text-decoration: none; }
+        .logo-icon { width: 45px; height: 45px; filter: drop-shadow(0 0 10px var(--primary-glow)); animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-5px); } }
+        .logo-text { display: flex; flex-direction: column; line-height: 1; }
         .logo-main {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 1.8rem;
+            font-family: 'Bebas Neue', cursive; font-size: 1.8rem;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: 2px;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 2px;
         }
-
-        .logo-sub {
-            font-size: 0.6rem;
-            color: var(--text-muted);
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            font-weight: 500;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 0.5rem;
-            align-items: center;
-        }
-
+        .logo-sub { font-size: 0.6rem; color: var(--text-muted); letter-spacing: 4px; text-transform: uppercase; font-weight: 500; }
+        .nav-links { display: flex; list-style: none; gap: 0.5rem; align-items: center; }
         .nav-links a {
-            color: rgba(255,255,255,0.7);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.9rem;
-            padding: 0.6rem 1.2rem;
-            border-radius: 25px;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
+            color: rgba(255,255,255,0.7); text-decoration: none; font-weight: 500; font-size: 0.9rem;
+            padding: 0.6rem 1.2rem; border-radius: 25px; transition: all 0.3s; position: relative; overflow: hidden;
         }
-
         .nav-links a::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: -1;
-            border-radius: 25px;
+            opacity: 0; transition: opacity 0.3s; z-index: -1; border-radius: 25px;
         }
-
-        .nav-links a:hover {
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .nav-links a:hover::before {
-            opacity: 1;
-        }
-
-        .nav-links a.active {
-            color: white;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-        }
-
+        .nav-links a:hover { color: white; transform: translateY(-2px); }
+        .nav-links a:hover::before { opacity: 1; }
+        .nav-links a.active { color: white; background: linear-gradient(135deg, var(--primary), var(--secondary)); }
         .order-btn {
-            background: transparent;
-            color: var(--primary);
-            padding: 0.6rem 1.5rem;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: 700;
-            border: 2px solid var(--primary);
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            position: relative;
-            overflow: hidden;
+            background: transparent; color: var(--primary); padding: 0.6rem 1.5rem;
+            border-radius: 25px; text-decoration: none; font-weight: 700;
+            border: 2px solid var(--primary); transition: all 0.3s;
+            display: flex; align-items: center; gap: 0.5rem; position: relative; overflow: hidden;
         }
-
         .order-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: var(--primary);
-            transition: left 0.3s;
-            z-index: -1;
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: var(--primary); transition: left 0.3s; z-index: -1;
         }
-
-        .order-btn:hover {
-            color: white;
-            box-shadow: 0 0 30px var(--primary-glow);
-        }
-
-        .order-btn:hover::before {
-            left: 0;
-        }
-
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            gap: 5px;
-            z-index: 1001;
-        }
-
-        .menu-toggle span {
-            width: 25px;
-            height: 2px;
-            background: white;
-            transition: 0.3s;
-            border-radius: 2px;
-        }
-
-        .menu-toggle.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-
-        .menu-toggle.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .menu-toggle.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -6px);
-        }
+        .order-btn:hover { color: white; box-shadow: 0 0 30px var(--primary-glow); }
+        .order-btn:hover::before { left: 0; }
+        .menu-toggle { display: none; flex-direction: column; cursor: pointer; gap: 5px; z-index: 1001; }
+        .menu-toggle span { width: 25px; height: 2px; background: white; transition: 0.3s; border-radius: 2px; }
+        .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .menu-toggle.active span:nth-child(2) { opacity: 0; }
+        .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
 
         /* HERO */
         .hero-historia {
             min-height: 100vh;
-            background: 
+            background:
                 radial-gradient(ellipse at 20% 50%, rgba(255, 77, 0, 0.15) 0%, transparent 50%),
                 radial-gradient(ellipse at 80% 80%, rgba(255, 140, 0, 0.1) 0%, transparent 50%),
                 linear-gradient(to bottom, rgba(5,5,5,0.3), rgba(5,5,5,0.9)),
                 url('https://drive.google.com/thumbnail?id=1a4WQvnHV9xE8NTnc4zL9IrZNNatlPGYH&sz=w1920');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
-            position: relative;
-            overflow: hidden;
-            padding-top: 100px;
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; color: white; position: relative; overflow: hidden; padding-top: 100px;
         }
-
         .hero-historia .hero-grid {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image:
                 linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-            pointer-events: none;
-            z-index: 1;
+            background-size: 50px 50px; pointer-events: none; z-index: 1;
         }
-
-        .hero-historia .hero-content {
-            position: relative;
-            z-index: 2;
-        }
-
+        .hero-historia .hero-content { position: relative; z-index: 2; }
         .hero-historia h1 {
-            font-family: 'Bebas Neue', cursive;
-            font-size: clamp(3rem, 8vw, 6rem);
-            color: white;
-            letter-spacing: 4px;
-            margin-bottom: 16px;
-            text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+            font-family: 'Bebas Neue', cursive; font-size: clamp(3rem, 8vw, 6rem);
+            letter-spacing: 4px; text-shadow: 0 2px 20px rgba(0,0,0,0.5); line-height: 1;
         }
-
-        .hero-historia p {
-            color: rgba(255,255,255,0.8);
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255, 77, 0, 0.1);
-            border: 1px solid rgba(255, 77, 0, 0.3);
-            padding: 6px 18px;
-            border-radius: 50px;
-            font-size: 0.75rem;
-            color: var(--primary);
-            margin-bottom: 20px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
+        .hero-historia h1.white { color: white; margin-bottom: 0; }
+        .hero-historia h1.orange { color: var(--primary); margin-top: 0; margin-bottom: 16px; }
+        .hero-historia p { color: rgba(255,255,255,0.8); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
 
         /* CONTENIDO PRINCIPAL */
-        main {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px 80px;
-        }
+        main { max-width: 1200px; margin: 0 auto; padding: 40px 20px 80px; }
 
         .historia-section {
-            background: var(--gray);
-            border-radius: 30px;
-            padding: 40px;
-            margin-bottom: 40px;
-            border: 1px solid var(--glass-border);
-            position: relative;
-            overflow: hidden;
+            background: var(--gray); border-radius: 30px; padding: 40px;
+            margin-bottom: 40px; border: 1px solid var(--glass-border);
+            position: relative; overflow: hidden;
         }
-
         .historia-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
+            content: ''; position: absolute; top: 0; left: 0;
+            width: 100%; height: 4px;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
         }
-
-        .historia-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 50px;
-            align-items: center;
-        }
-
-        .historia-text h2 {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 20px;
-            letter-spacing: 2px;
-        }
-
-        .historia-text p {
-            color: rgba(255,255,255,0.7);
-            line-height: 1.8;
-            margin-bottom: 20px;
-            font-size: 1rem;
-        }
-
+        .historia-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+        .historia-text h2 { font-family: 'Bebas Neue', cursive; font-size: 2.5rem; color: var(--primary); margin-bottom: 20px; letter-spacing: 2px; }
+        .historia-text p { color: rgba(255,255,255,0.7); line-height: 1.8; margin-bottom: 20px; font-size: 1rem; }
         .historia-text .fecha-destacada {
-            color: var(--primary);
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid var(--glass-border);
+            color: var(--primary); font-weight: 700; font-size: 1.1rem;
+            margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--glass-border);
         }
-
-        .historia-image {
-            position: relative;
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid var(--glass-border);
-        }
-
-        .historia-image img {
-            width: 100%;
-            height: auto;
-            display: block;
-            transition: transform 0.5s;
-        }
-
-        .historia-image:hover img {
-            transform: scale(1.05);
-        }
-
+        .historia-image { position: relative; border-radius: 20px; overflow: hidden; border: 1px solid var(--glass-border); }
+        .historia-image img { width: 100%; height: auto; display: block; transition: transform 0.5s; }
+        .historia-image:hover img { transform: scale(1.05); }
         .historia-image::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(255,77,0,0.2), transparent);
-            pointer-events: none;
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(255,77,0,0.2), transparent); pointer-events: none;
         }
 
-        /* ==========================================
-           MISIÓN, VISIÓN, VALORES — ICONOS MINIMALISTAS
-           ========================================== */
-        .mvv-section {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-
+        /* MVV */
+        .mvv-section { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-bottom: 40px; }
         .mvv-card {
-            background: var(--gray);
-            border-radius: 24px;
-            padding: 30px;
-            border: 1px solid var(--glass-border);
-            transition: all 0.3s;
-            text-align: center;
+            background: var(--gray); border-radius: 24px; padding: 30px;
+            border: 1px solid var(--glass-border); transition: all 0.3s; text-align: center;
         }
-
-        .mvv-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(255, 77, 0, 0.3);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
-
+        .mvv-card:hover { transform: translateY(-8px); border-color: rgba(255, 77, 0, 0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
         .mvv-icon {
-            width: 64px;
-            height: 64px;
-            border: 1px solid rgba(255, 77, 0, 0.25);
+            width: 64px; height: 64px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             margin: 0 auto 20px;
-            color: var(--primary);
-            font-size: 28px;
-            background: rgba(255, 77, 0, 0.05);
+            box-shadow: 0 10px 30px rgba(255,77,0,0.3);
             transition: all 0.3s;
+            overflow: hidden;
         }
-
-        .mvv-card:hover .mvv-icon {
-            background: rgba(255, 77, 0, 0.1);
-            border-color: rgba(255, 77, 0, 0.5);
+        .mvv-icon img {
+            width: 44px; height: 44px;
+            object-fit: contain;
+            filter: brightness(0) invert(1) drop-shadow(0 2px 6px rgba(0,0,0,0.4));
         }
-
-        .mvv-icon i {
-            line-height: 1;
-        }
-
-        .mvv-card h3 {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 1.8rem;
-            color: var(--primary);
-            margin-bottom: 16px;
-            letter-spacing: 1px;
-        }
-
-        .mvv-card p {
-            color: rgba(255,255,255,0.7);
-            line-height: 1.7;
-            font-size: 0.9rem;
-        }
+        .mvv-card:hover .mvv-icon { transform: scale(1.08); box-shadow: 0 14px 35px rgba(255,77,0,0.45); }
+        .mvv-card h3 { font-family: 'Bebas Neue', cursive; font-size: 1.8rem; color: var(--primary); margin-bottom: 16px; letter-spacing: 1px; }
+        .mvv-card p { color: rgba(255,255,255,0.7); line-height: 1.7; font-size: 0.9rem; }
 
         /* TIMELINE */
-        .timeline-section {
-            background: var(--gray);
-            border-radius: 30px;
-            padding: 40px;
-            border: 1px solid var(--glass-border);
-        }
-
-        .timeline-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .timeline-header h2 {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 2.2rem;
-            color: var(--primary);
-            letter-spacing: 2px;
-        }
-
-        .timeline {
-            display: flex;
-            justify-content: space-between;
-            position: relative;
-            flex-wrap: wrap;
-        }
-
+        .timeline-section { background: var(--gray); border-radius: 30px; padding: 40px; border: 1px solid var(--glass-border); }
+        .timeline-header { text-align: center; margin-bottom: 40px; }
+        .timeline-header h2 { font-family: 'Bebas Neue', cursive; font-size: 2.2rem; color: var(--primary); letter-spacing: 2px; }
+        .timeline { display: flex; justify-content: space-between; position: relative; flex-wrap: wrap; }
         .timeline::before {
-            content: '';
-            position: absolute;
-            top: 40px;
-            left: 10%;
-            right: 10%;
-            height: 2px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            opacity: 0.3;
+            content: ''; position: absolute; top: 40px; left: 10%; right: 10%;
+            height: 2px; background: linear-gradient(90deg, var(--primary), var(--secondary)); opacity: 0.3;
         }
-
-        .timeline-item {
-            text-align: center;
-            flex: 1;
-            min-width: 100px;
-            position: relative;
-            z-index: 1;
-        }
-
+        .timeline-item { text-align: center; flex: 1; min-width: 100px; position: relative; z-index: 1; }
         .timeline-year {
-            width: 60px;
-            height: 60px;
-            background: var(--dark);
-            border: 2px solid var(--primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px;
-            font-family: 'Bebas Neue', cursive;
-            font-size: 1.3rem;
-            color: var(--primary);
-            font-weight: 700;
+            width: 60px; height: 60px; background: var(--dark);
+            border: 2px solid var(--primary); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 15px; font-family: 'Bebas Neue', cursive;
+            font-size: 1.3rem; color: var(--primary); font-weight: 700;
         }
-
-        .timeline-text {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
+        .timeline-text { font-size: 0.8rem; color: var(--text-muted); }
 
         /* FOOTER */
         footer {
-            background: var(--dark);
-            color: white;
+            background: var(--dark); color: white;
             padding: 5rem 5% 2rem;
-            border-top: 1px solid var(--glass-border);
-            position: relative;
+            border-top: 1px solid var(--glass-border); position: relative;
         }
-
         footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
-            opacity: 0.5;
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent); opacity: 0.5;
         }
-
         .footer-content {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 4rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            margin-bottom: 4rem;
+            display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem; max-width: 1400px; margin: 0 auto 4rem;
         }
-
-        .footer-brand {
-            max-width: 300px;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .footer-logo-text {
-            display: flex;
-            flex-direction: column;
-        }
-
+        .footer-brand { max-width: 300px; }
+        .footer-logo { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .footer-logo-text { display: flex; flex-direction: column; }
         .footer-logo-text .main {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 1.8rem;
+            font-family: 'Bebas Neue', cursive; font-size: 1.8rem;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: 2px;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 2px;
         }
-
-        .footer-logo-text .sub {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
-
-        .footer-brand p {
-            color: var(--text-muted);
-            line-height: 1.8;
-            margin-bottom: 2rem;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1rem;
-        }
-
+        .footer-logo-text .sub { font-size: 0.7rem; color: var(--text-muted); letter-spacing: 3px; text-transform: uppercase; }
+        .footer-brand p { color: var(--text-muted); line-height: 1.8; margin-bottom: 2rem; }
+        .social-links { display: flex; gap: 1rem; }
         .social-links a {
-            width: 45px;
-            height: 45px;
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            overflow: hidden;
+            width: 45px; height: 45px; background: var(--glass);
+            border: 1px solid var(--glass-border); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; transition: all 0.3s; overflow: hidden;
         }
-
-        .social-links a:hover {
-            background: var(--primary);
-            border-color: var(--primary);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px var(--primary-glow);
-        }
-
-        .social-links a img {
-            width: 20px;
-            height: 20px;
-            filter: brightness(0) invert(1);
-            transition: transform 0.3s;
-        }
-
-        .social-links a:hover img {
-            transform: scale(1.2);
-        }
-
-        .footer-section h3 {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-            color: white;
-            letter-spacing: 1px;
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section ul li {
-            margin-bottom: 0.8rem;
-        }
-
-        .footer-section a {
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .footer-section a:hover {
-            color: var(--primary);
-            transform: translateX(5px);
-            text-shadow: 0 0 10px var(--primary-glow);
-        }
-
-        .footer-contact p {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-            font-size: 0.95rem;
-        }
-
-        .footer-contact img {
-            width: 18px;
-            opacity: 0.7;
-        }
-
+        .social-links a:hover { background: var(--primary); border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 10px 20px var(--primary-glow); }
+        .social-links a img { width: 20px; height: 20px; filter: brightness(0) invert(1); transition: transform 0.3s; }
+        .social-links a:hover img { transform: scale(1.2); }
+        .footer-section h3 { font-family: 'Bebas Neue', cursive; font-size: 1.3rem; margin-bottom: 1.5rem; color: white; letter-spacing: 1px; }
+        .footer-section ul { list-style: none; }
+        .footer-section ul li { margin-bottom: 0.8rem; }
+        .footer-section a { color: var(--text-muted); text-decoration: none; transition: all 0.3s; display: inline-flex; align-items: center; gap: 0.5rem; }
+        .footer-section a:hover { color: var(--primary); transform: translateX(5px); }
+        .footer-contact p { display: flex; align-items: center; gap: 0.8rem; color: var(--text-muted); margin-bottom: 1rem; font-size: 0.95rem; }
+        .footer-contact img { width: 18px; opacity: 0.7; }
         .footer-bottom {
-            text-align: center;
-            padding-top: 3rem;
-            border-top: 1px solid var(--glass-border);
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding-top: 3rem; border-top: 1px solid var(--glass-border);
+            max-width: 1400px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: flex-start;
         }
+        .footer-credits { display: flex; flex-direction: column; gap: 0.3rem; }
+        .footer-credits span { color: var(--text-muted); font-size: 0.85rem; line-height: 1.4; }
+        .footer-bottom-links { display: flex; gap: 2rem; align-items: center; }
+        .footer-bottom-links a { color: var(--text-muted); text-decoration: none; transition: color 0.3s; font-size: 0.9rem; }
+        .footer-bottom-links a:hover { color: var(--primary); }
 
         /* ANIMATIONS */
-        .fade-up {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .fade-up.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .fade-up { opacity: 0; transform: translateY(30px); transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
 
         /* RESPONSIVE */
         @media (max-width: 968px) {
-            .mvv-section {
-                grid-template-columns: 1fr;
-            }
-            .footer-content {
-                grid-template-columns: 1fr 1fr;
-            }
-            .historia-grid {
-                grid-template-columns: 1fr;
-            }
+            .mvv-section { grid-template-columns: 1fr; }
+            .footer-content { grid-template-columns: 1fr 1fr; }
+            .historia-grid { grid-template-columns: 1fr; }
         }
-
         @media (max-width: 768px) {
-            nav {
-                width: 95%;
-                padding: 0.8rem 1.5rem;
-            }
+            nav { width: 95%; padding: 0.8rem 1.5rem; }
             .nav-links {
-                position: fixed;
-                top: 0;
-                right: -100%;
-                width: 80%;
-                max-width: 400px;
-                height: 100vh;
-                background: rgba(5, 5, 5, 0.98);
-                backdrop-filter: blur(20px);
-                flex-direction: column;
-                padding: 6rem 2rem 2rem;
+                position: fixed; top: 0; right: -100%; width: 80%; max-width: 400px; height: 100vh;
+                background: rgba(5, 5, 5, 0.98); backdrop-filter: blur(20px);
+                flex-direction: column; padding: 6rem 2rem 2rem;
                 transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                border-left: 1px solid var(--glass-border);
-                gap: 1.5rem;
+                border-left: 1px solid var(--glass-border); gap: 1.5rem;
             }
-            .nav-links.active {
-                right: 0;
-            }
-            .menu-toggle {
-                display: flex;
-            }
-            .footer-content {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-            .footer-bottom {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-            .logo-main {
-                font-size: 1.5rem;
-            }
-            .logo-icon {
-                width: 40px;
-                height: 40px;
-            }
+            .nav-links.active { right: 0; }
+            .menu-toggle { display: flex; }
+            .footer-content { grid-template-columns: 1fr; gap: 2rem; }
+            .footer-bottom { flex-direction: column; gap: 1rem; }
+            .logo-main { font-size: 1.5rem; }
+            .logo-icon { width: 40px; height: 40px; }
+        }
+        @media (max-width: 480px) {
+            .logo-sub { display: none; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Loader -->
-    <div class="loader" id="loader">
-        <svg class="loader-burger" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="50" cy="50" r="45" fill="none" stroke="#FF4D00" stroke-width="2"/>
-            <path d="M 20 40 Q 50 20 80 40" fill="#F7931E" stroke="#FF4D00" stroke-width="2"/>
-            <rect x="22" y="48" width="56" height="10" rx="2" fill="#5D4037"/>
-            <path d="M 20 58 L 25 65 L 30 58 L 35 68 L 40 58 L 45 65 L 50 58 L 55 68 L 60 58 L 65 65 L 70 58 L 75 68 L 80 58" fill="#FFC107" stroke="#FF8F00" stroke-width="1"/>
-            <path d="M 20 62 Q 50 70 80 62" fill="#4CAF50"/>
-            <rect x="25" y="66" width="50" height="6" rx="2" fill="#D32F2F"/>
-            <path d="M 20 75 Q 50 85 80 75" fill="#F7931E" stroke="#FF4D00" stroke-width="2"/>
-        </svg>
+    <div id="loader">
+        <div class="loader-logo-wrap">
+            <img class="loader-logo" src="img/logoperron.png" alt="Flama's">
+        </div>
+        <div class="loader-text">Flama's</div>
     </div>
 
-    <!-- Navigation -->
     <nav id="navbar">
         <a href="index.html" class="logo-container">
-            <img src="/DS3M1EIGM/img/logoperron.png" alt="Logo" class="logo-icon"/>
+            <img src="img/logoperron.png" alt="Logo" class="logo-icon"/>
             <div class="logo-text">
                 <span class="logo-main">FLAMAS_SV</span>
                 <span class="logo-sub">La Mejor Hamburguesa</span>
@@ -816,30 +344,26 @@
         </a>
         <ul class="nav-links" id="navLinks">
             <li><a href="index.html">Inicio</a></li>
-            <li><a href="Menú.html">Menu</a></li>
+            <li><a href="Menú.html">Menú</a></li>
             <li><a href="historia.html" class="active">Historia</a></li>
             <li><a href="Galeria.html">Galería</a></li>
             <li><a href="ubicacion.html">Ubicación</a></li>
             <li><a href="Ordenar.html" class="order-btn">🛒 Ordenar</a></li>
         </ul>
         <div class="menu-toggle" onclick="toggleMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
+            <span></span><span></span><span></span>
         </div>
     </nav>
 
-    <!-- Hero -->
     <section class="hero-historia">
         <div class="hero-grid"></div>
         <div class="hero-content">
-            <h1>NUESTRA HISTORIA</h1>
-            <p>El origen de la llama que encendió la pasión por las mejores hamburguesas de Jucuapa</p>
+            <h1 class="white">Conoce</h1>
+            <h1 class="orange">Nuestra Historia</h1>
         </div>
     </section>
 
     <main>
-        <!-- Historia Principal -->
         <div class="historia-section fade-up">
             <div class="historia-grid">
                 <div class="historia-text">
@@ -847,9 +371,7 @@
                     <p>Corría el año 2024 en la tranquila ciudad de Jucuapa, cuando un joven emprendedor llamado Luis Alberto Mendez Zelaya decidió seguir su sueño más grande: crear la mejor hamburguesa que su ciudad natal hubiera probado jamás.</p>
                     <p>Después de años trabajando, Luis descubrió que el verdadero secreto no estaba solo en los ingredientes, sino en la <strong>pasión</strong> con la que se preparaba cada hamburguesa. Así nació FLAMA'S, un nombre que representa el fuego interior que impulsa a su equipo a dar lo mejor cada día.</p>
                     <p>Lo que comenzó como un sueño en el corazón de Jucuapa, rápidamente se convirtió en el punto de encuentro favorito de los amantes de las buenas hamburguesas. El boca a boca y la calidad inigualable hicieron que FLAMA'S creciera, pero nunca perdió su esencia: <strong>sabor auténtico, ingredientes frescos y atención personalizada</strong>.</p>
-                    <div class="fecha-destacada">
-                        📍 Jucuapa, El Salvador | Fundado: 2024
-                    </div>
+                    <div class="fecha-destacada">📍 Jucuapa, El Salvador | Fundado: 2024</div>
                 </div>
                 <div class="historia-image">
                     <img src="img/exterior letrero.jpeg" alt="Nuestro primer local">
@@ -857,32 +379,30 @@
             </div>
         </div>
 
-        <!-- Misión, Visión, Valores -->
         <div class="mvv-section">
             <div class="mvv-card fade-up">
-                <div class="mvv-icon" aria-hidden="true">
-                    <i class="ti ti-target"></i>
+                <div class="mvv-icon">
+                    <img src="img/logoperron.png" alt="Flama's">
                 </div>
                 <h3>Misión</h3>
                 <p>Brindar una experiencia única a través de nuestras alitas, hamburguesas y bebidas, ofreciendo sabor, calidad y un ambiente auténtico donde cada cliente disfrute momentos especiales con atención cercana y productos preparados con pasión.</p>
             </div>
             <div class="mvv-card fade-up">
-                <div class="mvv-icon" aria-hidden="true">
-                    <i class="ti ti-eye"></i>
+                <div class="mvv-icon">
+                    <img src="img/logoperron.png" alt="Flama's">
                 </div>
                 <h3>Visión</h3>
                 <p>Ser una de las marcas de comida rápida más reconocidas y queridas en El Salvador, destacándonos por nuestra creatividad, sabor inigualable y conexión con nuestros clientes, llevando la esencia de Flama's a más personas cada día.</p>
             </div>
             <div class="mvv-card fade-up">
-                <div class="mvv-icon" aria-hidden="true">
-                    <i class="ti ti-diamond"></i>
+                <div class="mvv-icon">
+                    <img src="img/logoperron.png" alt="Flama's">
                 </div>
                 <h3>Valores</h3>
                 <p>Calidad, pasión, creatividad, compromiso, responsabilidad, trabajo en equipo y autenticidad. Estos son los pilares que guían cada decisión y cada hamburguesa que sale de nuestra cocina.</p>
             </div>
         </div>
 
-        <!-- Línea de Tiempo -->
         <div class="timeline-section fade-up">
             <div class="timeline-header">
                 <h2>Línea de Tiempo</h2>
@@ -893,12 +413,10 @@
                     <div class="timeline-year">2024</div>
                     <div class="timeline-text">Fundación y apertura de FLAMA'S en Jucuapa</div>
                 </div>
-                
                 <div class="timeline-item">
                     <div class="timeline-year">2025</div>
                     <div class="timeline-text">Lanzamiento de nuevos productos</div>
                 </div>
-
                 <div class="timeline-item">
                     <div class="timeline-year">2026</div>
                     <div class="timeline-text">Incremento de popularidad en la localidad</div>
@@ -907,88 +425,85 @@
         </div>
     </main>
 
-    <!-- Footer -->
     <footer id="contacto">
         <div class="footer-content">
             <div class="footer-brand">
                 <div class="footer-logo">
-                    <img src="/DS3M1EIGM/img/logoperron.png" alt="Logo" class="logo-icon"/>
+                    <img src="img/logoperron.png" alt="Logo" class="logo-icon"/>
                     <div class="footer-logo-text">
                         <span class="main">FLAMAS_SV</span>
+                        <span class="sub">La Mejor Hamburguesa</span>
                     </div>
                 </div>
                 <p>Las mejores hamburguesas artesanales de Jucuapa. Hechas con amor, pasión y los mejores ingredientes locales.</p>
                 <div class="social-links">
-                    <a href="#"><img src="img/Whatsap-.png" alt="WhatsApp"></a>
-                    <a href="#"><img src="img/Facebook-.png" alt="Facebook"></a>
-                    <a href="#"><img src="img/Instagram-.png" alt="Instagram"></a>
-                    <a href="#"><img src="img/Twitter.jpg" alt="Twitter"></a>
+                <a href="https://wa.me/50370183333" target="_blank"><img src="img/Whatsap-.png" alt="WhatsApp"></a>
+                <a href="https://www.facebook.com/profile.php?id=61577150235322" target="_blank"><img src="img/Facebook-.png" alt="Facebook"></a>
+                <a href="https://www.instagram.com/flamas_sv?igsh=YXY5dWhsb2FkbDNy" target="_blank"><img src="img/Instagram-.png" alt="Instagram"></a>
+                <a href="https://www.tiktok.com/@flamas_sv?_r=1&_t=ZS-96TTacUnWdA" target="_blank"><img src="img/Tiktok (1).png" alt="TikTok"></a>
                 </div>
             </div>
             <div class="footer-section">
                 <h3>Horario</h3>
-                <ul>
-                    <li><a href="#">Lun - Mar: 12:00 - 5:00</a></li>
-                    <li><a href="#">Jue - Sáb: 12:00 - 5:00</a></li>
-                    <li><a href="#">Domingo: 12:00 - 5:30</a></li>
-                </ul>
+            <ul>
+                <li>Lun - Mar: 11:00 - 9:00</a></li>
+                <li>Mie - Jue: 11:00 - 9:00</a></li>
+                <li>Vie - Sáb: 11:00 - 9:00</a></li>
+                <li>Dom: 11:00 - 9:00</a></li>
+            </ul>
             </div>
             <div class="footer-contact footer-section">
-                <h3>Contacto</h3>
-                <p><img src="img/Ubicacion-.png" alt=""> Plaza, Jucuapa</p>
-                <p><img src="img/Whatsap-.png" alt=""> 7067-1505</p>
-                <p><img src="img/gmail-.png" alt=""> hola@flamassv.com</p>
+            <h3>Contacto</h3>
+            <p><img src="img/Ubicacion-.png" alt="Ubicación"> <a href="https://www.google.com/maps/place/Flama's+Burguers/@13.512865,-88.383573,17z/data=!3m1!4b1!4m6!3m5!1s0x8f7b330074995223:0x3f9f31e3298770ed!8m2!3d13.512865!4d-88.383573!16s%2Fg%2F11wc0t7vjf?hl=es-419&entry=ttu&g_ep=EgoyMDI2MDUyNy4wIKXMDSoASAFQAw%3D%3D" target="_blank">Esquina Opuesta De Plaza Gastronomica</a></p>
+            <p><img src="img/Whatsap-.png" alt="WhatsApp"> <a href="https://wa.me/50370183333" target="_blank"> 7018-3333</a></p>
+            <p><img src="img/gmail-.png" alt="Gmail"><a href="https://mail.google.com/mail/?view=cm&fs=1&to=Flamas_sv@gmail.com" target="_blank">Flamas_sv@gmail.com</a></p>
             </div>
             <div class="footer-section">
                 <h3>Links</h3>
                 <ul>
+                    <li><a href="index.html">→ Inicio</a></li>
                     <li><a href="Menú.html">→ Menú</a></li>
-                    <li><a href="historia.html">→ Historia</a></li>
                     <li><a href="Galeria.html">→ Galería</a></li>
                     <li><a href="ubicacion.html">→ Ubicación</a></li>
+                    <li><a href="EquipoDeTrabajo.html">→ Desarrolladores</a></li>
                 </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-credits">
+                <span>© Todos los derechos reservados Flamas_SV - 3° BTV-DS</span>
+            </div>
+            <div class="footer-bottom-links">
+                <a href="#">Privacidad</a>
+                <a href="#">Términos</a>
             </div>
         </div>
     </footer>
 
     <script>
         window.addEventListener('load', () => {
-            const loader = document.getElementById('loader');
-            if (loader) {
-                setTimeout(() => {
-                    loader.classList.add('hidden');
-                }, 1000);
-            }
+            setTimeout(() => document.getElementById('loader').classList.add('hidden'), 1000);
         });
 
         function toggleMenu() {
-            const navLinks = document.getElementById('navLinks');
-            const menuToggle = document.querySelector('.menu-toggle');
-            navLinks.classList.toggle('active');
-            menuToggle.classList.toggle('active');
+            document.getElementById('navLinks').classList.toggle('active');
+            document.querySelector('.menu-toggle').classList.toggle('active');
         }
 
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => {
-                document.getElementById('navLinks')?.classList.remove('active');
-                document.querySelector('.menu-toggle')?.classList.remove('active');
+                document.getElementById('navLinks').classList.remove('active');
+                document.querySelector('.menu-toggle').classList.remove('active');
             });
         });
 
         window.addEventListener('scroll', () => {
-            const nav = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                nav.classList.add('scrolled');
-            } else {
-                nav.classList.remove('scrolled');
-            }
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
         });
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
+                if (entry.isIntersecting) entry.target.classList.add('visible');
             });
         }, { threshold: 0.1 });
 

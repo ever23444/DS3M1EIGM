@@ -3,961 +3,993 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ordenar - Flama's </title>
+    <title>Ordenar - Flama's</title>
     <link rel="icon" href="img/logoperron.png" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
+            --fire: #FF4D00;
+            --ember: #FF8C00;
+            --gold: #FFB800;
+            --void: #050505;
+            --coal: #111111;
+            --ash: #1c1c1c;
+            --smoke: #2a2a2a;
+            --mist: #888;
+            --light: #fafafa;
+            --glass: rgba(255,255,255,0.03);
+            --glass-border: rgba(255,255,255,0.08);
             --primary: #FF4D00;
-            --primary-glow: rgba(255, 77, 0, 0.4);
-            --secondary: #FF6B35;
-            --dark: #050505;
-            --dark-secondary: #0a0a0a;
-            --dark-tertiary: #111111;
-            --light: #ffffff;
-            --gray: #888888;
-            --gray-dark: #333333;
-            --accent: #FF4D00;
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --primary-glow: rgba(255,77,0,0.4);
+            --secondary: #FF8C00;
+            --dark: #0a0a0a;
+            --darker: #050505;
+            --text-muted: #888;
             --success: #4CAF50;
-            --text-muted: #888888;
         }
+
+        html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--dark);
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--void);
             color: var(--light);
             overflow-x: hidden;
-            position: relative;
+            line-height: 1.6;
         }
 
-        body::before {
+        body::after {
             content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0.4;
+            position: fixed; inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none; z-index: 9998; mix-blend-mode: overlay;
         }
 
-        /* ── LOADER — igual al index ── */
-        .loader {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: var(--dark);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--dark); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+
+        /* ── LOADER ── */
+        #loader {
+            position: fixed; inset: 0;
+            background: var(--darker);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            z-index: 99999;
             transition: opacity 0.7s ease, visibility 0.7s ease;
         }
-        .loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-
+        #loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
         .loader-logo-wrap {
-            position: relative;
-            width: 110px; height: 110px;
+            position: relative; width: 110px; height: 110px;
             display: flex; align-items: center; justify-content: center;
         }
         .loader-logo-wrap::before {
-            content: '';
-            position: absolute; inset: 0;
-            border-radius: 50%;
+            content: ''; position: absolute; inset: 0; border-radius: 50%;
             border: 2px solid transparent;
-            border-top-color: var(--primary);
-            border-right-color: var(--secondary);
+            border-top-color: var(--primary); border-right-color: var(--secondary);
             animation: spin 1.2s linear infinite;
         }
         .loader-logo-wrap::after {
-            content: '';
-            position: absolute; inset: 6px;
-            border-radius: 50%;
+            content: ''; position: absolute; inset: 6px; border-radius: 50%;
             border: 1px solid rgba(255,77,0,0.15);
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-
         .loader-logo {
-            width: 72px; height: 72px;
-            object-fit: contain;
-            border-radius: 50%;
+            width: 72px; height: 72px; object-fit: contain; border-radius: 50%;
             animation: pulse-scale 1.4s ease-in-out infinite;
-            filter: drop-shadow(0 0 16px var(--primary-glow));
+            filter: drop-shadow(0 0 16px rgba(255,77,0,0.4));
         }
-        @keyframes pulse-scale {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.08); filter: drop-shadow(0 0 24px rgba(255,77,0,0.6)); }
-        }
-
+        @keyframes pulse-scale { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
         .loader-text {
-            margin-top: 1.5rem;
-            font-family: 'Bebas Neue', cursive;
-            font-size: 1.4rem;
-            letter-spacing: 6px;
-            color: var(--gray);
+            margin-top: 1.5rem; font-family: 'Bebas Neue', cursive;
+            font-size: 1.4rem; letter-spacing: 6px; color: var(--text-muted);
             animation: blink 1.4s ease-in-out infinite;
         }
         @keyframes blink { 0%,100%{opacity:0.4} 50%{opacity:1} }
 
-        /* Navegación */
+        /* ── NAV ── */
         nav {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 1400px;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            z-index: 1000;
-            padding: 0.8rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-radius: 50px;
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 1400px;
+            background: rgba(10,10,10,0.7);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 50px;
+            z-index: 1000; padding: 1rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
             box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,77,0,0.1);
         }
+        nav.scrolled { width: 95%; background: rgba(10,10,10,0.95); }
         .logo-container { display: flex; align-items: center; gap: 0.8rem; text-decoration: none; }
-        .logo-icon { width: 50px; height: 50px; animation: float 3s ease-in-out infinite; filter: drop-shadow(0 0 10px var(--primary-glow)); }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-5px); }
-        }
+        .logo-icon { width: 45px; height: 45px; filter: drop-shadow(0 0 10px var(--primary-glow)); animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
         .logo-text { display: flex; flex-direction: column; line-height: 1; }
-        .logo-main { font-family: 'Bebas Neue', cursive; font-size: 2rem; color: var(--primary); letter-spacing: 3px; text-transform: uppercase; text-shadow: 0 0 20px var(--primary-glow); }
-        .logo-sub { font-size: 0.7rem; color: var(--gray); letter-spacing: 4px; text-transform: uppercase; font-weight: 600; }
-        .nav-links { display: flex; list-style: none; gap: 2rem; align-items: center; }
-        .nav-links a { color: var(--light); text-decoration: none; font-weight: 600; transition: all 0.3s; position: relative; font-size: 0.9rem; letter-spacing: 0.5px; }
-        .nav-links a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--primary); transition: width 0.3s; box-shadow: 0 0 10px var(--primary); }
-        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
-        .nav-links a:hover, .nav-links a.active { color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); }
-        .order-btn { background: var(--primary); color: white; padding: 0.8rem 1.5rem; border-radius: 50px; text-decoration: none; font-weight: 700; transition: all 0.3s; border: 2px solid var(--primary); display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 0 20px var(--primary-glow); }
-        .order-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 30px var(--primary-glow); background: transparent; color: var(--primary); }
+        .logo-main {
+            font-family: 'Bebas Neue', cursive; font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 2px;
+        }
+        .logo-sub { font-size: 0.6rem; color: var(--text-muted); letter-spacing: 4px; text-transform: uppercase; font-weight: 500; }
+        .nav-links { display: flex; list-style: none; gap: 0.5rem; align-items: center; }
+        .nav-links a {
+            color: rgba(255,255,255,0.7); text-decoration: none; font-weight: 500; font-size: 0.9rem;
+            padding: 0.6rem 1.2rem; border-radius: 25px; transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+            position: relative; overflow: hidden;
+        }
+        .nav-links a::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            opacity: 0; transition: opacity 0.3s; z-index: -1; border-radius: 25px;
+        }
+        .nav-links a:hover { color: white; transform: translateY(-2px); }
+        .nav-links a:hover::before { opacity: 1; }
+        .nav-links a.active { color: white; background: linear-gradient(135deg, var(--primary), var(--secondary)); }
+        .order-btn {
+            background: transparent; color: var(--primary); padding: 0.6rem 1.5rem;
+            border-radius: 25px; text-decoration: none; font-weight: 700;
+            border: 2px solid var(--primary); transition: all 0.3s;
+            display: flex; align-items: center; gap: 0.5rem; position: relative; overflow: hidden;
+            cursor: pointer; font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem;
+        }
+        .order-btn::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: var(--primary); transition: left 0.3s; z-index: -1;
+        }
+        .order-btn:hover { color: white; box-shadow: 0 0 30px var(--primary-glow); }
+        .order-btn:hover::before { left: 0; }
         .menu-toggle { display: none; flex-direction: column; cursor: pointer; gap: 5px; z-index: 1001; }
-        .menu-toggle span { width: 25px; height: 3px; background: white; transition: 0.3s; border-radius: 2px; }
+        .menu-toggle span { width: 25px; height: 2px; background: white; transition: 0.3s; border-radius: 2px; }
+        .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+        .menu-toggle.active span:nth-child(2) { opacity: 0; }
+        .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(7px,-6px); }
 
-        /* Header */
+        /* ── PAGE HEADER ── */
         .page-header {
-            margin-top: 100px;
-            padding: 5rem 5%;
-            background: linear-gradient(135deg, rgba(5,5,5,0.95), rgba(5,5,5,0.9)), url('img/Comboduo1.jpg');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+            margin-top: 100px; padding: 5rem 5%;
+            background: linear-gradient(135deg, rgba(5,5,5,0.97), rgba(5,5,5,0.9));
+            color: white; text-align: center; position: relative; overflow: hidden;
             border-bottom: 1px solid var(--glass-border);
         }
         .page-header::before {
-            content: '';
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: linear-gradient(rgba(255,77,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,77,0,0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-            pointer-events: none;
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(255,77,0,0.04) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255,77,0,0.04) 1px, transparent 1px);
+            background-size: 50px 50px; pointer-events: none;
         }
         .page-header h1 {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 6rem;
-            letter-spacing: 10px;
-            margin-bottom: 1rem;
-            position: relative; z-index: 2;
-            background: linear-gradient(135deg, var(--primary), #ffaa00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-family: 'Bebas Neue', cursive; font-size: clamp(3.5rem, 10vw, 6rem);
+            letter-spacing: 8px; margin-bottom: 1rem; position: relative; z-index: 2;
+            background: linear-gradient(135deg, var(--primary), var(--gold));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
         }
-        .page-header p { color: var(--gray); font-size: 1.3rem; position: relative; z-index: 2; font-weight: 300; letter-spacing: 1px; }
+        .page-header p { color: var(--text-muted); font-size: 1.1rem; position: relative; z-index: 2; font-weight: 300; letter-spacing: 1px; }
 
-        /* Contenedor Principal */
-        .order-container { display: grid; grid-template-columns: 1fr 400px; gap: 2rem; max-width: 1400px; margin: 3rem auto; padding: 0 5%; }
+        /* ── ORDER CONTAINER ── */
+        .order-container {
+            display: grid; grid-template-columns: 1fr 400px;
+            gap: 2rem; max-width: 1400px; margin: 3rem auto;
+            padding: 0 5%;
+        }
 
-        /* Productos */
-        .products-section { background: linear-gradient(145deg, var(--dark-secondary), var(--dark-tertiary)); border-radius: 24px; padding: 2.5rem; border: 1px solid var(--glass-border); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
-        .section-title { font-family: 'Bebas Neue', cursive; font-size: 2.5rem; margin-bottom: 2rem; color: var(--light); letter-spacing: 3px; position: relative; display: inline-block; }
-        .section-title::after { content: ''; position: absolute; bottom: -10px; left: 0; width: 60px; height: 4px; background: linear-gradient(90deg, var(--primary), transparent); border-radius: 2px; }
-        .category-filter { display: flex; gap: 1rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
-        .filter-btn { background: var(--glass); border: 1px solid var(--glass-border); color: var(--gray); padding: 0.8rem 1.8rem; border-radius: 50px; cursor: pointer; font-weight: 600; transition: all 0.3s; font-size: 0.9rem; }
-        .filter-btn.active, .filter-btn:hover { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 0 20px var(--primary-glow); }
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.5rem; }
+        /* ── PRODUCTS SECTION ── */
+        .products-section {
+            background: linear-gradient(145deg, var(--coal), var(--ash));
+            border-radius: 24px; padding: 2.5rem;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .section-title {
+            font-family: 'Bebas Neue', cursive; font-size: 2.5rem;
+            margin-bottom: 2rem; color: var(--light); letter-spacing: 3px;
+            position: relative; display: inline-block;
+        }
+        .section-title::after {
+            content: ''; position: absolute; bottom: -10px; left: 0;
+            width: 60px; height: 3px;
+            background: linear-gradient(90deg, var(--primary), transparent); border-radius: 2px;
+        }
+        .category-filter {
+            display: flex; gap: 8px; margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            background: var(--coal); border: 1px solid rgba(255,255,255,0.07);
+            color: var(--mist); font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.82rem; font-weight: 500;
+            padding: 0.6rem 1.4rem; border-radius: 30px;
+            cursor: pointer; transition: all 0.25s; white-space: nowrap;
+        }
+        .filter-btn:hover { border-color: rgba(255,255,255,0.2); color: white; }
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--fire), var(--ember));
+            border-color: transparent; color: white;
+            box-shadow: 0 4px 16px rgba(255,77,0,0.3);
+        }
+        .products-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.2rem;
+        }
 
-        /* Product card with description */
-        .product-item { background: var(--glass); border-radius: 20px; padding: 1.5rem; text-align: center; transition: all 0.4s; border: 1px solid var(--glass-border); position: relative; overflow: hidden; display: flex; flex-direction: column; }
-        .product-item:hover { transform: translateY(-10px); border-color: var(--primary); box-shadow: 0 20px 40px rgba(255, 77, 0, 0.15); }
-        .product-item::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent); transition: left 0.5s; }
-        .product-item:hover::before { left: 100%; }
-        .product-item img { width: 100%; height: 140px; object-fit: cover; border-radius: 12px; margin-bottom: 1rem; transition: transform 0.3s; }
+        /* ── PRODUCT CARD (Ordenar) ── */
+        .product-item {
+            background: rgba(255,255,255,0.03); border-radius: 20px; padding: 1.2rem;
+            text-align: center; transition: all 0.4s; border: 1px solid var(--glass-border);
+            position: relative; overflow: hidden; display: flex; flex-direction: column;
+        }
+        .product-item:hover {
+            transform: translateY(-8px); border-color: rgba(255,77,0,0.35);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,77,0,0.1);
+        }
+        .product-item img {
+            width: 100%; height: 140px; object-fit: cover; border-radius: 12px;
+            margin-bottom: 1rem; transition: transform 0.3s;
+        }
         .product-item:hover img { transform: scale(1.05); }
-        .product-item h4 { font-family: 'Bebas Neue', cursive; font-size: 1.3rem; margin-bottom: 0.4rem; color: var(--light); letter-spacing: 1px; }
-        .product-item .description { font-size: 0.75rem; color: var(--gray); margin-bottom: 0.8rem; line-height: 1.5; flex-grow: 1; }
-        .product-item .price { color: var(--primary); font-weight: 700; font-size: 1.3rem; margin-bottom: 1rem; text-shadow: 0 0 10px var(--primary-glow); }
-        .add-btn { background: linear-gradient(135deg, var(--primary), #ff6600); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 25px; cursor: pointer; font-weight: 600; width: 100%; transition: all 0.3s; font-size: 0.95rem; box-shadow: 0 4px 15px rgba(255, 77, 0, 0.3); }
+        .product-item h4 {
+            font-family: 'Bebas Neue', cursive; font-size: 1.2rem;
+            margin-bottom: 0.4rem; color: var(--light); letter-spacing: 1px;
+        }
+        .product-item .description {
+            font-size: 0.73rem; color: var(--mist); margin-bottom: 0.8rem; line-height: 1.5; flex-grow: 1;
+        }
+        .product-item .price {
+            font-weight: 700; font-size: 1rem; color: var(--fire);
+            background: rgba(255,77,0,0.1); border: 1px solid rgba(255,77,0,0.2);
+            padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: 0.8rem;
+        }
+        .add-btn {
+            background: linear-gradient(135deg, var(--primary), #ff6600);
+            color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 25px;
+            cursor: pointer; font-weight: 700; width: 100%; transition: all 0.3s;
+            font-size: 0.9rem; font-family: 'Space Grotesk', sans-serif;
+            box-shadow: 0 4px 15px rgba(255,77,0,0.3);
+        }
         .add-btn:hover { transform: scale(1.05); box-shadow: 0 0 30px var(--primary-glow); }
 
-        /* Category group label */
         .category-group-label {
             grid-column: 1 / -1;
-            font-family: 'Bebas Neue', cursive;
-            font-size: 1.6rem;
-            letter-spacing: 3px;
-            color: var(--primary);
-            padding: 1rem 0 0.5rem;
-            border-bottom: 1px solid var(--glass-border);
-            margin-top: 1rem;
-            text-shadow: 0 0 15px var(--primary-glow);
+            font-family: 'Bebas Neue', cursive; font-size: 1.6rem; letter-spacing: 3px;
+            color: var(--fire); padding: 1rem 0 0.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.06); margin-top: 1rem;
         }
         .category-group-label:first-child { margin-top: 0; }
-
-        /* Note banner */
         .includes-note {
-            grid-column: 1 / -1;
-            font-size: 0.8rem;
-            color: var(--gray);
-            text-align: center;
-            padding: 0.5rem;
-            border: 1px dashed rgba(255,255,255,0.1);
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-            font-style: italic;
+            grid-column: 1 / -1; font-size: 0.78rem; color: var(--ember);
+            text-align: center; padding: 0.6rem;
+            background: rgba(255,77,0,0.05); border-radius: 10px;
+            border: 1px dashed rgba(255,77,0,0.2);
         }
 
-        /* Wings/Chunks special layout */
-        .wings-item {
-            background: var(--glass);
-            border-radius: 16px;
-            padding: 1rem 1.5rem;
-            border: 1px solid var(--glass-border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        /* ── CART SIDEBAR ── */
+        .cart-sidebar { position: sticky; top: 100px; height: calc(100vh - 120px); display: flex; flex-direction: column; }
+        .cart-box {
+            background: linear-gradient(145deg, var(--coal), var(--ash));
+            border-radius: 24px; border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            display: flex; flex-direction: column; height: 100%; overflow: hidden;
+        }
+        .cart-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1.5rem 2rem 1rem; border-bottom: 1px solid var(--glass-border); flex-shrink: 0;
+        }
+        .cart-header h3 { font-family: 'Bebas Neue', cursive; font-size: 1.8rem; color: var(--light); letter-spacing: 2px; }
+        .cart-count {
+            background: var(--primary); color: white; width: 30px; height: 30px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 0.9rem; font-weight: 700; box-shadow: 0 0 15px var(--primary-glow);
+        }
+        .cart-items { flex: 1; overflow-y: auto; padding: 0.5rem 2rem; min-height: 0; }
+        .cart-items::-webkit-scrollbar { width: 6px; }
+        .cart-items::-webkit-scrollbar-track { background: var(--ash); border-radius: 3px; }
+        .cart-items::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
+        .cart-footer { flex-shrink: 0; padding: 1rem 2rem 1.5rem; border-top: 1px solid var(--glass-border); }
+        .cart-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.9rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .cart-item-info h4 { font-size: 0.92rem; margin-bottom: 0.2rem; color: var(--light); font-weight: 600; }
+        .cart-item-info p { font-size: 0.8rem; color: var(--mist); }
+        .cart-item-actions { display: flex; align-items: center; gap: 0.6rem; }
+        .qty-btn {
+            background: var(--glass); border: 1px solid var(--glass-border);
+            color: var(--light); width: 28px; height: 28px; border-radius: 50%;
+            cursor: pointer; font-weight: 700; transition: all 0.3s; font-size: 1rem;
+        }
+        .qty-btn:hover { background: var(--primary); border-color: var(--primary); box-shadow: 0 0 10px var(--primary-glow); }
+        .qty-display { font-weight: 700; min-width: 20px; text-align: center; }
+        .remove-btn {
+            background: rgba(255,68,68,0.15); color: #ff6666; border: 1px solid rgba(255,68,68,0.3);
+            width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 1rem;
             transition: all 0.3s;
         }
-        .wings-item:hover { border-color: var(--primary); box-shadow: 0 10px 30px rgba(255,77,0,0.1); }
-        .wings-item h4 { font-family: 'Bebas Neue', cursive; font-size: 1.1rem; color: var(--light); letter-spacing: 1px; }
-        .wings-item .description { font-size: 0.78rem; color: var(--gray); margin-top: 0.2rem; }
-        .wings-item-right { display: flex; align-items: center; gap: 1rem; }
-        .wings-item .price { color: var(--primary); font-weight: 700; font-size: 1.1rem; text-shadow: 0 0 8px var(--primary-glow); white-space: nowrap; }
-        .wings-item .add-btn { width: auto; padding: 0.5rem 1rem; font-size: 0.85rem; }
-
-        /* Carrito */
-        .cart-sidebar { position: sticky; top: 120px; height: fit-content; }
-        .cart-box { background: linear-gradient(145deg, var(--dark-secondary), var(--dark-tertiary)); border-radius: 24px; padding: 2rem; border: 1px solid var(--glass-border); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
-        .cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--glass-border); }
-        .cart-header h3 { font-family: 'Bebas Neue', cursive; font-size: 1.8rem; color: var(--light); letter-spacing: 2px; }
-        .cart-count { background: var(--primary); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 700; box-shadow: 0 0 15px var(--primary-glow); }
-        .cart-items { max-height: 350px; overflow-y: auto; margin-bottom: 1.5rem; }
-        .cart-items::-webkit-scrollbar { width: 6px; }
-        .cart-items::-webkit-scrollbar-track { background: var(--dark-tertiary); border-radius: 3px; }
-        .cart-items::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
-        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--glass-border); }
-        .cart-item-info h4 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--light); }
-        .cart-item-info p { font-size: 0.85rem; color: var(--gray); }
-        .cart-item-actions { display: flex; align-items: center; gap: 0.8rem; }
-        .qty-btn { background: var(--glass); border: 1px solid var(--glass-border); color: var(--light); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-weight: 700; transition: all 0.3s; }
-        .qty-btn:hover { background: var(--primary); border-color: var(--primary); box-shadow: 0 0 10px var(--primary-glow); }
-        .remove-btn { background: #ff4444; color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 1rem; transition: all 0.3s; }
-        .remove-btn:hover { transform: scale(1.1); box-shadow: 0 0 15px rgba(255, 68, 68, 0.5); }
-        .cart-total { border-top: 1px solid var(--glass-border); padding-top: 1.5rem; margin-bottom: 1.5rem; }
-        .total-row { display: flex; justify-content: space-between; margin-bottom: 0.8rem; color: var(--gray); font-size: 0.95rem; }
-        .total-row.final { font-size: 1.5rem; font-weight: 700; color: var(--primary); border-top: 1px solid var(--glass-border); padding-top: 1rem; margin-top: 1rem; text-shadow: 0 0 10px var(--primary-glow); }
-        .checkout-btn { background: linear-gradient(135deg, var(--primary), #ff6600); color: white; border: none; padding: 1.2rem; border-radius: 50px; width: 100%; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 20px rgba(255, 77, 0, 0.3); letter-spacing: 1px; }
+        .remove-btn:hover { background: #ff4444; color: white; box-shadow: 0 0 15px rgba(255,68,68,0.4); }
+        .cart-total { margin-bottom: 1rem; }
+        .total-row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: var(--mist); font-size: 0.9rem; }
+        .total-row.final {
+            font-size: 1.3rem; font-weight: 700; color: var(--fire);
+            border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.8rem; margin-top: 0.5rem;
+        }
+        .checkout-btn {
+            background: linear-gradient(135deg, var(--primary), #ff6600);
+            color: white; border: none; padding: 1rem; border-radius: 50px;
+            width: 100%; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(255,77,0,0.3); letter-spacing: 1px;
+            font-family: 'Space Grotesk', sans-serif;
+        }
         .checkout-btn:hover:not(:disabled) { transform: scale(1.02); box-shadow: 0 0 30px var(--primary-glow); }
-        .checkout-btn:disabled { background: var(--glass); color: var(--gray); cursor: not-allowed; box-shadow: none; border: 1px solid var(--glass-border); }
+        .checkout-btn:disabled { background: var(--ash); color: var(--mist); cursor: not-allowed; box-shadow: none; border: 1px solid var(--glass-border); }
+        .clear-cart-btn {
+            background: transparent; color: var(--mist); border: 1px solid rgba(255,255,255,0.1);
+            padding: 0.6rem; border-radius: 25px; width: 100%; font-size: 0.8rem;
+            cursor: pointer; transition: all 0.3s; margin-bottom: 0.8rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .clear-cart-btn:hover { border-color: rgba(255,68,68,0.4); color: #ff6666; }
 
-        .empty-cart {
-            text-align: center;
-            padding: 40px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .empty-cart-logo {
-            width: 120px;
-            height: auto;
-            margin-bottom: 15px;
-            opacity: 0.7;
-            filter: brightness(0.9);
-        }
-        .empty-cart p {
-            color: #888;
-            font-size: 16px;
-        }
+        .empty-cart { text-align: center; padding: 2rem 1rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem; }
+        .empty-cart img { width: 80px; opacity: 0.4; }
+        .empty-cart p { color: var(--mist); font-size: 0.9rem; }
+        .empty-cart a { color: var(--fire); text-decoration: none; font-size: 0.85rem; font-weight: 600; }
+        .empty-cart a:hover { text-decoration: underline; }
 
-        /* Checkout Form */
-        .checkout-form { background: linear-gradient(145deg, var(--dark-secondary), var(--dark-tertiary)); border-radius: 24px; padding: 2.5rem; margin-top: 2rem; border: 1px solid var(--glass-border); box-shadow: 0 20px 60px rgba(0,0,0,0.5); display: none; max-width: 800px; margin-left: auto; margin-right: auto; }
+        /* ── CHECKOUT FORM ── */
+        .checkout-form {
+            background: linear-gradient(145deg, var(--coal), var(--ash));
+            border-radius: 24px; padding: 2.5rem; margin: 2rem 5% 3rem;
+            border: 1px solid var(--glass-border); box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            display: none; max-width: 800px; margin-left: auto; margin-right: auto;
+        }
         .checkout-form.active { display: block; animation: fadeInUp 0.5s ease; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         .form-group { margin-bottom: 1.5rem; }
         .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--light); font-size: 0.95rem; }
-        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 1rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 12px; font-family: inherit; color: var(--light); font-size: 1rem; transition: all 0.3s; }
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 20px rgba(255, 77, 0, 0.1); }
-        .form-group input::placeholder, .form-group textarea::placeholder { color: var(--gray); }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-        .submit-order-btn { background: linear-gradient(135deg, var(--success), #45a049); color: white; border: none; padding: 1.2rem 2rem; border-radius: 50px; font-size: 1.1rem; font-weight: 700; cursor: pointer; width: 100%; margin-top: 1rem; transition: all 0.3s; box-shadow: 0 4px 20px rgba(76, 175, 80, 0.3); letter-spacing: 1px; }
-        .submit-order-btn:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(76, 175, 80, 0.4); }
-        .empty-cart-icon { font-size: 4rem; margin-bottom: 1rem; opacity: 0.5; }
-
-        /* Notificación */
-        .notification {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: var(--primary);
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            font-weight: 600;
-            z-index: 9998;
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.3s;
-            box-shadow: 0 5px 20px var(--primary-glow);
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 1rem; background: rgba(255,255,255,0.04);
+            border: 1px solid var(--glass-border); border-radius: 12px;
+            font-family: 'Space Grotesk', sans-serif; color: var(--light); font-size: 1rem; transition: all 0.3s;
         }
-        .notification.show { transform: translateY(0); opacity: 1; }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none; border-color: var(--primary); box-shadow: 0 0 20px rgba(255,77,0,0.1);
+        }
+        .form-group input::placeholder, .form-group textarea::placeholder { color: var(--mist); }
+        .form-group input.error, .form-group textarea.error { border-color: #ff4444; }
+        .field-error { color: #ff6666; font-size: 0.8rem; margin-top: 0.4rem; display: none; }
+        .field-error.show { display: block; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .submit-order-btn {
+            background: linear-gradient(135deg, var(--success), #45a049);
+            color: white; border: none; padding: 1.2rem 2rem; border-radius: 50px;
+            font-size: 1.1rem; font-weight: 700; cursor: pointer; width: 100%; margin-top: 1rem;
+            transition: all 0.3s; box-shadow: 0 4px 20px rgba(76,175,80,0.3); letter-spacing: 1px;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .submit-order-btn:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(76,175,80,0.4); }
 
-        /* FOOTER */
+        /* ── TOAST ── */
+        .toast {
+            position: fixed; bottom: 24px; left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--ash); border: 1px solid rgba(255,77,0,0.3);
+            color: white; padding: 10px 18px; border-radius: 30px;
+            font-size: 0.85rem; font-weight: 500; z-index: 99996;
+            transition: transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275), opacity 0.3s;
+            display: flex; align-items: center; gap: 8px; white-space: nowrap; opacity: 0;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .toast-dot { width: 8px; height: 8px; background: var(--fire); border-radius: 50%; flex-shrink: 0; }
+
+        /* ── FOOTER (idéntico al de Menú.html) ── */
         footer {
-            background: var(--dark);
-            color: white;
+            background: var(--dark); color: white;
             padding: 5rem 5% 2rem;
-            border-top: 1px solid var(--glass-border);
-            position: relative;
-            margin-top: 4rem;
+            border-top: 1px solid var(--glass-border); position: relative;
         }
         footer::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 1px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
-            opacity: 0.6;
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent); opacity: 0.5;
         }
         .footer-content {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 4rem;
-            max-width: 1400px;
-            margin: 0 auto 4rem;
+            display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem; max-width: 1400px; margin: 0 auto 4rem;
         }
         .footer-brand { max-width: 300px; }
         .footer-logo { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
-        .footer-logo-img { width: 55px; height: 55px; filter: drop-shadow(0 0 10px var(--primary-glow)); }
         .footer-logo-text { display: flex; flex-direction: column; }
-        .footer-logo-text .main { font-family: 'Bebas Neue', cursive; font-size: 2rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 3px; }
-        .footer-logo-text .sub { font-size: 0.65rem; color: var(--text-muted); letter-spacing: 3px; text-transform: uppercase; font-weight: 600; }
-        .footer-brand p { color: var(--text-muted); line-height: 1.8; margin-bottom: 2rem; font-size: 0.95rem; }
-        .social-links { display: flex; gap: 0.8rem; }
-        .social-links a { width: 44px; height: 44px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 12px; display: flex; align-items: center; justify-content: center; transition: all 0.3s; text-decoration: none; }
-        .social-links a:hover { transform: translateY(-5px); box-shadow: 0 10px 20px var(--primary-glow); }
-        .social-links a.whatsapp:hover { background: #25D366; border-color: #25D366; }
-        .social-links a.facebook:hover { background: #1877F2; border-color: #1877F2; }
-        .social-links a.instagram:hover { background: linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); border-color: #dc2743; }
-        .social-links a svg { width: 20px; height: 20px; fill: white; }
-        .footer-section h3 { font-family: 'Bebas Neue', cursive; font-size: 1.3rem; margin-bottom: 1.5rem; color: white; letter-spacing: 2px; position: relative; display: inline-block; }
-        .footer-section h3::after { content: ''; position: absolute; bottom: -6px; left: 0; width: 30px; height: 2px; background: var(--primary); border-radius: 2px; }
+        .footer-logo-text .main {
+            font-family: 'Bebas Neue', cursive; font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 2px;
+        }
+        .footer-logo-text .sub { font-size: 0.7rem; color: var(--text-muted); letter-spacing: 3px; text-transform: uppercase; }
+        .footer-brand p { color: var(--text-muted); line-height: 1.8; margin-bottom: 2rem; }
+        .social-links { display: flex; gap: 1rem; }
+        .social-links a {
+            width: 45px; height: 45px; background: var(--glass);
+            border: 1px solid var(--glass-border); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; transition: all 0.3s; overflow: hidden;
+        }
+        .social-links a:hover { background: var(--primary); border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 10px 20px var(--primary-glow); }
+        .social-links a img { width: 20px; height: 20px; filter: brightness(0) invert(1); transition: transform 0.3s; }
+        .social-links a:hover img { transform: scale(1.2); }
+        .footer-section h3 { font-family: 'Bebas Neue', cursive; font-size: 1.3rem; margin-bottom: 1.5rem; color: white; letter-spacing: 1px; }
         .footer-section ul { list-style: none; }
         .footer-section ul li { margin-bottom: 0.8rem; }
-        .footer-section a { color: var(--text-muted); text-decoration: none; transition: all 0.3s; display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; }
+        .footer-section a { color: var(--text-muted); text-decoration: none; transition: all 0.3s; display: inline-flex; align-items: center; gap: 0.5rem; }
         .footer-section a:hover { color: var(--primary); transform: translateX(5px); }
         .footer-contact p { display: flex; align-items: center; gap: 0.8rem; color: var(--text-muted); margin-bottom: 1rem; font-size: 0.95rem; }
-        .contact-icon { width: 20px; height: 20px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; }
-        .footer-bottom { text-align: center; padding-top: 2.5rem; border-top: 1px solid var(--glass-border); color: var(--text-muted); font-size: 0.88rem; max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .footer-bottom-links { display: flex; gap: 2rem; }
-        .footer-bottom-links a { color: var(--text-muted); text-decoration: none; transition: color 0.3s; }
+        .footer-contact img { width: 18px; opacity: 0.7; }
+        .footer-bottom {
+            padding-top: 3rem; border-top: 1px solid var(--glass-border);
+            max-width: 1400px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: flex-start;
+        }
+        .footer-credits { display: flex; flex-direction: column; gap: 0.3rem; }
+        .footer-credits span { color: var(--text-muted); font-size: 0.85rem; line-height: 1.4; }
+        .footer-bottom-links { display: flex; gap: 2rem; align-items: center; }
+        .footer-bottom-links a { color: var(--text-muted); text-decoration: none; transition: color 0.3s; font-size: 0.9rem; }
         .footer-bottom-links a:hover { color: var(--primary); }
 
-        /* Responsive */
+        /* ── RESPONSIVE ── */
         @media (max-width: 968px) {
-            .footer-content { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+            .footer-content { grid-template-columns: 1fr 1fr; }
             .order-container { grid-template-columns: 1fr; }
-            .cart-sidebar { position: static; }
+            .cart-sidebar { position: static; height: auto; }
+            .cart-box { height: auto; }
+            .cart-items { max-height: 300px; }
         }
         @media (max-width: 768px) {
             nav { width: 95%; padding: 0.8rem 1.5rem; }
-            .nav-links { position: fixed; top: 0; right: -100%; width: 80%; max-width: 400px; height: 100vh; background: rgba(5,5,5,0.98); backdrop-filter: blur(20px); flex-direction: column; padding: 6rem 2rem 2rem; transition: right 0.4s; border-left: 1px solid var(--glass-border); gap: 1.5rem; }
+            .nav-links {
+                position: fixed; top: 0; right: -100%; width: 80%; max-width: 400px; height: 100vh;
+                background: rgba(5,5,5,0.98); backdrop-filter: blur(20px);
+                flex-direction: column; padding: 6rem 2rem 2rem;
+                transition: right 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+                border-left: 1px solid var(--glass-border); gap: 1.5rem;
+            }
             .nav-links.active { right: 0; }
             .menu-toggle { display: flex; }
             .footer-content { grid-template-columns: 1fr; gap: 2rem; }
-            .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
-            .footer-brand { max-width: 100%; }
-            .page-header h1 { font-size: 3.5rem; }
+            .footer-bottom { flex-direction: column; gap: 1.5rem; }
             .logo-main { font-size: 1.5rem; }
             .logo-icon { width: 40px; height: 40px; }
             .form-row { grid-template-columns: 1fr; }
-            .wings-item { flex-direction: column; align-items: flex-start; gap: 0.8rem; }
-            .wings-item-right { width: 100%; justify-content: space-between; }
+            .page-header { margin-top: 80px; padding: 3rem 5%; }
+        }
+        @media (max-width: 480px) {
+            nav { width: 92%; padding: 0.7rem 1rem; }
+            .logo-sub { display: none; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Loader -->
-    <div class="loader" id="loader">
-        <div class="loader-logo-wrap">
-            <img class="loader-logo" src="img/logoperron.png" alt="Flama's">
+<!-- LOADER -->
+<div id="loader">
+    <div class="loader-logo-wrap">
+        <img class="loader-logo" src="img/logoperron.png" alt="Flama's">
+    </div>
+    <div class="loader-text">Flama's</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+    <div class="toast-dot"></div>
+    <span id="toastMsg">Agregado al carrito</span>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+    <a href="index.html" class="logo-container">
+        <img src="img/logoperron.png" alt="Logo" class="logo-icon"/>
+        <div class="logo-text">
+            <span class="logo-main">FLAMAS_SV</span>
+            <span class="logo-sub">La Mejor Hamburguesa</span>
         </div>
-        <div class="loader-text">Flama's</div>
+    </a>
+    <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="Menú.html">Menú</a></li>
+        <li><a href="historia.html">Historia</a></li>
+        <li><a href="Galeria.html">Galería</a></li>
+        <li><a href="ubicacion.html">Ubicación</a></li>
+        <li><a href="Ordenar.html" class="order-btn active">🛒 Ordenar</a></li>
+    </ul>
+    <div class="menu-toggle" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<header class="page-header">
+    <h1>HACER PEDIDO</h1>
+    <p>Arma tu orden y te la llevamos a tu puerta</p>
+</header>
+
+<!-- ORDER CONTAINER -->
+<div class="order-container">
+    <!-- PRODUCTS -->
+    <div class="products-section">
+        <h2 class="section-title">Nuestro Menú</h2>
+        <div class="category-filter" id="categoryFilter">
+            <button class="filter-btn active" onclick="filterProducts('all', this)">Todos</button>
+            <button class="filter-btn" onclick="filterProducts('carnudas', this)">Las Carnudas</button>
+            <button class="filter-btn" onclick="filterProducts('mar', this)">Mar y Granja</button>
+            <button class="filter-btn" onclick="filterProducts('joyitas', this)">Las Joyitas</button>
+            <button class="filter-btn" onclick="filterProducts('bestias', this)">Las Bestias</button>
+            <button class="filter-btn" onclick="filterProducts('pechugonas', this)">Las Pechugonas</button>
+            <button class="filter-btn" onclick="filterProducts('crujientes', this)">Las Crujientes</button>
+            <button class="filter-btn" onclick="filterProducts('paponas', this)">Las Paponas</button>
+            <button class="filter-btn" onclick="filterProducts('leve', this)">Algo Leve</button>
+            <button class="filter-btn" onclick="filterProducts('combos', this)">Para Compartir</button>
+            <button class="filter-btn" onclick="filterProducts('motores', this)">Pa' Calentar</button>
+            <button class="filter-btn" onclick="filterProducts('bebidas', this)">Bebidas</button>
+            <button class="filter-btn" onclick="filterProducts('extras', this)">Extras</button>
+        </div>
+        <div class="products-grid" id="productsGrid"></div>
     </div>
 
-    <!-- Navegación -->
-    <nav id="navbar">
-        <a href="index.html" class="logo-container">
-            <img src="img/logoperron.png" alt="Logo" class="logo-icon"/>
-            <div class="logo-text">
-                <span class="logo-main">FLAMAS_SV</span>
-                <span class="logo-sub">Las Mejores Hamburguesas</span>
+    <!-- CART -->
+    <div class="cart-sidebar">
+        <div class="cart-box">
+            <div class="cart-header">
+                <h3>🛒 Tu Pedido</h3>
+                <span class="cart-count" id="cartCount">0</span>
             </div>
-        </a>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="Menú.html">Menu</a></li>
-            <li><a href="historia.html">Historia</a></li>
-            <li><a href="Galeria.html">Galería</a></li>
-            <li><a href="ubicacion.html">Ubicación</a></li>
-            <li><a href="Ordenar.html" class="order-btn active">🛒 Ordenar</a></li>
-        </ul>
-        <div class="menu-toggle" onclick="toggleMenu()">
-            <span></span><span></span><span></span>
-        </div>
-    </nav>
-
-    <!-- Header -->
-    <header class="page-header">
-        <h1>HACER PEDIDO</h1>
-        <p>Arma tu orden y te la llevamos a tu puerta</p>
-    </header>
-
-    <!-- Contenedor Principal -->
-    <div class="order-container">
-        <!-- Productos -->
-        <div class="products-section">
-            <h2 class="section-title">Nuestro Menú</h2>
-            <div class="category-filter">
-                <button class="filter-btn active" onclick="filterProducts('all', this)">Todos</button>
-                <button class="filter-btn" onclick="filterProducts('carnudas', this)"> Las Carnudas</button>
-                <button class="filter-btn" onclick="filterProducts('mar', this)"> Del Mar y la Granja</button>
-                <button class="filter-btn" onclick="filterProducts('joyitas', this)"> Las Joyitas</button>
-                <button class="filter-btn" onclick="filterProducts('bestias', this)"> Las Bestias</button>
-                <button class="filter-btn" onclick="filterProducts('pechugonas', this)"> Las Pechugonas</button>
-                <button class="filter-btn" onclick="filterProducts('crujientes', this)"> Las Crujientes</button>
-                <button class="filter-btn" onclick="filterProducts('paponas', this)"> Las Paponas</button>
-                <button class="filter-btn" onclick="filterProducts('leve', this)"> Algo Leve</button>
-                <button class="filter-btn" onclick="filterProducts('combos', this)"> Para Compartir</button>
-                <button class="filter-btn" onclick="filterProducts('motores', this)"> Pa' Calentar</button>
-                <button class="filter-btn" onclick="filterProducts('bebidas', this)"> Bebidas</button>
-                <button class="filter-btn" onclick="filterProducts('extras', this)"> Extras</button>
+            <div class="cart-items" id="cartItems">
+                <div class="empty-cart">
+                    <img src="img/logoperron.png" alt="Flama's">
+                    <p>Tu carrito está vacío</p>
+                    <a href="Menú.html">← Ver el menú</a>
+                </div>
             </div>
-            <div class="products-grid" id="productsGrid"></div>
-        </div>
-
-        <!-- Carrito -->
-        <div class="cart-sidebar">
-            <div class="cart-box">
-                <div class="cart-header">
-                    <h3>🛒 Tu Pedido</h3>
-                    <span class="cart-count" id="cartCount">0</span>
-                </div>
-                <div class="cart-items" id="cartItems">
-                    <div class="empty-cart">
-                        <img src="img/logoperron.png" alt="FLAMA'S Logo" class="empty-cart-logo">
-                        <p>Tu carrito está vacío</p>
-                    </div>
-                </div>
+            <div class="cart-footer">
                 <div class="cart-total" id="cartTotal" style="display:none;">
                     <div class="total-row"><span>Subtotal:</span><span id="subtotal">$0.00</span></div>
-                    <div class="total-row"><span>Envío:</span><span id="shipping">$2.00</span></div>
+                    <div class="total-row"><span>Envío:</span><span>$2.00</span></div>
                     <div class="total-row final"><span>TOTAL:</span><span id="total">$0.00</span></div>
                 </div>
+                <button class="clear-cart-btn" id="clearBtn" onclick="clearCart()" style="display:none;">🗑 Vaciar carrito</button>
                 <button class="checkout-btn" id="checkoutBtn" onclick="showCheckout()" disabled>
                     Continuar con el Pedido
                 </button>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Formulario de Checkout -->
-    <div class="checkout-form" id="checkoutForm">
-        <h2 class="section-title">Datos de Entrega</h2>
-        <form onsubmit="submitOrder(event)">
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Nombre completo *</label>
-                    <input type="text" required placeholder="Tu nombre">
-                </div>
-                <div class="form-group">
-                    <label>Teléfono *</label>
-                    <input type="tel" required placeholder="0000-0000">
-                </div>
+<!-- CHECKOUT FORM -->
+<div class="checkout-form" id="checkoutForm">
+    <h2 class="section-title">Datos de Entrega</h2>
+    <form id="orderForm" onsubmit="submitOrder(event)">
+        <div class="form-row">
+            <div class="form-group">
+                <label>Nombre completo *</label>
+                <input type="text" id="fieldNombre" placeholder="Tu nombre">
+                <div class="field-error" id="errNombre">Ingresa tu nombre completo.</div>
             </div>
             <div class="form-group">
-                <label>Dirección de entrega *</label>
-                <textarea rows="3" required placeholder="Calle, número, colonia, punto de referencia..."></textarea>
+                <label>Teléfono *</label>
+                <input type="tel" id="fieldTelefono" placeholder="0000-0000" maxlength="9">
+                <div class="field-error" id="errTelefono">Ingresa un teléfono válido (ej: 7018-3333).</div>
             </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Método de pago</label>
-                    <select required>
-                        <option value="">Selecciona...</option>
-                        <option value="efectivo">💵 Efectivo</option>
-                        <option value="tarjeta">💳 Tarjeta (al recibir)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>¿Necesitas cambio?</label>
-                    <input type="text" placeholder="Ej: $20, $50">
-                </div>
+        </div>
+        <div class="form-group">
+            <label>Dirección de entrega *</label>
+            <textarea id="fieldDireccion" rows="3" placeholder="Calle, número, colonia, punto de referencia..."></textarea>
+            <div class="field-error" id="errDireccion">Ingresa una dirección de entrega.</div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Método de pago</label>
+                <input type="text" value="💵 Efectivo" readonly style="cursor:default;opacity:0.8;">
             </div>
             <div class="form-group">
-                <label>Notas adicionales</label>
-                <textarea rows="2" placeholder="Sin cebolla, salsa aparte, etc..."></textarea>
+                <label>¿Necesitas cambio?</label>
+                <input type="text" id="fieldCambio" placeholder="Ej: $20, $50">
             </div>
-            <button type="submit" class="submit-order-btn">✅ Confirmar Pedido por WhatsApp</button>
-        </form>
+        </div>
+        <div class="form-group">
+            <label>Notas adicionales</label>
+            <textarea id="fieldNotas" rows="2" placeholder="Sin cebolla, salsa aparte, etc..."></textarea>
+        </div>
+        <button type="submit" class="submit-order-btn">✅ Confirmar Pedido por WhatsApp</button>
+    </form>
+</div>
+
+<!-- FOOTER — idéntico al de Menú.html -->
+<footer id="contacto">
+    <div class="footer-content">
+        <div class="footer-brand">
+            <div class="footer-logo">
+                <img src="img/logoperron.png" alt="Logo" class="logo-icon"/>
+                <div class="footer-logo-text">
+                    <span class="main">FLAMAS_SV</span>
+                    <span class="sub">La Mejor Hamburguesa</span>
+                </div>
+            </div>
+            <p>Las mejores hamburguesas artesanales de Jucuapa. Hechas con amor, pasión y los mejores ingredientes locales.</p>
+            <div class="social-links">
+                <a href="https://wa.me/50370183333" target="_blank"><img src="img/Whatsap-.png" alt="WhatsApp"></a>
+                <a href="https://www.facebook.com/profile.php?id=61577150235322" target="_blank"><img src="img/Facebook-.png" alt="Facebook"></a>
+                <a href="https://www.instagram.com/flamas_sv?igsh=YXY5dWhsb2FkbDNy" target="_blank"><img src="img/Instagram-.png" alt="Instagram"></a>
+                <a href="https://www.tiktok.com/@flamas_sv?_r=1&_t=ZS-96TTacUnWdA" target="_blank"><img src="img/Tiktok (1).png" alt="TikTok"></a>
+            </div>
+        </div>
+        <div class="footer-section">
+            <h3>Horario</h3>
+            <ul>
+                <li>Lun - Mar: 11:00 - 9:00</li>
+                <li>Mie - Jue: 11:00 - 9:00</li>
+                <li>Vie - Sáb: 11:00 - 9:00</li>
+                <li>Dom: 11:00 - 9:00</li>
+            </ul>
+        </div>
+        <div class="footer-contact footer-section">
+            <h3>Contacto</h3>
+            <p><img src="img/Ubicacion-.png" alt="Ubicación"> <a href="https://www.google.com/maps/place/Flama's+Burguers/@13.512865,-88.383573,17z/data=!3m1!4b1!4m6!3m5!1s0x8f7b330074995223:0x3f9f31e3298770ed!8m2!3d13.512865!4d-88.383573!16s%2Fg%2F11wc0t7vjf?hl=es-419&entry=ttu&g_ep=EgoyMDI2MDUyNy4wIKXMDSoASAFQAw%3D%3D" target="_blank">Esquina Opuesta De Plaza Gastronomica</a></p>
+            <p><img src="img/Whatsap-.png" alt="WhatsApp"> <a href="https://wa.me/50370183333" target="_blank">7018-3333</a></p>
+            <p><img src="img/gmail-.png" alt="Gmail"><a href="https://mail.google.com/mail/?view=cm&fs=1&to=Flamas_sv@gmail.com" target="_blank">Flamas_sv@gmail.com</a></p>
+        </div>
+        <div class="footer-section">
+            <h3>Links</h3>
+            <ul>
+                <li><a href="index.html">→ Inicio</a></li>
+                <li><a href="historia.html">→ Historia</a></li>
+                <li><a href="Galeria.html">→ Galería</a></li>
+                <li><a href="Ubicacion.html">→ Ubicación</a></li>
+                <li><a href="EquipoDeTrabajo.html">→ Desarrolladores</a></li>
+            </ul>
+        </div>
     </div>
-
-    <!-- Notificación -->
-    <div class="notification" id="notification">Producto agregado al carrito</div>
-
-    <!-- FOOTER -->
-    <footer id="contacto">
-        <div class="footer-content">
-            <div class="footer-brand">
-                <div class="footer-logo">
-                    <img src="img/logoperron.png" alt="Logo Flamas" class="footer-logo-img"/>
-                    <div class="footer-logo-text">
-                        <span class="main">FLAMAS_SV</span>
-                        <span class="sub">La Mejor Hamburguesa</span>
-                    </div>
-                </div>
-                <p>Las mejores hamburguesas artesanales de Jucuapa. Hechas con amor, pasión y los mejores ingredientes locales.</p>
-                <div class="social-links">
-                    <a href="https://wa.me/50375416644" target="_blank" class="whatsapp" title="WhatsApp">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-                            <path d="M11.998 0C5.374 0 0 5.373 0 11.998c0 2.117.554 4.1 1.523 5.822L.057 23.998l6.347-1.485A11.945 11.945 0 0011.998 24C18.626 24 24 18.626 24 11.998 24 5.373 18.626 0 11.998 0zm0 21.818a9.814 9.814 0 01-5.001-1.368l-.359-.214-3.718.871.936-3.63-.234-.373A9.817 9.817 0 012.18 11.998c0-5.42 4.4-9.82 9.818-9.82 5.42 0 9.82 4.4 9.82 9.82 0 5.418-4.4 9.82-9.82 9.82z"/>
-                        </svg>
-                    </a>
-                    <a href="#" class="facebook" title="Facebook">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                        </svg>
-                    </a>
-                    <a href="#" class="instagram" title="Instagram">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-            <div class="footer-section">
-                <h3>Horario</h3>
-                <ul>
-                    <li><a href="#">Lun - Mar: 12:00 - 5:00</a></li>
-                    <li><a href="#">Jue - Sáb: 12:00 - 5:00</a></li>
-                    <li><a href="#">Domingo: 12:00 - 5:30</a></li>
-                </ul>
-            </div>
-            <div class="footer-contact footer-section">
-                <h3>Contacto</h3>
-                <p>
-                    <span class="contact-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="#FF4D00"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></span>
-                    Plaza, Jucuapa
-                </p>
-                <p>
-                    <span class="contact-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM11.998 0C5.374 0 0 5.373 0 11.998c0 2.117.554 4.1 1.523 5.822L.057 23.998l6.347-1.485A11.945 11.945 0 0011.998 24C18.626 24 24 18.626 24 11.998 24 5.373 18.626 0 11.998 0zm0 21.818a9.814 9.814 0 01-5.001-1.368l-.359-.214-3.718.871.936-3.63-.234-.373A9.817 9.817 0 012.18 11.998c0-5.42 4.4-9.82 9.818-9.82 5.42 0 9.82 4.4 9.82 9.82 0 5.418-4.4 9.82-9.82 9.82z"/></svg></span>
-                    7067-1505
-                </p>
-                <p>
-                    <span class="contact-icon"><svg viewBox="0 0 24 24" width="18" height="18"><path fill="#EA4335" d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 010 19.366V5.457c0-.904.732-1.636 1.636-1.636h.749L12 10.18l9.615-6.359h.749A1.636 1.636 0 0124 5.457z"/></svg></span>
-                    hola@flamassv.com
-                </p>
-            </div>
-            <div class="footer-section">
-                <h3>Links</h3>
-                <ul>
-                    <li><a href="Menú.html">→ Menú</a></li>
-                    <li><a href="historia.html">→ Historia</a></li>
-                    <li><a href="Galeria.html">→ Galería</a></li>
-                    <li><a href="ubicacion.html">→ Ubicación</a></li>
-                </ul>
-            </div>
+    <div class="footer-bottom">
+        <div class="footer-credits">
+            <span>© Todos los derechos reservados Flamas_SV - 3° BTV-DS</span>
         </div>
-        <div class="footer-bottom">
-            <p>© 2025 FLAMAS_SV — Todos los derechos reservados.</p>
-            <div class="footer-bottom-links">
-                <a href="#">Privacidad</a>
-                <a href="#">Términos</a>
-            </div>
+        <div class="footer-bottom-links">
+            <a href="#">Privacidad</a>
+            <a href="#">Términos</a>
         </div>
-    </footer>
+    </div>
+</footer>
 
-    <script>
-        // Loader
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('loader').classList.add('hidden');
-            }, 1000);
-        });
+<script>
+/* ═══════════════════════════════════════════════════════
+   DATOS DE PRODUCTOS (mismo catálogo que Menú.html)
+   ═══════════════════════════════════════════════════════ */
+const products = [
+    { id:1,  name:"La Facilota",          price:5.00,  category:"carnudas",   image:"img/carnuda1.png",    description:"Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate y Cebolla Caramelizada" },
+    { id:2,  name:"La Cheese",             price:5.00,  category:"carnudas",   image:"img/carnuda2.png",    description:"Pan Artesanal, Carne de Res, Queso Americano y Queso Cheddar" },
+    { id:3,  name:"La Honguito",           price:6.00,  category:"carnudas",   image:"img/carnuda3.png",    description:"Pan Artesanal, Carne de Res, Lechuga, Tomate, Queso, Cebolla Caramelizada y Hongos en Salsa de la Casa" },
+    { id:4,  name:"La Tropical",           price:6.00,  category:"carnudas",   image:"img/carnuda4.png",    description:"Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada, Piña y Tocino" },
+    { id:5,  name:"La Bacon Cheese",       price:6.00,  category:"carnudas",   image:"img/carnuda5.png",    description:"Pan Artesanal, Carne de Res, Queso Americano, Queso Cheddar, Pepinillos y Tocino" },
+    { id:6,  name:"La Ahuevada",           price:6.00,  category:"carnudas",   image:"img/carnuda6.png",    description:"Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada, Huevo Estrellado y Tocino" },
+    { id:7,  name:"La Guacamole",          price:6.00,  category:"carnudas",   image:"img/carnuda7.png",    description:"Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Morada, Aguacate y Tocino" },
+    { id:8,  name:"La Camarón",            price:6.00,  category:"mar",        image:"img/mar1.png",        description:"Pan Artesanal, Camarones Empanizados, Queso, Cebolla Caramelizada, Lechuga y Tomate" },
+    { id:9,  name:"La Porky",              price:6.00,  category:"mar",        image:"img/mar2.png",        description:"Pan Artesanal, Chicharrones de Cerdo, Queso, Cebolla Caramelizada, Lechuga, Tomate y Tocino" },
+    { id:10, name:"La Bañada",             price:7.50,  category:"joyitas",    image:"img/joyitas1.png",    description:"Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada, Bañada en Queso Cheddar y Tocino" },
+    { id:11, name:"La Engañosa",           price:7.50,  category:"joyitas",    image:"img/joyitas2.png",    description:"Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada, Servida en Cama de Queso Cheddar" },
+    { id:12, name:"La Doble Carne",        price:7.50,  category:"joyitas",    image:"img/joyitas3.png",    description:"Pan Artesanal, Doble Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada y Tocino" },
+    { id:13, name:"La Vacunada",           price:7.50,  category:"joyitas",    image:"img/joyitas4.png",    description:"Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada y Una Inyección de Queso Cheddar" },
+    { id:14, name:"La Mar y Tierra",       price:8.00,  category:"bestias",    image:"img/bestia1.png",     description:"Pan Artesanal, Carne de Res, Camarones Empanizados, Lechuga, Queso, Tomate, Cebolla y Tocino" },
+    { id:15, name:"La Castrosa",           price:8.00,  category:"bestias",    image:"img/bestia2.png",     description:"Pan Artesanal, Doble Carne de Res, Queso Americano, Tocino, Cubierta de Costra de Queso" },
+    { id:16, name:"La Bacon Cheese Doble", price:8.00,  category:"bestias",    image:"img/bestia3.png",     description:"Pan Artesanal, Doble Carne de Res, Queso Americano, Queso Cheddar, Pepinillos y Tocino" },
+    { id:17, name:"La Argentina",          price:8.00,  category:"bestias",    image:"img/bestia 4.png",    description:"Pan Artesanal, Carne de Res, Tomate, Cebolla, Pepinillos, Aderezo de la Casa, Aguacate, Tocino y Chorizo Argentino" },
+    { id:18, name:"La Atascada",           price:8.50,  category:"bestias",    image:"img/bestia5.png",     description:"Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla, Dedos de Queso, Tocino y Aros de Cebolla" },
+    { id:19, name:"La Triple Carne",       price:8.50,  category:"bestias",    image:"img/bestia6.png",     description:"Pan Artesanal, Triple Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada y Tocino" },
+    { id:20, name:"La Pió",                price:5.00,  category:"pechugonas", image:"img/Pechugonas1.png", description:"Pan Artesanal, Pollo Crujiente, Queso, Cebolla Caramelizada, Lechuga y Tomate" },
+    { id:21, name:"La Chipotle",           price:6.00,  category:"pechugonas", image:"img/Pechugonas2.png", description:"Pan Artesanal, Pollo Crujiente Bañado en Salsa Chipotle, Queso, Cebolla Caramelizada, Lechuga y Tomate" },
+    { id:22, name:"La Barbie",             price:6.00,  category:"pechugonas", image:"img/Pechugonas3.png", description:"Pan Artesanal, Pollo Crujiente Bañado en Salsa Barbacoa, Queso, Cebolla Caramelizada, Lechuga y Tomate" },
+    { id:23, name:"5 Wings + Papas",       price:6.00,  category:"crujientes", image:"img/5wings.png",      description:"5 Alitas crujientes acompañadas de papas fritas" },
+    { id:24, name:"10 Wings + Papas",      price:8.00,  category:"crujientes", image:"img/10wings.png",     description:"10 Alitas crujientes acompañadas de papas fritas" },
+    { id:25, name:"15 Wings + Papas",      price:12.00, category:"crujientes", image:"img/15wings.png",     description:"15 Alitas crujientes acompañadas de papas fritas" },
+    { id:26, name:"20 Wings + Papas",      price:18.00, category:"crujientes", image:"img/20wings.png",     description:"20 Alitas crujientes acompañadas de papas fritas" },
+    { id:27, name:"8 Chunks + Papas",      price:5.00,  category:"crujientes", image:"img/chunks1.png",     description:"8 Chunks de pollo crujiente acompañados de papas fritas" },
+    { id:28, name:"16 Chunks + Papas",     price:8.00,  category:"crujientes", image:"img/chunks2.png",     description:"16 Chunks de pollo crujiente acompañados de papas fritas" },
+    { id:29, name:"25 Chunks + Papas",     price:15.00, category:"crujientes", image:"img/chunks3.png",     description:"25 Chunks de pollo crujiente acompañados de papas fritas" },
+    { id:30, name:"Nuggets",               price:4.50,  category:"crujientes", image:"img/nuggets.png",     description:"6 Nuggets bañados en tu salsa preferida (Barbacoa, Chipotle o Buffalo) acompañados de papas fritas" },
+    { id:31, name:"Papas Mexicanas",       price:6.00,  category:"paponas",    image:"img/paponas1.png",    description:"Papas Fritas con Carne de Res Asada, Chirimol, Aguacate, Jalapeños, Aderezo, Queso y Salsa de la Casa" },
+    { id:32, name:"Salchipapa",            price:5.50,  category:"paponas",    image:"img/paponas2.png",    description:"Papas Fritas con Salchicha, Queso y Aderezo" },
+    { id:33, name:"Papas Bacon",           price:5.50,  category:"paponas",    image:"img/paponas3.png",    description:"Papas fritas con queso y tocino" },
+    { id:34, name:"Papas Chicken",         price:5.50,  category:"paponas",    image:"img/paponas4.png",    description:"Papas Fritas con Pechuga de Pollo Empanizado, Queso y Aderezo de la Casa" },
+    { id:35, name:"Papas Chili",           price:5.50,  category:"paponas",    image:"img/paponas5.png",    description:"Papas Fritas con Chili de la Casa, Queso y Jalapeños" },
+    { id:36, name:"Chili Dog",             price:4.00,  category:"leve",       image:"img/leve3.png",       description:"Pan Artesanal, Salchicha, Chili de la Casa, Queso y Jalapeños" },
+    { id:37, name:"Bacon Dog",             price:4.00,  category:"leve",       image:"img/leve1.png",       description:"Pan Artesanal, Salchicha, Aderezo, Queso y Baño de Tocino" },
+    { id:38, name:"Mexican Dog",           price:4.50,  category:"leve",       image:"img/leve2.png",       description:"Pan Artesanal, Salchicha Envuelta en Tocino, Aderezo, Cebolla Morada, Aguacate y Jalapeños" },
+    { id:39, name:"Pa' Uno",               price:5.50,  category:"combos",     image:"img/pa1.png",         description:"1 Hamburguesa (Facilota, Cheese o Pió) + 1 Soda · Válido Lun–Jue" },
+    { id:40, name:"Pa' Dos",               price:15.00, category:"combos",     image:"img/pa2.png",         description:"2 Hamburguesas + Papas Preparadas + 2 Sodas · Válido Lun–Jue" },
+    { id:41, name:"Pa' Todos",             price:25.00, category:"combos",     image:"img/pa3.png",         description:"4 Hamburguesas + 4 Papas + 1 Chunks + Dedos de Queso + Coca 1.5L · Válido Lun–Jue" },
+    { id:42, name:"Pan con Ajo",           price:2.50,  category:"motores",    image:"img/calentar1.png",   description:"Pan Artesanal Tostado con Mantequilla y Ajo Fresco, Sazonado con Hierbas (4 piezas)" },
+    { id:43, name:"Papas Sazonadas",       price:2.50,  category:"motores",    image:"img/calentar2.png",   description:"Crujientes Papas Fritas Sazonadas a la Perfección con Mezcla Especial" },
+    { id:44, name:"Dedos de Queso",        price:3.00,  category:"motores",    image:"img/calentar3.png",   description:"Dedos de Queso Empanizados y Crujientes (5 piezas)" },
+    { id:45, name:"Aros de Cebolla",       price:2.50,  category:"motores",    image:"img/calentar4.png",   description:"Aros de Cebolla Empanizados, Crujientes por Fuera y Tiernos por Dentro (8 piezas)" },
+    { id:46, name:"Frozen",                price:2.50,  category:"bebidas",    image:"img/frozen.png",      description:"Fresa / Piña / Maracuyá / Limón (indica tu sabor en notas)" },
+    { id:47, name:"Malteada",              price:3.50,  category:"bebidas",    image:"img/malteadas.png",   description:"Fresa / Oreo / Chocolate / Café / Coco (indica tu sabor en notas)" },
+    { id:48, name:"Limonada con Boba",     price:3.50,  category:"bebidas",    image:"img/limonada.png",    description:"Fresa / Hierbabuena / Piña / Cherry / Azul / Maracuyá · ¡Incluyen bobas!" },
+    { id:49, name:"Refrescante",           price:2.50,  category:"bebidas",    image:"img/refrescos.png",   description:"Horchata de Maní / Limonada Natural (indica tu opción en notas)" },
+    { id:50, name:"Café Caliente",         price:1.00,  category:"bebidas",    image:"img/cafe.png",        description:"Café negro caliente" },
+    { id:51, name:"Café con Leche",        price:1.25,  category:"bebidas",    image:"img/cafe_leche.png",  description:"Café con leche caliente" },
+    { id:52, name:"Iced Coffee",           price:2.50,  category:"bebidas",    image:"img/cafe_ice.png",    description:"Café helado con jellys de café" },
+    { id:53, name:"Soda",                  price:1.25,  category:"bebidas",    image:"img/sodas.png",       description:"Coca Cola / Coca Cola 0 / Uva / Fanta / Sprite / Té de Frambuesa / Té de Durazno" },
+    { id:54, name:"Agua",                  price:1.00,  category:"bebidas",    image:"img/agua.png",        description:"Botella de agua natural" },
+    { id:55, name:"Carne Extra",           price:1.50,  category:"extras",     image:"img/extra1.png",      description:"Porción extra de carne de res" },
+    { id:56, name:"Aderezo Extra",         price:0.50,  category:"extras",     image:"img/extra2.png",      description:"Porción extra de aderezo de la casa" },
+    { id:57, name:"Queso Cheddar Extra",   price:1.50,  category:"extras",     image:"img/extra3.png",      description:"Porción extra de queso cheddar" },
+    { id:58, name:"Agrandado de Papas",    price:1.50,  category:"extras",     image:"img/extra4.png",      description:"Agrandado de papas fritas en tu orden" },
+    { id:59, name:"Papas Preparadas",      price:1.50,  category:"extras",     image:"img/calentar2.png",   description:"Cambio de papas normales a papas preparadas" },
+    { id:60, name:"Tocino Extra",          price:0.50,  category:"extras",     image:"img/extra5.png",      description:"Porción extra de tocino crujiente" },
+];
 
-        const products = [
-            // LAS CARNUDAS
-            { id: 1,  name: "La Facilota",        price: 5.00, category: "carnudas", image: "img/carnuda1.png",
-              description: "Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate y Cebolla Caramelizada" },
-            { id: 2,  name: "La Cheese",           price: 5.00, category: "carnudas", image: "img/carnuda2.png",
-              description: "Pan Artesanal, Carne de Res, Queso Americano y Queso Cheddar" },
-            { id: 3,  name: "La Honguito",         price: 6.00, category: "carnudas", image: "img/carnuda3.png",
-              description: "Pan Artesanal, Carne de Res, Lechuga, Tomate, Queso, Cebolla Caramelizada y Hongos Preparados en Salsa de la Casa" },
-            { id: 4,  name: "La Tropical",         price: 6.00, category: "carnudas", image: "img/carnuda4.png",
-              description: "Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada, Piña y Tocino" },
-            { id: 5,  name: "La Bacon Cheese",     price: 6.00, category: "carnudas", image: "img/carnuda5.png",
-              description: "Pan Artesanal, Carne de Res, Queso Americano, Queso Cheddar, Pepinillos y Tocino" },
-            { id: 6,  name: "La Ahuevada",         price: 6.00, category: "carnudas", image: "img/carnuda6.png",
-              description: "Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada, Huevo Estrellado y Tocino" },
-            { id: 7,  name: "La Guacamole",        price: 6.00, category: "carnudas", image: "img/carnuda7.png",
-              description: "Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Morada, Aguacate y Tocino" },
+const categoryMeta = {
+    carnudas:   { label:'Las Carnudas',          note:'Todas las hamburguesas incluyen papas' },
+    mar:        { label:'Del Mar y la Granja',    note:'Todas las hamburguesas incluyen papas' },
+    joyitas:    { label:"Las Joyitas Flama's",    note:'Todas las hamburguesas incluyen papas' },
+    bestias:    { label:'Las Bestias',            note:'Todas las hamburguesas incluyen papas' },
+    pechugonas: { label:'Las Pechugonas',         note:'Todas las hamburguesas incluyen papas' },
+    crujientes: { label:'Las Crujientes',         note:null },
+    paponas:    { label:'Las Paponas',            note:null },
+    leve:       { label:'Algo Leve',              note:null },
+    combos:     { label:'Para Compartir',         note:'📅 Válido únicamente de Lunes a Jueves' },
+    motores:    { label:"Pa' Calentar Motores",   note:null },
+    bebidas:    { label:"Bebidas Flama's",        note:null },
+    extras:     { label:'Extras',                 note:null },
+};
+const catOrder = ['carnudas','mar','joyitas','bestias','pechugonas','crujientes','paponas','leve','combos','motores','bebidas','extras'];
 
-            // DEL MAR Y LA GRANJA
-            { id: 8,  name: "La Camarón",          price: 6.00, category: "mar", image: "img/mar1.png",
-              description: "Pan Artesanal, Camarones Empanizados, Queso, Cebolla Caramelizada, Lechuga y Tomate" },
-            { id: 9,  name: "La Porky",            price: 6.00, category: "mar", image: "img/mar2.png",
-              description: "Pan Artesanal, Chicharrones de Cerdo, Queso, Cebolla Caramelizada, Lechuga, Tomate y Tocino" },
+/* ═══════════════════════════════════════════════════════
+   CARRITO — lee y escribe en localStorage ('flamasCart')
+   Formato: { id, name, price, category, image, description, quantity }
+   ═══════════════════════════════════════════════════════ */
+function loadCart() {
+    try { return JSON.parse(localStorage.getItem('flamasCart') || '[]'); }
+    catch(e) { return []; }
+}
+function saveCart(cart) {
+    localStorage.setItem('flamasCart', JSON.stringify(cart));
+}
 
-            // LAS JOYITAS
-            { id: 10, name: "La Bañada",           price: 7.50, category: "joyitas", image: "img/joyitas1.png",
-              description: "Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada, Bañada en Queso Cheddar y Tocino" },
-            { id: 11, name: "La Engañosa",         price: 7.50, category: "joyitas", image: "img/joyitas2.png",
-              description: "Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada, Servida en Una Cama de Queso Cheddar" },
-            { id: 12, name: "La Doble Carne",      price: 7.50, category: "joyitas", image: "img/joyitas3.png",
-              description: "Pan Artesanal, Doble Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada y Tocino" },
-            { id: 13, name: "La Vacunada",         price: 7.50, category: "joyitas", image: "img/joyitas4.png",
-              description: "Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada y Una Inyección de Queso Cheddar" },
+function addToCart(id) {
+    const p = products.find(x => x.id === id);
+    if (!p) return;
+    let cart = loadCart();
+    const ex = cart.find(x => x.id === id);
+    if (ex) { ex.quantity++; }
+    else { cart.push({ id:p.id, name:p.name, price:p.price, category:p.category, image:p.image, description:p.description, quantity:1 }); }
+    saveCart(cart);
+    renderCart();
+    showToast('🔥 ' + p.name + ' agregado');
+}
 
-            // LAS BESTIAS
-            { id: 14, name: "La Mar y Tierra",     price: 8.00, category: "bestias", image: "img/bestia1.png",
-              description: "Pan Artesanal, Carne de Res, Camarones Empanizados, Lechuga, Queso, Tomate, Cebolla y Tocino" },
-            { id: 15, name: "La Castrosa",         price: 8.00, category: "bestias", image: "img/bestia2.png",
-              description: "Pan Artesanal, Doble Carne de Res, Queso Americano, Tocino, Cubierta de Costra de Queso" },
-            { id: 16, name: "La Bacon Cheese Doble", price: 8.00, category: "bestias", image: "img/bestia3.png",
-              description: "Pan Artesanal, Doble Carne de Res, Queso Americano, Queso Cheddar, Pepinillos y Tocino" },
-            { id: 17, name: "La Argentina",        price: 8.00, category: "bestias", image: "img/bestia4.png",
-              description: "Pan artesanal, carne de res, tomate, cebolla, pepinillos, aderezo de la casa, aguacate y tocino, coronada con un chorizo argentino" },
-            { id: 18, name: "La Atascada",         price: 8.50, category: "bestias", image: "img/bestia5.png",
-              description: "Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla, Dedos de Queso, Tocino, Coronada con Aros de Cebolla" },
-            { id: 19, name: "La Triple Carne",     price: 8.50, category: "bestias", image: "img/bestia6.png",
-              description: "Pan Artesanal, Triple Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada y Tocino" },
+function updateQuantity(id, delta) {
+    let cart = loadCart();
+    const item = cart.find(x => x.id === id);
+    if (!item) return;
+    item.quantity += delta;
+    if (item.quantity <= 0) cart = cart.filter(x => x.id !== id);
+    saveCart(cart);
+    renderCart();
+}
 
-            // LAS PECHUGONAS
-            { id: 20, name: "La Pio",              price: 5.00, category: "pechugonas", image: "img/Pechugonas1.png",
-              description: "Pan artesanal, Pollo Crujiente, Queso, Cebolla Caramelizada, Lechuga y Tomate" },
-            { id: 21, name: "La Chipotle",         price: 6.00, category: "pechugonas", image: "img/Pechugonas2.png",
-              description: "Pan Artesanal, Pollo Crujiente Bañado en Salsa Chipotle, Queso, Cebolla Caramelizada, Lechuga y Tomate" },
-            { id: 22, name: "La Barbie",           price: 6.00, category: "pechugonas", image: "img/Pechugonas3.png",
-              description: "Pan Artesanal, Pollo Crujiente Bañado en Salsa Barbacoa, Queso, Cebolla Caramelizada, Lechuga y Tomate" },
+function removeFromCart(id) {
+    let cart = loadCart().filter(x => x.id !== id);
+    saveCart(cart);
+    renderCart();
+}
 
-            // LAS CRUJIENTES
-            { id: 23, name: "Wings 5 + Papas",     price: 6.00,  category: "crujientes", image: "img/5wings.png",
-              description: "5 Alitas crujientes acompañadas de papas fritas" },
-            { id: 24, name: "Wings 10 + Papas",    price: 8.00,  category: "crujientes", image: "img/10wings.png",
-              description: "10 Alitas crujientes acompañadas de papas fritas" },
-            { id: 25, name: "Wings 15 + Papas",    price: 12.00, category: "crujientes", image: "img/15wings.png",
-              description: "15 Alitas crujientes acompañadas de papas fritas" },
-            { id: 26, name: "Wings 20 + Papas",    price: 18.00, category: "crujientes", image: "img/20wings.png",
-              description: "20 Alitas crujientes acompañadas de papas fritas" },
-            { id: 27, name: "Chunks 8 + Papas",    price: 5.00,  category: "crujientes", image: "img/chunks1.png",
-              description: "8 Chunks de pollo crujiente acompañados de papas fritas" },
-            { id: 28, name: "Chunks 16 + Papas",   price: 8.00,  category: "crujientes", image: "img/chunks2.png",
-              description: "16 Chunks de pollo crujiente acompañados de papas fritas" },
-            { id: 29, name: "Chunks 25 + Papas",   price: 15.00, category: "crujientes", image: "img/chunks3.png",
-              description: "25 Chunks de pollo crujiente acompañados de papas fritas" },
-            { id: 30, name: "Nuggets",              price: 4.50,  category: "crujientes", image: "img/nuggets.png",
-              description: "6 Nuggets bañados en tu salsa preferida (Barbacoa, Chipotle o Buffalo) acompañados de papas fritas" },
+function clearCart() {
+    if (!confirm('¿Vaciar el carrito?')) return;
+    saveCart([]);
+    renderCart();
+}
 
-            // LAS PAPONAS
-            { id: 31, name: "Papas Mexicanas",      price: 6.00, category: "paponas", image: "img/paponas1.png",
-              description: "Papas Fritas con Carne de Res Asada, Chirimol, Aguacate, Jalapeños, Aderezo, Queso y Salsa de la Casa" },
-            { id: 32, name: "Salchipapa",           price: 5.50, category: "paponas", image: "img/paponas2.png",
-              description: "Papas Fritas con Salchicha, Queso y Aderezo" },
-            { id: 33, name: "Papas Bacon",          price: 5.50, category: "paponas", image: "img/paponas3.png",
-              description: "Papas fritas con queso y tocino" },
-            { id: 34, name: "Papas Chicken",        price: 5.50, category: "paponas", image: "img/paponas4.png",
-              description: "Papas Fritas con Pechuga de Pollo Empanizado, Queso y Aderezo de la Casa" },
-            { id: 35, name: "Papas Chili",          price: 5.50, category: "paponas", image: "img/paponas5.png",
-              description: "Papas Fritas con Chili de la Casa, Queso y Jalapeños" },
+function renderCart() {
+    const cart = loadCart();
+    const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
 
-            // ALGO LEVE
-            { id: 36, name: "Chili Dog",            price: 4.00, category: "leve", image: "img/leve3.png",
-              description: "Pan Artesanal, Salchicha, Chili de la Casa, Queso y Jalapeños" },
-            { id: 37, name: "Bacon Dog",            price: 4.00, category: "leve", image: "img/leve1.png",
-              description: "Pan Artesanal, Salchicha, Aderezo, Queso y Baño de Tocino" },
-            { id: 38, name: "Mexican Dog",          price: 4.50, category: "leve", image: "img/leve2.png",
-              description: "Pan Artesanal, Salchicha Envuelta en Tocino, Aderezo, Cebolla Morada, Aguacate y Jalapeños" },
+    document.getElementById('cartCount').textContent = totalItems;
 
-            // PARA COMPARTIR
-            { id: 39, name: "Pa' Uno",              price: 5.50, category: "combos", image: "img/pa1.png",
-              description: "1 Hamburguesa (Facilota, Cheese o Pio) + 1 Soda. Válido de Lunes a Jueves." },
-            { id: 40, name: "Pa' Dos",              price: 15.00, category: "combos", image: "img/pa2.png",
-              description: "2 Hamburguesas (Facilota, Cheese o Pio) + Papas preparadas + 2 Sodas. Válido de Lunes a Jueves." },
-            { id: 41, name: "Pa' Todos",            price: 25.00, category: "combos", image: "img/pa3.png",
-              description: "4 Hamburguesas + 4 Papas + 1 Chunks + 1 Dedos de queso + 1 Coca 1.5 Lts. Válido de Lunes a Jueves." },
+    const cartItems   = document.getElementById('cartItems');
+    const cartTotal   = document.getElementById('cartTotal');
+    const checkoutBtn = document.getElementById('checkoutBtn');
+    const clearBtn    = document.getElementById('clearBtn');
 
-            // PA' CALENTAR MOTORES
-            { id: 42, name: "Pan con Ajo",          price: 2.50, category: "motores", image: "img/calentar1.png",
-              description: "Pan Artesanal Tostado con Mantequilla y Ajo Fresco, Sazonado con Hierbas. La orden incluye 4 piezas." },
-            { id: 43, name: "Papas Sazonadas",      price: 2.50, category: "motores", image: "img/calentar2.png",
-              description: "Crujientes Papas Fritas Sazonadas a la Perfección con una Mezcla Especial" },
-            { id: 44, name: "Dedos de Queso",       price: 3.00, category: "motores", image: "img/calentar3.png",
-              description: "Irresistibles Dedos de Queso Empanizados y Crujientes. La orden incluye 5 piezas." },
-            { id: 45, name: "Aros de Cebolla",      price: 2.50, category: "motores", image: "img/calentar4.png",
-              description: "Aros de Cebolla Empanizados, Crujientes por Fuera y Tiernos por Dentro. La orden incluye 8 piezas." },
+    if (cart.length === 0) {
+        cartItems.innerHTML = `
+            <div class="empty-cart">
+                <img src="img/logoperron.png" alt="Flama's">
+                <p>Tu carrito está vacío</p>
+                <a href="Menú.html">← Agregar del menú</a>
+            </div>`;
+        cartTotal.style.display   = 'none';
+        checkoutBtn.disabled      = true;
+        clearBtn.style.display    = 'none';
+    } else {
+        cartItems.innerHTML = cart.map(item => `
+            <div class="cart-item">
+                <div class="cart-item-info">
+                    <h4>${item.name}</h4>
+                    <p>$${item.price.toFixed(2)} × ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}</p>
+                </div>
+                <div class="cart-item-actions">
+                    <button class="qty-btn" onclick="updateQuantity(${item.id}, -1)">−</button>
+                    <span class="qty-display">${item.quantity}</span>
+                    <button class="qty-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                    <button class="remove-btn" onclick="removeFromCart(${item.id})">×</button>
+                </div>
+            </div>`).join('');
 
-            // BEBIDAS
-            { id: 46, name: "Frozen",               price: 2.50, category: "bebidas", image: "img/frozen.png",
-              description: "Fresa / Piña / Maracuyá / Limón (indica tu sabor en notas)" },
-            { id: 47, name: "Malteada",             price: 3.50, category: "bebidas", image: "img/malteadas.png",
-              description: "Fresa / Oreo / Chocolate / Café / Coco (indica tu sabor en notas)" },
-            { id: 48, name: "Limonada con Boba",    price: 3.50, category: "bebidas", image: "img/limonada.png",
-              description: "Fresa / Hierbabuena / Piña / Cherry / Azul / Maracuyá. ¡Todas incluyen bobas!" },
-            { id: 49, name: "Refrescante",          price: 2.50, category: "bebidas", image: "img/refrescos.png",
-              description: "Horchata de Maní / Limonada Natural (indica tu opción en notas)" },
-            { id: 50, name: "Café Caliente",        price: 1.00, category: "bebidas", image: "img/cafe.png",
-              description: "Café negro caliente" },
-            { id: 51, name: "Café con Leche",       price: 1.25, category: "bebidas", image: "img/cafe_leche.png",
-              description: "Café con leche caliente" },
-            { id: 52, name: "Iced Coffee",          price: 2.50, category: "bebidas", image: "img/cafe_ice.png",
-              description: "Café helado. ¡Incluye jellys de café!" },
-            { id: 53, name: "Soda",                 price: 1.25, category: "bebidas", image: "img/sodas.png",
-              description: "Coca Cola / Coca Cola 0 / Uva / Fanta / Sprite / Té de Frambuesa / Té de Durazno (indica en notas)" },
-            { id: 54, name: "Agua",                 price: 1.00, category: "bebidas", image: "img/agua.png",
-              description: "Botella con agua natural" },
+        const subtotal = cart.reduce((s, i) => s + i.price * i.quantity, 0);
+        document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+        document.getElementById('total').textContent    = `$${(subtotal + 2).toFixed(2)}`;
+        cartTotal.style.display   = 'block';
+        checkoutBtn.disabled      = false;
+        clearBtn.style.display    = 'block';
+    }
 
-            // EXTRAS
-            { id: 55, name: "Carne Extra",          price: 1.50, category: "extras", image: "img/extra1.png",
-              description: "Porción extra de carne de res para tu hamburguesa" },
-            { id: 56, name: "Aderezo Extra",        price: 0.50, category: "extras", image: "img/extra2.png",
-              description: "Porción extra de aderezo de la casa" },
-            { id: 57, name: "Queso Cheddar Extra",  price: 1.50, category: "extras", image: "img/extra3.png",
-              description: "Porción extra de queso cheddar" },
-            { id: 58, name: "Agrandado de Papas",   price: 1.50, category: "extras", image: "img/extra4.png",
-              description: "Agrandado de papas fritas en tu orden" },
-            { id: 59, name: "Papas Preparadas",     price: 1.50, category: "extras", image: "img/calentar2.png",
-              description: "Cambio de papas normales a papas preparadas (precio desde $1.50)" },
-            { id: 60, name: "Tocino Extra",         price: 0.50, category: "extras", image: "img/extra5.png",
-              description: "Porción extra de tocino crujiente" },
-        ];
+    // Cerrar el form si vaciamos
+    if (cart.length === 0) document.getElementById('checkoutForm').classList.remove('active');
+}
 
-        const categoryMeta = {
-            carnudas:   { label: ' Las Carnudas',         note: '  Todas las hamburguesas incluyen papas' },
-            mar:        { label: ' Del Mar y la Granja',   note: ' Todas las hamburguesas incluyen papas' },
-            joyitas:    { label: ' Las Joyitas Flama\'s',  note: ' Todas las hamburguesas incluyen papas' },
-            bestias:    { label: ' Las Bestias',           note: ' Todas las hamburguesas incluyen papas' },
-            pechugonas: { label: ' Las Pechugonas',        note: ' Todas las hamburguesas incluyen papas' },
-            crujientes: { label: ' Las Crujientes',        note: null },
-            paponas:    { label: ' Las Paponas',           note: null },
-            leve:       { label: ' Algo Leve',             note: null },
-            combos:     { label: ' Para Compartir',        note: ' Válido únicamente de Lunes a Jueves' },
-            motores:    { label: ' Pa\' Calentar Motores', note: null },
-            bebidas:    { label: ' Bebidas Flama\'s',      note: null },
-            extras:     { label: ' Extras',                note: null },
-        };
-
-        let cart = [];
-
-        function toggleMenu() {
-            document.getElementById('navLinks').classList.toggle('active');
-            document.querySelector('.menu-toggle').classList.toggle('active');
+/* ═══════════════════════════════════════════
+   RENDER PRODUCTOS
+   ═══════════════════════════════════════════ */
+function loadProducts(category = 'all') {
+    const grid = document.getElementById('productsGrid');
+    grid.innerHTML = '';
+    const cats = category === 'all' ? catOrder : [category];
+    cats.forEach(cat => {
+        const items = products.filter(p => p.category === cat);
+        if (!items.length) return;
+        const meta = categoryMeta[cat];
+        if (meta) {
+            const lbl = document.createElement('div');
+            lbl.className = 'category-group-label';
+            lbl.textContent = meta.label;
+            grid.appendChild(lbl);
         }
-
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                document.getElementById('navLinks').classList.remove('active');
-                document.querySelector('.menu-toggle').classList.remove('active');
-            });
-        });
-
-        function loadProducts(category = 'all') {
-            const grid = document.getElementById('productsGrid');
-            grid.innerHTML = '';
-
-            if (category === 'all') {
-                const order = ['carnudas','mar','joyitas','bestias','pechugonas','crujientes','paponas','leve','combos','motores','bebidas','extras'];
-                order.forEach(cat => {
-                    const items = products.filter(p => p.category === cat);
-                    if (!items.length) return;
-                    const meta = categoryMeta[cat];
-                    const label = document.createElement('div');
-                    label.className = 'category-group-label';
-                    label.textContent = meta.label;
-                    grid.appendChild(label);
-                    items.forEach(product => grid.appendChild(buildCard(product)));
-                    if (meta.note) {
-                        const note = document.createElement('div');
-                        note.className = 'includes-note';
-                        note.style.gridColumn = '1 / -1';
-                        note.textContent = meta.note;
-                        grid.appendChild(note);
-                    }
-                });
-            } else {
-                const filtered = products.filter(p => p.category === category);
-                const meta = categoryMeta[category];
-                if (meta) {
-                    const label = document.createElement('div');
-                    label.className = 'category-group-label';
-                    label.textContent = meta.label;
-                    grid.appendChild(label);
-                }
-                filtered.forEach(product => grid.appendChild(buildCard(product)));
-                if (meta && meta.note) {
-                    const note = document.createElement('div');
-                    note.className = 'includes-note';
-                    note.style.gridColumn = '1 / -1';
-                    note.textContent = meta.note;
-                    grid.appendChild(note);
-                }
-            }
+        items.forEach(p => grid.appendChild(buildCard(p)));
+        if (meta && meta.note) {
+            const note = document.createElement('div');
+            note.className = 'includes-note';
+            note.textContent = meta.note;
+            grid.appendChild(note);
         }
+    });
+}
 
-        function buildCard(product) {
-            const div = document.createElement('div');
-            div.className = 'product-item';
-            div.dataset.category = product.category;
-            div.innerHTML = `
-                <img src="${product.image}" alt="${product.name}" onerror="this.style.background='#1a1a1a';this.style.objectFit='contain';this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 100 100\\'%3E%3Ctext y=\\'.9em\\'  font-size=\\'90\\'%3E🍔%3C/text%3E%3C/svg%3E'">
-                <h4>${product.name}</h4>
-                <p class="description">${product.description}</p>
-                <p class="price">$${product.price.toFixed(2)}</p>
-                <button class="add-btn" onclick="addToCart(${product.id})">Añadir +</button>
-            `;
-            return div;
-        }
+function buildCard(p) {
+    const div = document.createElement('div');
+    div.className = 'product-item';
+    div.innerHTML = `
+        <img src="${p.image}" alt="${p.name}"
+            onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E🍔%3C/text%3E%3C/svg%3E';this.style.objectFit='contain';this.style.background='#1a1a1a'">
+        <h4>${p.name}</h4>
+        <p class="description">${p.description}</p>
+        <p class="price">$${p.price.toFixed(2)}</p>
+        <button class="add-btn" onclick="addToCart(${p.id})">+ Añadir al pedido</button>
+    `;
+    return div;
+}
 
-        function filterProducts(category, btn) {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            if (btn) btn.classList.add('active');
-            loadProducts(category);
-        }
+function filterProducts(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    loadProducts(cat);
+}
 
-        function addToCart(productId) {
-            const product = products.find(p => p.id === productId);
-            const existingItem = cart.find(item => item.id === productId);
-            if (existingItem) { existingItem.quantity++; }
-            else { cart.push({ ...product, quantity: 1 }); }
-            updateCart();
-            showNotification(`${product.name} agregado`);
-        }
+/* ═══════════════════════════════════════════
+   FORMULARIO & WHATSAPP
+   ═══════════════════════════════════════════ */
+function validateForm() {
+    let valid = true;
+    const nombre    = document.getElementById('fieldNombre');
+    const telefono  = document.getElementById('fieldTelefono');
+    const direccion = document.getElementById('fieldDireccion');
 
-        function updateCart() {
-            const cartItems   = document.getElementById('cartItems');
-            const cartCount   = document.getElementById('cartCount');
-            const cartTotal   = document.getElementById('cartTotal');
-            const checkoutBtn = document.getElementById('checkoutBtn');
-            const totalItems  = cart.reduce((sum, item) => sum + item.quantity, 0);
-            cartCount.textContent = totalItems;
+    if (!nombre.value.trim() || nombre.value.trim().length < 3) {
+        nombre.classList.add('error'); document.getElementById('errNombre').classList.add('show'); valid = false;
+    } else { nombre.classList.remove('error'); document.getElementById('errNombre').classList.remove('show'); }
 
-            if (cart.length === 0) {
-                cartItems.innerHTML = `<div class="empty-cart"><img src="img/logoperron.png" alt="FLAMA'S Logo" class="empty-cart-logo"><p>Tu carrito está vacío</p></div>`;
-                cartTotal.style.display = 'none';
-                checkoutBtn.disabled = true;
-            } else {
-                cartItems.innerHTML = cart.map(item => `
-                    <div class="cart-item">
-                        <div class="cart-item-info">
-                            <h4>${item.name}</h4>
-                            <p>$${item.price.toFixed(2)} x ${item.quantity}</p>
-                        </div>
-                        <div class="cart-item-actions">
-                            <button class="qty-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
-                            <span>${item.quantity}</span>
-                            <button class="qty-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
-                            <button class="remove-btn" onclick="removeFromCart(${item.id})">×</button>
-                        </div>
-                    </div>`).join('');
-                cartTotal.style.display = 'block';
-                checkoutBtn.disabled = false;
-                const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
-                document.getElementById('total').textContent = `$${(subtotal + 2).toFixed(2)}`;
-            }
-        }
+    if (!/^\d{4}-\d{4}$/.test(telefono.value.trim())) {
+        telefono.classList.add('error'); document.getElementById('errTelefono').classList.add('show'); valid = false;
+    } else { telefono.classList.remove('error'); document.getElementById('errTelefono').classList.remove('show'); }
 
-        function updateQuantity(productId, change) {
-            const item = cart.find(item => item.id === productId);
-            if (item) {
-                item.quantity += change;
-                if (item.quantity <= 0) removeFromCart(productId);
-                else updateCart();
-            }
-        }
+    if (!direccion.value.trim() || direccion.value.trim().length < 5) {
+        direccion.classList.add('error'); document.getElementById('errDireccion').classList.add('show'); valid = false;
+    } else { direccion.classList.remove('error'); document.getElementById('errDireccion').classList.remove('show'); }
 
-        function removeFromCart(productId) {
-            cart = cart.filter(item => item.id !== productId);
-            updateCart();
-        }
+    return valid;
+}
 
-        function showNotification(message) {
-            const n = document.getElementById('notification');
-            n.textContent = message;
-            n.classList.add('show');
-            setTimeout(() => n.classList.remove('show'), 2000);
-        }
+function showCheckout() {
+    document.getElementById('checkoutForm').classList.add('active');
+    document.getElementById('checkoutForm').scrollIntoView({ behavior: 'smooth' });
+}
 
-        function showCheckout() {
-            document.getElementById('checkoutForm').classList.add('active');
-            document.getElementById('checkoutForm').scrollIntoView({ behavior: 'smooth' });
-        }
+function submitOrder(e) {
+    e.preventDefault();
+    const cart = loadCart();
+    if (!cart.length) { alert('Tu carrito está vacío'); return; }
+    if (!validateForm()) return;
 
-        function submitOrder(event) {
-            event.preventDefault();
-            if (cart.length === 0) { alert('Tu carrito está vacío'); return; }
-            const form     = event.target;
-            const nombre   = form.querySelector('input[type="text"]').value;
-            const telefono = form.querySelector('input[type="tel"]').value;
-            const direccion= form.querySelector('textarea').value;
-            const pago     = form.querySelector('select').value;
-            const cambio   = form.querySelectorAll('input[type="text"]')[1].value;
-            const notas    = form.querySelectorAll('textarea')[1].value;
-            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const total    = subtotal + 2.00;
+    const nombre    = document.getElementById('fieldNombre').value.trim();
+    const telefono  = document.getElementById('fieldTelefono').value.trim();
+    const direccion = document.getElementById('fieldDireccion').value.trim();
+    const cambio    = document.getElementById('fieldCambio').value.trim();
+    const notas     = document.getElementById('fieldNotas').value.trim();
+    const subtotal  = cart.reduce((s, i) => s + i.price * i.quantity, 0);
+    const total     = subtotal + 2;
+    const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
 
-            let mensaje = `🍔 *NUEVO PEDIDO FLAMA'S* 🍔\n\n`;
-            mensaje += `👤 *Cliente:* ${nombre}\n`;
-            mensaje += `📞 *Teléfono:* ${telefono}\n`;
-            mensaje += `📍 *Dirección:* ${direccion}\n\n`;
-            mensaje += `🛒 *PEDIDO:*\n`;
-            cart.forEach(item => {
-                mensaje += `• ${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}\n`;
-            });
-            mensaje += `\n💰 *Subtotal:* $${subtotal.toFixed(2)}\n`;
-            mensaje += `🚚 *Envío:* $2.00\n`;
-            mensaje += `💵 *TOTAL:* $${total.toFixed(2)}\n\n`;
-            mensaje += `💳 *Pago:* ${pago === 'efectivo' ? 'Efectivo' : 'Tarjeta'}\n`;
-            if (cambio) mensaje += `💵 *Cambio para:* $${cambio}\n`;
-            if (notas)  mensaje += `📝 *Notas:* ${notas}\n`;
+    const L1 = '━━━━━━━━━━━━━━━━━━━━━━';
+    const L2 = '──────────────────────';
+    let msg = `🔥 *FLAMA'S SV — NUEVO PEDIDO* 🔥\n${L1}\n\n`;
+    msg += `👤 *CLIENTE*\n   Nombre:    ${nombre}\n   Teléfono:  ${telefono}\n   Dirección: ${direccion}\n\n`;
+    msg += `${L2}\n🛒 *PEDIDO* (${totalItems} artículo${totalItems>1?'s':''})\n${L2}\n`;
+    cart.forEach(i => {
+        msg += `▸ ${i.name}\n   ${i.quantity} × $${i.price.toFixed(2)} = *$${(i.price*i.quantity).toFixed(2)}*\n`;
+    });
+    msg += `${L2}\n   Subtotal: $${subtotal.toFixed(2)}\n   Envío:    $2.00\n   *TOTAL:   $${total.toFixed(2)}*\n\n`;
+    msg += `${L2}\n💵 *PAGO*\n   Método: Efectivo\n`;
+    if (cambio) msg += `   Cambio para: $${cambio}\n`;
+    if (notas) msg += `\n${L2}\n📝 *NOTAS*\n   ${notas}\n`;
+    msg += `\n${L1}\n_Pedido generado desde flamassv.com_`;
 
-            window.open(`https://wa.me/50375416644?text=${encodeURIComponent(mensaje)}`, '_blank');
-            cart = [];
-            updateCart();
-            form.reset();
-            document.getElementById('checkoutForm').classList.remove('active');
-            showNotification('¡Pedido enviado!');
-        }
+    window.open(`https://wa.me/50370183333?text=${encodeURIComponent(msg)}`, '_blank');
+    saveCart([]);
+    renderCart();
+    document.getElementById('orderForm').reset();
+    document.getElementById('checkoutForm').classList.remove('active');
+    showToast('✅ ¡Pedido enviado por WhatsApp!');
+}
 
-        // Init
-        loadProducts();
-    </script>
+/* ═══════════════════════════════════════════
+   UTILIDADES
+   ═══════════════════════════════════════════ */
+let toastTimer;
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function toggleMenu() {
+    document.getElementById('navLinks').classList.toggle('active');
+    document.querySelector('.menu-toggle').classList.toggle('active');
+}
+document.querySelectorAll('.nav-links a').forEach(a => {
+    a.addEventListener('click', () => {
+        document.getElementById('navLinks').classList.remove('active');
+        document.querySelector('.menu-toggle').classList.remove('active');
+    });
+});
+
+// Formato teléfono
+document.addEventListener('DOMContentLoaded', () => {
+    const tel = document.getElementById('fieldTelefono');
+    if (tel) tel.addEventListener('input', e => {
+        let v = e.target.value.replace(/\D/g,'');
+        if (v.length > 4) v = v.slice(0,4) + '-' + v.slice(4,8);
+        e.target.value = v;
+    });
+    const nom = document.getElementById('fieldNombre');
+    if (nom) nom.addEventListener('input', e => {
+        e.target.value = e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]/g,'');
+    });
+});
+
+window.addEventListener('load', () => {
+    setTimeout(() => document.getElementById('loader').classList.add('hidden'), 1000);
+});
+window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// ── INIT ──
+loadProducts();
+renderCart(); // lee el localStorage al cargar
+</script>
 </body>
 </html>

@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Flama's | Menú</title>
 <link rel="icon" href="img/logoperron.png" type="image/png">
-<link rel="" href="img/exterior letrero.jpeg">
- <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -25,12 +24,19 @@
   --fire-glow: rgba(255,77,0,0.35);
   --glass: rgba(255,255,255,0.03);
   --glass-border: rgba(255,255,255,0.08);
+  --primary: #FF4D00;
+  --primary-glow: rgba(255, 77, 0, 0.4);
+  --secondary: #FF8C00;
+  --dark: #0a0a0a;
+  --darker: #050505;
+  --gray: #1a1a1a;
+  --text-muted: #888;
 }
 
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   background: var(--void);
   color: var(--light);
   overflow-x: hidden;
@@ -44,21 +50,20 @@ body::after {
   pointer-events: none; z-index: 9998; mix-blend-mode: overlay;
 }
 
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: var(--abyss); }
-::-webkit-scrollbar-thumb { background: linear-gradient(var(--fire), var(--ember)); border-radius: 3px; }
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--dark); }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
 
 /* ── LOADER ── */
 #loader {
   position: fixed; inset: 0;
-  background: var(--void);
+  background: var(--darker);
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   z-index: 99999;
   transition: opacity 0.7s ease, visibility 0.7s ease;
 }
 #loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-
 .loader-logo-wrap {
   position: relative;
   width: 110px; height: 110px;
@@ -69,8 +74,8 @@ body::after {
   position: absolute; inset: 0;
   border-radius: 50%;
   border: 2px solid transparent;
-  border-top-color: var(--fire);
-  border-right-color: var(--ember);
+  border-top-color: var(--primary);
+  border-right-color: var(--secondary);
   animation: spin 1.2s linear infinite;
 }
 .loader-logo-wrap::after {
@@ -80,12 +85,12 @@ body::after {
   border: 1px solid rgba(255,77,0,0.15);
 }
 @keyframes spin { to { transform: rotate(360deg); } }
-
 .loader-logo {
   width: 72px; height: 72px;
-  object-fit: contain; border-radius: 50%;
+  object-fit: contain;
+  border-radius: 50%;
   animation: pulse-scale 1.4s ease-in-out infinite;
-  filter: drop-shadow(0 0 16px var(--fire-glow));
+  filter: drop-shadow(0 0 16px rgba(255,77,0,0.4));
 }
 @keyframes pulse-scale {
   0%,100% { transform: scale(1); }
@@ -94,165 +99,120 @@ body::after {
 .loader-text {
   margin-top: 1.5rem;
   font-family: 'Bebas Neue', cursive;
-  font-size: 1.4rem; letter-spacing: 6px;
-  color: var(--mist);
+  font-size: 1.4rem;
+  letter-spacing: 6px;
+  color: var(--text-muted);
   animation: blink 1.4s ease-in-out infinite;
 }
 @keyframes blink { 0%,100%{opacity:0.4} 50%{opacity:1} }
 
 /* ── NAV ── */
 nav {
-  position: fixed;
-  top: 16px; left: 50%;
-  transform: translateX(-50%);
-  width: 92%; max-width: 1380px;
-  background: rgba(8,8,8,0.6);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid var(--glass-border);
-  border-radius: 60px;
-  z-index: 1000;
-  padding: 0.85rem 1.8rem;
+  position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+  width: 90%; max-width: 1400px;
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border); border-radius: 50px;
+  z-index: 1000; padding: 1rem 2rem;
   display: flex; justify-content: space-between; align-items: center;
-  transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
-  box-shadow: 0 8px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,77,0,0.1);
 }
-nav.scrolled {
-  background: rgba(5,5,5,0.95);
-  box-shadow: 0 12px 50px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,77,0,0.15);
-  top: 10px;
-}
-
-.logo-container { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
-.logo-icon { width: 42px; height: 42px; filter: drop-shadow(0 0 12px var(--fire-glow)); animation: float 3.5s ease-in-out infinite; }
-@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+nav.scrolled { width: 95%; background: rgba(10, 10, 10, 0.95); }
+.logo-container { display: flex; align-items: center; gap: 0.8rem; text-decoration: none; }
+.logo-icon { width: 45px; height: 45px; filter: drop-shadow(0 0 10px var(--primary-glow)); animation: float 3s ease-in-out infinite; }
+@keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-5px); } }
 .logo-text { display: flex; flex-direction: column; line-height: 1; }
 .logo-main {
-  font-family: 'Bebas Neue', cursive; font-size: 1.7rem;
-  background: linear-gradient(120deg, var(--fire) 0%, var(--ember) 60%, var(--gold) 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  letter-spacing: 3px;
+  font-family: 'Bebas Neue', cursive; font-size: 1.8rem;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 2px;
 }
-.logo-sub { font-size: 0.55rem; color: var(--mist); letter-spacing: 5px; text-transform: uppercase; font-weight: 500; margin-top: 1px; }
-
-.nav-links { display: flex; list-style: none; gap: 0.2rem; align-items: center; }
+.logo-sub { font-size: 0.6rem; color: var(--text-muted); letter-spacing: 4px; text-transform: uppercase; font-weight: 500; }
+.nav-links { display: flex; list-style: none; gap: 0.5rem; align-items: center; }
 .nav-links a {
-  color: rgba(255,255,255,0.6); text-decoration: none;
-  font-weight: 500; font-size: 0.88rem;
-  padding: 0.55rem 1.1rem; border-radius: 30px;
-  transition: all 0.3s; position: relative; letter-spacing: 0.3px;
+  color: rgba(255,255,255,0.7); text-decoration: none; font-weight: 500; font-size: 0.9rem;
+  padding: 0.6rem 1.2rem; border-radius: 25px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative; overflow: hidden;
 }
-.nav-links a:hover, .nav-links a.active { color: white; }
-.nav-links a::after {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(135deg, var(--fire), var(--ember));
-  border-radius: 30px; opacity: 0; transition: opacity 0.3s; z-index: -1;
+.nav-links a::before {
+  content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  opacity: 0; transition: opacity 0.3s; z-index: -1; border-radius: 25px;
 }
-.nav-links a:hover::after, .nav-links a.active::after { opacity: 1; }
-
+.nav-links a:hover { color: white; transform: translateY(-2px); }
+.nav-links a:hover::before { opacity: 1; }
+.nav-links a.active { color: white; background: linear-gradient(135deg, var(--primary), var(--secondary)); }
 .order-btn {
-  background: linear-gradient(135deg, var(--fire), var(--ember)) !important;
-  color: white !important; padding: 0.6rem 1.4rem !important;
-  border-radius: 30px !important; font-weight: 700 !important;
-  box-shadow: 0 4px 20px rgba(255,77,0,0.35);
-  transition: all 0.3s !important;
-  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: transparent; color: var(--primary); padding: 0.6rem 1.5rem;
+  border-radius: 25px; text-decoration: none; font-weight: 700;
+  border: 2px solid var(--primary); transition: all 0.3s;
+  display: flex; align-items: center; gap: 0.5rem; position: relative; overflow: hidden;
+  cursor: pointer; font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem;
 }
-.order-btn::after { display: none !important; }
-.order-btn:hover { transform: translateY(-2px) scale(1.04) !important; box-shadow: 0 8px 30px rgba(255,77,0,0.5) !important; }
-
+.order-btn::before {
+  content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+  background: var(--primary); transition: left 0.3s; z-index: -1;
+}
+.order-btn:hover { color: white; box-shadow: 0 0 30px var(--primary-glow); }
+.order-btn:hover::before { left: 0; }
+.cart-nav-count {
+  background: var(--primary); color: white; width: 20px; height: 20px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-weight: 700; transition: transform 0.3s;
+}
+.cart-nav-count.bump { transform: scale(1.5); }
 .menu-toggle { display: none; flex-direction: column; cursor: pointer; gap: 5px; z-index: 1001; }
-.menu-toggle span { width: 24px; height: 2px; background: white; transition: 0.3s; border-radius: 2px; display: block; }
+.menu-toggle span { width: 25px; height: 2px; background: white; transition: 0.3s; border-radius: 2px; }
 .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-.menu-toggle.active span:nth-child(2) { opacity: 0; transform: translateX(10px); }
-.menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
-.nav-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 999; backdrop-filter: blur(2px); }
-.nav-overlay.active { display: block; }
+.menu-toggle.active span:nth-child(2) { opacity: 0; }
+.menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
 
 /* ── HERO ── */
 .hero {
-  min-height: 70vh;
-  position: relative;
-  display: flex; align-items: center; justify-content: center;
-  overflow: hidden; background: var(--void);
-}
-.hero-overlay {
-  position: absolute; inset: 0;
+  height: 100vh;
   background:
-    linear-gradient(to bottom, rgba(5,5,5,0.3) 0%, rgba(5,5,5,0.6) 50%, rgba(5,5,5,0.98) 100%),
-    radial-gradient(ellipse at 20% 50%, rgba(255,77,0,0.18) 0%, transparent 55%);
+    radial-gradient(ellipse at 20% 50%, rgba(255, 77, 0, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(255, 140, 0, 0.1) 0%, transparent 50%),
+    linear-gradient(to bottom, rgba(5,5,5,0.3), rgba(5,5,5,0.85)),
+    url('https://drive.google.com/thumbnail?id=1a4WQvnHV9xE8NTnc4zL9IrZNNatlPGYH&sz=w1920');
+  background-size: cover; background-position: center; background-attachment: fixed;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
 }
 .hero-grid {
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-  background-size: 60px 60px;
-  mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 50px 50px; pointer-events: none;
 }
 .hero-content {
   position: relative; z-index: 2;
   text-align: center; max-width: 800px;
-  padding: 0 2rem; padding-top: 100px;
+  padding: 0 2rem;
 }
-.hero-eyebrow {
-  display: inline-flex; align-items: center; gap: 0.6rem;
-  background: rgba(255,77,0,0.08); border: 1px solid rgba(255,77,0,0.25);
-  padding: 0.5rem 1.2rem; border-radius: 60px;
-  font-size: 0.78rem; font-weight: 600; color: var(--ember);
-  letter-spacing: 3px; text-transform: uppercase;
-  margin-bottom: 1.5rem; backdrop-filter: blur(10px);
-  animation: fadeInDown 0.9s ease both;
-}
-.hero-dot { width: 7px; height: 7px; background: var(--fire); border-radius: 50%; animation: pulse-dot 2s ease-in-out infinite; }
-@keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.7)} }
-
 .hero-title {
   font-family: 'Bebas Neue', cursive;
-  font-size: clamp(3.5rem, 10vw, 7rem);
-  line-height: 0.92; letter-spacing: 1px;
-  margin-bottom: 1.5rem;
-  animation: fadeInUp 1s ease 0.2s both;
+  font-size: clamp(4rem, 12vw, 9rem);
+  letter-spacing: 4px;
+  animation: fadeInUp 1s ease 0.2s backwards;
+  line-height: 1;
+  display: flex; flex-direction: column; align-items: center;
 }
-.hero-title .line1 { display: block; color: rgba(255,255,255,0.92); }
-.hero-title .line2 {
-  display: block;
+.hero-title .line-white { color: white; -webkit-text-fill-color: white; }
+.hero-title .line-orange {
   background: linear-gradient(90deg, var(--fire) 0%, var(--ember) 50%, var(--gold) 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   filter: drop-shadow(0 0 30px rgba(255,77,0,0.4));
 }
-.hero-desc {
-  font-size: clamp(0.95rem, 1.6vw, 1.1rem);
-  color: rgba(255,255,255,0.5); font-weight: 300;
-  max-width: 460px; margin: 0 auto;
-  animation: fadeInUp 1s ease 0.4s both;
+.hero-scroll {
+  position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  animation: fadeInUp 1s ease 0.8s backwards; z-index: 2;
 }
-
-@keyframes fadeInUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
-@keyframes fadeInDown { from{opacity:0;transform:translateY(-28px)} to{opacity:1;transform:translateY(0)} }
-
-/* ── STATS BAR ── */
-.stats-wrap { padding: 0 5%; margin-top: -40px; position: relative; z-index: 10; }
-.stats-bar {
-  background: var(--coal); border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 20px; max-width: 1380px; margin: 0 auto;
-  display: grid; grid-template-columns: repeat(4,1fr);
-  overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-}
-.stat-item {
-  padding: 1.6rem 1.5rem; text-align: center;
-  border-right: 1px solid rgba(255,255,255,0.04);
-  transition: background 0.3s;
-}
-.stat-item:last-child { border-right: none; }
-.stat-item:hover { background: rgba(255,77,0,0.04); }
-.stat-num {
-  font-family: 'Bebas Neue', cursive; font-size: 2.2rem;
-  background: linear-gradient(135deg, var(--fire), var(--ember));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  line-height: 1;
-}
-.stat-label { color: var(--mist); font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+.hero-scroll span { font-size: 0.65rem; letter-spacing: 4px; color: rgba(255,255,255,0.3); text-transform: uppercase; }
+.scroll-line { width: 1px; height: 50px; background: linear-gradient(to bottom, var(--fire), transparent); animation: scrollAnim 2s ease-in-out infinite; }
+@keyframes scrollAnim { 0%,100%{opacity:1;transform:scaleY(1)} 50%{opacity:0.3;transform:scaleY(0.5)} }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
 /* ── MENU MAIN ── */
 .menu-wrap { max-width: 1380px; margin: 0 auto; padding: 6rem 5%; }
@@ -260,7 +220,6 @@ nav.scrolled {
 .section-header { text-align: center; margin-bottom: 4rem; }
 .section-tag {
   display: inline-block;
-  font-family: 'Barlow Condensed', sans-serif;
   font-size: 0.7rem; font-weight: 700;
   letter-spacing: 5px; text-transform: uppercase;
   color: var(--fire); margin-bottom: 1rem;
@@ -274,21 +233,19 @@ nav.scrolled {
 }
 .section-tag::before { right: 100%; margin-right: -1.5rem; }
 .section-tag::after { left: 100%; margin-left: -1.5rem; background: linear-gradient(270deg, var(--fire), transparent); }
-
 .section-header h2 {
   font-family: 'Bebas Neue', cursive;
-  font-size: clamp(2.2rem, 4vw, 3.8rem);
-  color: white; letter-spacing: 2px; line-height: 1;
-  position: relative; display: inline-block;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  color: white; letter-spacing: 2px; margin-bottom: 1rem; position: relative; display: inline-block;
 }
 .section-header h2 .accent { color: var(--fire); }
 .section-header h2::after {
   content: ''; position: absolute;
   bottom: -10px; left: 50%; transform: translateX(-50%);
-  width: 50px; height: 3px;
-  background: linear-gradient(90deg, var(--fire), var(--ember)); border-radius: 2px;
+  width: 60px; height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 2px;
 }
-.section-header p { color: var(--mist); font-size: 1rem; max-width: 440px; margin: 1.6rem auto 0; font-weight: 300; }
+.section-header p { color: var(--text-muted); font-size: 1.1rem; max-width: 500px; margin: 1.5rem auto 0; }
 
 /* FILTER BAR */
 .filter-bar {
@@ -299,7 +256,7 @@ nav.scrolled {
 .filter-bar::-webkit-scrollbar { display: none; }
 .filter-pill {
   background: var(--coal); border: 1px solid rgba(255,255,255,0.07);
-  color: var(--mist); font-family: 'DM Sans', sans-serif;
+  color: var(--mist); font-family: 'Space Grotesk', sans-serif;
   font-size: 0.82rem; font-weight: 500;
   padding: 0.6rem 1.4rem; border-radius: 30px;
   cursor: pointer; transition: all 0.25s; white-space: nowrap;
@@ -331,14 +288,6 @@ nav.scrolled {
   padding: 4px 12px; border-radius: 20px; white-space: nowrap;
 }
 
-/* SUB CATEGORY */
-.sub-cat {
-  font-size: 0.78rem; font-weight: 600; color: rgba(255,140,0,0.8);
-  letter-spacing: 2px; text-transform: uppercase;
-  margin: 2rem 0 1.2rem; display: flex; align-items: center; gap: 10px;
-}
-.sub-cat::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.06); }
-
 /* PRODUCTS GRID */
 .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.2rem; }
 
@@ -355,38 +304,31 @@ nav.scrolled {
   box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,77,0,0.1);
 }
 .product-img-wrap { position: relative; overflow: hidden; height: 160px; }
-.product-img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s cubic-bezier(0.175,0.885,0.32,1.275); }
-.product-card:hover .product-img { transform: scale(1.08); }
 .product-img-overlay {
   position: absolute; inset: 0;
   background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
   opacity: 0; transition: opacity 0.3s;
 }
 .product-card:hover .product-img-overlay { opacity: 1; }
-
-/* Image with fallback emoji */
 .product-img-placeholder {
   width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
   font-size: 3rem; background: linear-gradient(135deg, var(--ash) 0%, var(--smoke) 100%);
 }
-
 .product-img-real {
   width: 100%; height: 100%; object-fit: cover; display: block;
   transition: transform 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
 }
 .product-card:hover .product-img-real { transform: scale(1.08); }
-
 .quick-add {
   position: absolute; bottom: 10px; left: 50%;
   transform: translateX(-50%) translateY(10px); opacity: 0;
   background: var(--fire); color: white; border: none;
   padding: 7px 18px; border-radius: 30px;
-  font-family: 'DM Sans', sans-serif; font-size: 0.75rem; font-weight: 700;
+  font-family: 'Space Grotesk', sans-serif; font-size: 0.75rem; font-weight: 700;
   cursor: pointer; white-space: nowrap; transition: all 0.3s; z-index: 2;
 }
 .product-card:hover .quick-add { opacity: 1; transform: translateX(-50%) translateY(0); }
 .quick-add:hover { background: var(--ember); transform: translateX(-50%) translateY(0) scale(1.05) !important; }
-
 .badge {
   position: absolute; top: 10px; left: 10px;
   font-size: 0.6rem; font-weight: 700;
@@ -396,7 +338,6 @@ nav.scrolled {
 .badge-popular { background: var(--fire); color: white; box-shadow: 0 4px 12px rgba(255,77,0,0.4); }
 .badge-new { background: #00c853; color: white; box-shadow: 0 4px 12px rgba(0,200,83,0.4); }
 .badge-top { background: var(--gold); color: #000; box-shadow: 0 4px 12px rgba(255,184,0,0.4); }
-
 .product-info { padding: 1.1rem 1.2rem 1.3rem; }
 .product-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 5px; }
 .product-name { font-weight: 600; font-size: 0.92rem; line-height: 1.3; color: var(--light); }
@@ -406,8 +347,6 @@ nav.scrolled {
   padding: 3px 9px; border-radius: 20px; white-space: nowrap; flex-shrink: 0;
 }
 .product-desc { font-size: 0.72rem; color: var(--mist); line-height: 1.5; }
-
-/* NOTE */
 .note {
   font-size: 0.78rem; color: var(--ember); text-align: center;
   margin-top: 1rem; padding: 0.6rem;
@@ -415,90 +354,6 @@ nav.scrolled {
   border: 1px dashed rgba(255,77,0,0.2);
   grid-column: 1/-1;
 }
-
-/* ── CART ── */
-.cart-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.7);
-  z-index: 9000; opacity: 0; visibility: hidden; transition: all 0.3s; backdrop-filter: blur(4px);
-}
-.cart-overlay.open { opacity: 1; visibility: visible; }
-.cart-panel {
-  position: fixed; right: 0; top: 0; bottom: 0;
-  width: 100%; max-width: 420px; background: var(--coal);
-  z-index: 9001; transform: translateX(100%);
-  transition: transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
-  display: flex; flex-direction: column;
-  border-left: 1px solid rgba(255,255,255,0.07);
-}
-.cart-panel.open { transform: translateX(0); }
-.cart-header {
-  padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.07);
-  display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
-}
-.cart-header h2 { font-family: 'Bebas Neue', cursive; font-size: 1.6rem; letter-spacing: 2px; }
-.cart-close {
-  background: var(--ash); border: 1px solid rgba(255,255,255,0.08);
-  color: white; width: 36px; height: 36px; border-radius: 50%;
-  font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
-}
-.cart-close:hover { background: var(--smoke); transform: rotate(90deg); }
-.cart-body { flex: 1; overflow-y: auto; padding: 1rem 1.5rem; }
-.cart-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 200px; gap: 12px; color: var(--mist); text-align: center; }
-.cart-empty-icon { font-size: 3rem; opacity: 0.4; }
-.cart-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); animation: slideIn 0.3s ease; }
-@keyframes slideIn { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
-.cart-item-thumb {
-  width: 60px; height: 60px; border-radius: 10px; flex-shrink: 0;
-  background: var(--ash); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; overflow: hidden;
-}
-.cart-item-thumb img { width: 100%; height: 100%; object-fit: cover; }
-.cart-item-info { flex: 1; min-width: 0; }
-.cart-item-name { font-weight: 600; font-size: 0.88rem; margin-bottom: 3px; }
-.cart-item-price { font-size: 0.8rem; color: var(--fire); }
-.cart-item-controls { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
-.qty-btn {
-  width: 24px; height: 24px; background: var(--ash); border: 1px solid rgba(255,255,255,0.08);
-  color: white; border-radius: 50%; font-size: 0.85rem;
-  cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
-}
-.qty-btn:hover { background: var(--fire); border-color: var(--fire); }
-.qty-num { font-size: 0.85rem; font-weight: 600; min-width: 18px; text-align: center; }
-.cart-item-remove { margin-left: auto; background: none; border: none; color: var(--mist); font-size: 1rem; cursor: pointer; padding: 4px; transition: color 0.2s; flex-shrink: 0; }
-.cart-item-remove:hover { color: #ff4040; }
-.cart-footer { padding: 1.2rem 1.5rem; border-top: 1px solid rgba(255,255,255,0.07); flex-shrink: 0; }
-.cart-subtotal { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.85rem; color: var(--mist); }
-.cart-total-row { display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1rem; margin-bottom: 1.2rem; }
-.cart-total-row span:last-child { color: var(--fire); font-family: 'Bebas Neue', cursive; font-size: 1.4rem; letter-spacing: 1px; }
-.checkout-btn {
-  width: 100%; background: linear-gradient(135deg, var(--fire), var(--ember));
-  color: white; border: none; padding: 14px; border-radius: 14px;
-  font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 700;
-  cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;
-}
-.checkout-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(255,77,0,0.4); }
-.whatsapp-btn {
-  width: 100%; background: #25D366; color: white; border: none; padding: 12px;
-  border-radius: 14px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600;
-  cursor: pointer; margin-top: 8px; transition: all 0.3s;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-}
-.whatsapp-btn:hover { background: #1da851; transform: translateY(-1px); }
-
-/* CART BUTTON */
-.cart-nav-btn {
-  background: linear-gradient(135deg, var(--fire), var(--ember));
-  color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 30px;
-  font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 700;
-  cursor: pointer; display: flex; align-items: center; gap: 8px;
-  transition: all 0.3s; box-shadow: 0 4px 20px rgba(255,77,0,0.35);
-}
-.cart-nav-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 25px rgba(255,77,0,0.5); }
-.cart-nav-count {
-  background: white; color: var(--fire); width: 20px; height: 20px;
-  border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  font-size: 0.7rem; font-weight: 700; transition: transform 0.3s;
-}
-.cart-nav-count.bump { transform: scale(1.5); }
 
 /* TOAST */
 .toast {
@@ -513,85 +368,85 @@ nav.scrolled {
 .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 .toast-dot { width: 8px; height: 8px; background: var(--fire); border-radius: 50%; }
 
-/* ── FOOTER ── */
-footer {
-  background: var(--coal); padding: 5rem 5% 2rem;
-  position: relative; margin-top: 2rem;
-}
-footer::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--fire), transparent); opacity: 0.4;
-}
-.footer-grid {
-  display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr;
-  gap: 4rem; max-width: 1380px; margin: 0 auto 4rem;
-}
-.footer-brand-logo { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.5rem; }
-.footer-brand-logo img { width: 44px; height: 44px; filter: drop-shadow(0 0 10px var(--fire-glow)); }
-.footer-logo-main {
-  font-family: 'Bebas Neue', cursive; font-size: 1.6rem;
-  background: linear-gradient(135deg, var(--fire), var(--ember));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 3px;
-}
-.footer-desc { color: var(--mist); line-height: 1.8; font-size: 0.9rem; margin-bottom: 2rem; max-width: 280px; }
-.social-row { display: flex; gap: 0.8rem; }
-.social-btn {
-  width: 42px; height: 42px; background: var(--ash); border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 12px; display: flex; align-items: center; justify-content: center; transition: all 0.3s; text-decoration: none;
-}
-.social-btn:hover { background: linear-gradient(135deg, var(--fire), var(--ember)); border-color: transparent; transform: translateY(-4px); box-shadow: 0 8px 20px var(--fire-glow); }
-.social-btn svg { width: 18px; height: 18px; fill: rgba(255,255,255,0.6); transition: fill 0.3s; }
-.social-btn:hover svg { fill: white; }
-
-.footer-col h4 { font-family: 'Bebas Neue', cursive; font-size: 1.1rem; letter-spacing: 2px; color: white; margin-bottom: 1.5rem; }
-.footer-col ul { list-style: none; }
-.footer-col ul li { margin-bottom: 0.7rem; }
-.footer-col a { color: var(--mist); text-decoration: none; font-size: 0.9rem; transition: all 0.3s; display: inline-flex; align-items: center; gap: 0.4rem; }
-.footer-col a:hover { color: var(--fire); transform: translateX(5px); }
-.footer-contact-item { display: flex; align-items: flex-start; gap: 0.8rem; color: var(--mist); font-size: 0.88rem; margin-bottom: 0.9rem; line-height: 1.5; }
-
-.footer-bottom {
-  max-width: 1380px; margin: 0 auto; padding-top: 2.5rem;
-  border-top: 1px solid rgba(255,255,255,0.05);
-  display: flex; justify-content: space-between; align-items: center;
-  color: var(--fog); font-size: 0.83rem;
-}
-.footer-bottom-links { display: flex; gap: 2rem; }
-.footer-bottom-links a { color: var(--fog); text-decoration: none; transition: color 0.3s; }
-.footer-bottom-links a:hover { color: var(--fire); }
-
-.fade-in { opacity: 0; transform: translateY(32px); transition: opacity 0.9s cubic-bezier(0.4,0,0.2,1), transform 0.9s cubic-bezier(0.4,0,0.2,1); }
+/* ── ANIMACIONES ── */
+.fade-in { opacity: 0; transform: translateY(30px); transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
 .fade-in.visible { opacity: 1; transform: translateY(0); }
 
+/* ── FOOTER ── */
+footer {
+  background: var(--dark); color: white;
+  padding: 5rem 5% 2rem;
+  border-top: 1px solid var(--glass-border); position: relative;
+}
+footer::before {
+  content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent); opacity: 0.5;
+}
+.footer-content {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 4rem; max-width: 1400px; margin: 0 auto 4rem;
+}
+.footer-brand { max-width: 300px; }
+.footer-logo { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+.footer-logo-text { display: flex; flex-direction: column; }
+.footer-logo-text .main {
+  font-family: 'Bebas Neue', cursive; font-size: 1.8rem;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 2px;
+}
+.footer-logo-text .sub { font-size: 0.7rem; color: var(--text-muted); letter-spacing: 3px; text-transform: uppercase; }
+.footer-brand p { color: var(--text-muted); line-height: 1.8; margin-bottom: 2rem; }
+.social-links { display: flex; gap: 1rem; }
+.social-links a {
+  width: 45px; height: 45px; background: var(--glass);
+  border: 1px solid var(--glass-border); border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; transition: all 0.3s; overflow: hidden;
+}
+.social-links a:hover { background: var(--primary); border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 10px 20px var(--primary-glow); }
+.social-links a img { width: 20px; height: 20px; filter: brightness(0) invert(1); transition: transform 0.3s; }
+.social-links a:hover img { transform: scale(1.2); }
+.footer-section h3 { font-family: 'Bebas Neue', cursive; font-size: 1.3rem; margin-bottom: 1.5rem; color: white; letter-spacing: 1px; }
+.footer-section ul { list-style: none; }
+.footer-section ul li { margin-bottom: 0.8rem; }
+.footer-section a { color: var(--text-muted); text-decoration: none; transition: all 0.3s; display: inline-flex; align-items: center; gap: 0.5rem; }
+.footer-section a:hover { color: var(--primary); transform: translateX(5px); }
+.footer-contact p { display: flex; align-items: center; gap: 0.8rem; color: var(--text-muted); margin-bottom: 1rem; font-size: 0.95rem; }
+.footer-contact img { width: 18px; opacity: 0.7; }
+.footer-bottom {
+  padding-top: 3rem;
+  border-top: 1px solid var(--glass-border);
+  max-width: 1400px; margin: 0 auto;
+  display: flex; justify-content: space-between; align-items: flex-start;
+}
+.footer-credits { display: flex; flex-direction: column; gap: 0.3rem; }
+.footer-credits span { color: var(--text-muted); font-size: 0.85rem; line-height: 1.4; }
+.footer-bottom-links { display: flex; gap: 2rem; align-items: center; }
+.footer-bottom-links a { color: var(--text-muted); text-decoration: none; transition: color 0.3s; font-size: 0.9rem; }
+.footer-bottom-links a:hover { color: var(--primary); }
+
 /* ── RESPONSIVE ── */
-@media(max-width:968px) {
-  .menu-toggle { display: flex; }
+@media (max-width: 968px) { .footer-content { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 768px) {
+  nav { width: 95%; padding: 0.8rem 1.5rem; }
   .nav-links {
-    position: fixed; top: 0; right: -110%;
-    width: 80%; max-width: 360px; height: 100vh;
-    background: rgba(5,5,5,0.98); backdrop-filter: blur(24px);
-    flex-direction: column; padding: 5.5rem 2rem 2rem;
-    gap: 1rem; transition: right 0.45s cubic-bezier(0.175,0.885,0.32,1.275);
-    border-left: 1px solid rgba(255,255,255,0.06); z-index: 2000;
+    position: fixed; top: 0; right: -100%; width: 80%; max-width: 400px; height: 100vh;
+    background: rgba(5, 5, 5, 0.98); backdrop-filter: blur(20px);
+    flex-direction: column; padding: 6rem 2rem 2rem;
+    transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-left: 1px solid var(--glass-border); gap: 1.5rem;
   }
   .nav-links.active { right: 0; }
-  .nav-links a { font-size: 1.1rem; padding: 0.8rem 1.2rem; min-height: 44px; display: flex; align-items: center; }
-  .stats-bar { grid-template-columns: repeat(2,1fr); }
-  .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
-}
-@media(max-width:768px) {
-  nav { width: 94%; padding: 0.75rem 1.2rem; top: 12px; }
-  .logo-icon { width: 36px; height: 36px; }
-  .logo-main { font-size: 1.4rem; }
+  .menu-toggle { display: flex; }
   .products-grid { grid-template-columns: 1fr 1fr; }
-  .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
-  .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+  .footer-content { grid-template-columns: 1fr; gap: 2rem; }
+  .footer-bottom { flex-direction: column; gap: 1.5rem; }
+  .logo-main { font-size: 1.5rem; }
+  .logo-icon { width: 40px; height: 40px; }
   .menu-wrap { padding: 4rem 4%; }
+  .hero { background-attachment: scroll; }
 }
-@media(max-width:480px) {
+@media (max-width: 480px) {
   .products-grid { grid-template-columns: 1fr 1fr; }
-  .stats-bar { grid-template-columns: 1fr 1fr; }
-  .hero-title { font-size: 3rem; }
   nav { width: 92%; padding: 0.7rem 1rem; }
   .logo-sub { display: none; }
 }
@@ -604,7 +459,7 @@ footer::before {
   <div class="loader-logo-wrap">
     <img class="loader-logo" src="img/logoperron.png" alt="Flama's">
   </div>
-  <div class="loader-text">Cargando el Menú</div>
+  <div class="loader-text">Flama's</div>
 </div>
 
 <!-- TOAST -->
@@ -613,37 +468,10 @@ footer::before {
   <span id="toastMsg">Agregado al carrito</span>
 </div>
 
-<!-- CART OVERLAY -->
-<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
-
-<!-- CART PANEL -->
-<div class="cart-panel" id="cartPanel">
-  <div class="cart-header">
-    <h2>🛒 Mi Orden</h2>
-    <button class="cart-close" onclick="closeCart()">✕</button>
-  </div>
-  <div class="cart-body" id="cartBody">
-    <div class="cart-empty">
-      <div class="cart-empty-icon">🍔</div>
-      <span>Tu carrito está vacío</span>
-      <small style="color:var(--mist);font-size:0.75rem;margin-top:4px">Agrega algo delicioso</small>
-    </div>
-  </div>
-  <div class="cart-footer" id="cartFooter" style="display:none">
-    <div class="cart-subtotal"><span>Subtotal</span><span id="cartSubtotal">$0.00</span></div>
-    <div class="cart-total-row"><span>Total</span><span id="cartTotal">$0.00</span></div>
-    <button class="checkout-btn" onclick="checkout()">Ordenar Ahora 🔥</button>
-    <button class="whatsapp-btn" onclick="orderWhatsApp()">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      Pedir por WhatsApp
-    </button>
-  </div>
-</div>
-
 <!-- NAV -->
 <nav id="navbar">
   <a href="index.html" class="logo-container">
-    <img src="img/logoperron.png" alt="Logo" class="logo-icon">
+    <img src="img/logoperron.png" alt="Logo" class="logo-icon"/>
     <div class="logo-text">
       <span class="logo-main">FLAMAS_SV</span>
       <span class="logo-sub">La Mejor Hamburguesa</span>
@@ -656,35 +484,26 @@ footer::before {
     <li><a href="Galeria.html">Galería</a></li>
     <li><a href="ubicacion.html">Ubicación</a></li>
     <li>
-      <button class="order-btn cart-nav-btn" onclick="openCart()" style="border:none;cursor:pointer;">
+      <a href="Ordenar.html" class="order-btn">
         🛒 Ordenar <span class="cart-nav-count" id="cartCount">0</span>
-      </button>
+      </a>
     </li>
   </ul>
-  <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+  <div class="menu-toggle" onclick="toggleMenu()">
     <span></span><span></span><span></span>
   </div>
 </nav>
-<div class="nav-overlay" id="navOverlay" onclick="toggleMenu()"></div>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-overlay"></div>
   <div class="hero-grid"></div>
   <div class="hero-content">
-    <div class="hero-eyebrow">
-      <span class="hero-dot"></span>
-       Hamburguesas Artesanales · Jucuapa, SV
+    <div class="hero-title">
+      <span class="line-white">NUESTRO</span>
+      <span class="line-orange">MENÚ</span>
     </div>
-    <h1 class="hero-title">
-      <span class="line1">NUESTRO</span>
-      <span class="line2">MENÚ</span>
-    </h1>
-    <p class="hero-desc">Ingredientes frescos, sabor que no se olvida. Cada hamburguesa hecha con obsesión por el detalle.</p>
   </div>
 </section>
-
-
 
 <!-- MENU -->
 <div class="menu-wrap" id="menu">
@@ -696,72 +515,73 @@ footer::before {
 
   <!-- FILTER BAR -->
   <div class="filter-bar" id="filterBar">
-    <button class="filter-pill active" data-filter="all"> Todo</button>
-    <button class="filter-pill" data-filter="carnudas"> Las Carnudas</button>
-    <button class="filter-pill" data-filter="mar"> Mar y Granja</button>
-    <button class="filter-pill" data-filter="joyitas"> Las Joyitas</button>
-    <button class="filter-pill" data-filter="bestias"> Las Bestias</button>
-    <button class="filter-pill" data-filter="pechugonas"> Las Pechugonas</button>
-    <button class="filter-pill" data-filter="crujientes"> Las Crujientes</button>
-    <button class="filter-pill" data-filter="paponas"> Las Paponas</button>
-    <button class="filter-pill" data-filter="leve"> Algo Leve</button>
-    <button class="filter-pill" data-filter="combos"> Para Compartir</button>
-    <button class="filter-pill" data-filter="motores"> Pa' Calentar</button>
-    <button class="filter-pill" data-filter="bebidas"> Bebidas</button>
-    <button class="filter-pill" data-filter="extras"> Extras</button>
+    <button class="filter-pill active" data-filter="all">Todo</button>
+    <button class="filter-pill" data-filter="carnudas">Las Carnudas</button>
+    <button class="filter-pill" data-filter="mar">Mar y Granja</button>
+    <button class="filter-pill" data-filter="joyitas">Las Joyitas</button>
+    <button class="filter-pill" data-filter="bestias">Las Bestias</button>
+    <button class="filter-pill" data-filter="pechugonas">Las Pechugonas</button>
+    <button class="filter-pill" data-filter="crujientes">Las Crujientes</button>
+    <button class="filter-pill" data-filter="paponas">Las Paponas</button>
+    <button class="filter-pill" data-filter="leve">Algo Leve</button>
+    <button class="filter-pill" data-filter="combos">Para Compartir</button>
+    <button class="filter-pill" data-filter="motores">Pa' Calentar</button>
+    <button class="filter-pill" data-filter="bebidas">Bebidas</button>
+    <button class="filter-pill" data-filter="extras">Extras</button>
   </div>
 
-  <!-- Sections rendered by JS -->
   <div id="menuContainer"></div>
 </div>
 
 <!-- FOOTER -->
 <footer id="contacto">
-  <div class="footer-grid">
-    <div>
-      <div class="footer-brand-logo">
-        <img src="img/logoperron.png" alt="Logo">
-        <span class="footer-logo-main">FLAMAS_SV</span>
+  <div class="footer-content">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <img src="img/logoperron.png" alt="Logo" class="logo-icon"/>
+        <div class="footer-logo-text">
+          <span class="main">FLAMAS_SV</span>
+          <span class="sub">La Mejor Hamburguesa</span>
+        </div>
       </div>
-      <p class="footer-desc">Las mejores hamburguesas artesanales de Jucuapa. Hechas con amor, pasión y los mejores ingredientes locales.</p>
-      <div class="social-row">
-        <a href="https://wa.me/50375416644" target="_blank" class="social-btn" title="WhatsApp">
-          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        </a>
-        <a href="#" class="social-btn" title="Facebook">
-          <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-        </a>
-        <a href="#" class="social-btn" title="Instagram">
-          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-        </a>
+      <p>Las mejores hamburguesas artesanales de Jucuapa. Hechas con amor, pasión y los mejores ingredientes locales.</p>
+      <div class="social-links">
+        <a href="https://wa.me/50370183333" target="_blank"><img src="img/Whatsap-.png" alt="WhatsApp"></a>
+        <a href="https://www.facebook.com/profile.php?id=61577150235322" target="_blank"><img src="img/Facebook-.png" alt="Facebook"></a>
+        <a href="https://www.instagram.com/flamas_sv?igsh=YXY5dWhsb2FkbDNy" target="_blank"><img src="img/Instagram-.png" alt="Instagram"></a>
+        <a href="https://www.tiktok.com/@flamas_sv?_r=1&_t=ZS-96TTacUnWdA" target="_blank"><img src="img/Tiktok (1).png" alt="TikTok"></a>
       </div>
     </div>
-    <div class="footer-col">
-      <h4>Horario</h4>
+    <div class="footer-section">
+      <h3>Horario</h3>
       <ul>
-        <li><a href="#">Lun – Mar: 11am – 9pm</a></li>
-        <li><a href="#">Jue – Sáb: 11am – 9pm</a></li>
-        <li><a href="#">Domingo: 11am – 9pm</a></li>
+        <li>Lun - Mar: 11:00 - 9:00</li>
+        <li>Mie - Jue: 11:00 - 9:00</li>
+        <li>Vie - Sáb: 11:00 - 9:00</li>
+        <li>Dom: 11:00 - 9:00</li>
       </ul>
     </div>
-    <div class="footer-col">
-      <h4>Contacto</h4>
-      <div class="footer-contact-item">📍 Plaza, Jucuapa</div>
-      <div class="footer-contact-item">📱 7067-1505</div>
-      <div class="footer-contact-item">✉️ flamassv@gmail.com</div>
+    <div class="footer-contact footer-section">
+      <h3>Contacto</h3>
+      <p><img src="img/Ubicacion-.png" alt="Ubicación"> <a href="https://www.google.com/maps/place/Flama's+Burguers/@13.512865,-88.383573,17z/data=!3m1!4b1!4m6!3m5!1s0x8f7b330074995223:0x3f9f31e3298770ed!8m2!3d13.512865!4d-88.383573!16s%2Fg%2F11wc0t7vjf?hl=es-419&entry=ttu&g_ep=EgoyMDI2MDUyNy4wIKXMDSoASAFQAw%3D%3D" target="_blank">Esquina Opuesta De Plaza Gastronomica</a></p>
+      <p><img src="img/Whatsap-.png" alt="WhatsApp"> <a href="https://wa.me/50370183333" target="_blank">7018-3333</a></p>
+      <p><img src="img/gmail-.png" alt="Gmail"><a href="https://mail.google.com/mail/?view=cm&fs=1&to=Flamas_sv@gmail.com" target="_blank">Flamas_sv@gmail.com</a></p>
     </div>
-    <div class="footer-col">
-      <h4>Links</h4>
+    <div class="footer-section">
+      <h3>Links</h3>
       <ul>
         <li><a href="index.html">→ Inicio</a></li>
         <li><a href="historia.html">→ Historia</a></li>
         <li><a href="Galeria.html">→ Galería</a></li>
-        <li><a href="ubicacion.html">→ Ubicación</a></li>
+        <li><a href="Ubicacion.html">→ Ubicación</a></li>
+        <li><a href="EquipoDeTrabajo.html">→ Desarrolladores</a></li>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2025 Flama's SV · Todos los derechos reservados</span>
+    <div class="footer-credits">
+      <span>© Todos los derechos reservados Flamas_SV - 3° BTV-DS</span>
+    </div>
     <div class="footer-bottom-links">
       <a href="#">Privacidad</a>
       <a href="#">Términos</a>
@@ -770,9 +590,7 @@ footer::before {
 </footer>
 
 <script>
-// ── PRODUCT DATA (from Ordenar.html) ──
 const products = [
-  // LAS CARNUDAS
   { id:1,  name:"La Facilota",         price:5.00, category:"carnudas",   image:"img/carnuda1.png",    emoji:"🍔", badge:"", desc:"Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate y Cebolla Caramelizada" },
   { id:2,  name:"La Cheese",            price:5.00, category:"carnudas",   image:"img/carnuda2.png",    emoji:"🧀", badge:"", desc:"Pan Artesanal, Carne de Res, Queso Americano y Queso Cheddar" },
   { id:3,  name:"La Honguito",          price:6.00, category:"carnudas",   image:"img/carnuda3.png",    emoji:"🍄", badge:"", desc:"Pan Artesanal, Carne de Res, Lechuga, Tomate, Queso, Cebolla Caramelizada y Hongos en Salsa de la Casa" },
@@ -780,26 +598,21 @@ const products = [
   { id:5,  name:"La Bacon Cheese",      price:6.00, category:"carnudas",   image:"img/carnuda5.png",    emoji:"🥓", badge:"", desc:"Pan Artesanal, Carne de Res, Queso Americano, Queso Cheddar, Pepinillos y Tocino" },
   { id:6,  name:"La Ahuevada",          price:6.00, category:"carnudas",   image:"img/carnuda6.png",    emoji:"🍳", badge:"", desc:"Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada, Huevo Estrellado y Tocino" },
   { id:7,  name:"La Guacamole",         price:6.00, category:"carnudas",   image:"img/carnuda7.png",    emoji:"🥑", badge:"", desc:"Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Morada, Aguacate y Tocino" },
-  // DEL MAR Y LA GRANJA
   { id:8,  name:"La Camarón",           price:6.00, category:"mar",        image:"img/mar1.png",        emoji:"🦐", badge:"", desc:"Pan Artesanal, Camarones Empanizados, Queso, Cebolla Caramelizada, Lechuga y Tomate" },
   { id:9,  name:"La Porky",             price:6.00, category:"mar",        image:"img/mar2.png",        emoji:"🐷", badge:"", desc:"Pan Artesanal, Chicharrones de Cerdo, Queso, Cebolla Caramelizada, Lechuga, Tomate y Tocino" },
-  // LAS JOYITAS
   { id:10, name:"La Bañada",            price:7.50, category:"joyitas",    image:"img/joyitas1.png",    emoji:"🧀", badge:"top", desc:"Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada, Bañada en Queso Cheddar y Tocino" },
   { id:11, name:"La Engañosa",          price:7.50, category:"joyitas",    image:"img/joyitas2.png",    emoji:"💎", badge:"", desc:"Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada, Servida en Cama de Queso Cheddar" },
   { id:12, name:"La Doble Carne",       price:7.50, category:"joyitas",    image:"img/joyitas3.png",    emoji:"🥩", badge:"", desc:"Pan Artesanal, Doble Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada y Tocino" },
   { id:13, name:"La Vacunada",          price:7.50, category:"joyitas",    image:"img/joyitas4.png",    emoji:"💉", badge:"new", desc:"Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada y Una Inyección de Queso Cheddar" },
-  // LAS BESTIAS
   { id:14, name:"La Mar y Tierra",      price:8.00, category:"bestias",    image:"img/bestia1.png",     emoji:"🦐", badge:"", desc:"Pan Artesanal, Carne de Res, Camarones Empanizados, Lechuga, Queso, Tomate, Cebolla y Tocino" },
   { id:15, name:"La Castrosa",          price:8.00, category:"bestias",    image:"img/bestia2.png",     emoji:"🔥", badge:"", desc:"Pan Artesanal, Doble Carne de Res, Queso Americano, Tocino, Cubierta de Costra de Queso" },
   { id:16, name:"La Bacon Cheese Doble",price:8.00, category:"bestias",    image:"img/bestia3.png",     emoji:"🥓", badge:"", desc:"Pan Artesanal, Doble Carne de Res, Queso Americano, Queso Cheddar, Pepinillos y Tocino" },
-  { id:17, name:"La Argentina",         price:8.00, category:"bestias",    image:"img/bestia4.png",     emoji:"🌭", badge:"top", desc:"Pan Artesanal, Carne de Res, Tomate, Cebolla, Pepinillos, Aderezo de la Casa, Aguacate, Tocino y Chorizo Argentino" },
+  { id:17, name:"La Argentina",         price:8.00, category:"bestias",    image:"img/bestia 4.png",    emoji:"🌭", badge:"", desc:"Pan Artesanal, Carne de Res, Tomate, Cebolla, Pepinillos, Aderezo de la Casa, Aguacate, Tocino y Chorizo Argentino" },
   { id:18, name:"La Atascada",          price:8.50, category:"bestias",    image:"img/bestia5.png",     emoji:"🍔", badge:"", desc:"Pan Artesanal, Carne de Res, Lechuga, Queso, Tomate, Cebolla, Dedos de Queso, Tocino y Aros de Cebolla" },
   { id:19, name:"La Triple Carne",      price:8.50, category:"bestias",    image:"img/bestia6.png",     emoji:"👑", badge:"", desc:"Pan Artesanal, Triple Carne de Res, Lechuga, Queso, Tomate, Cebolla Caramelizada y Tocino" },
-  // LAS PECHUGONAS
   { id:20, name:"La Pió",               price:5.00, category:"pechugonas", image:"img/Pechugonas1.png", emoji:"🍗", badge:"popular", desc:"Pan Artesanal, Pollo Crujiente, Queso, Cebolla Caramelizada, Lechuga y Tomate" },
   { id:21, name:"La Chipotle",          price:6.00, category:"pechugonas", image:"img/Pechugonas2.png", emoji:"🌶️", badge:"", desc:"Pan Artesanal, Pollo Crujiente Bañado en Salsa Chipotle, Queso, Cebolla Caramelizada, Lechuga y Tomate" },
   { id:22, name:"La Barbie",            price:6.00, category:"pechugonas", image:"img/Pechugonas3.png", emoji:"🍗", badge:"", desc:"Pan Artesanal, Pollo Crujiente Bañado en Salsa Barbacoa, Queso, Cebolla Caramelizada, Lechuga y Tomate" },
-  // LAS CRUJIENTES
   { id:23, name:"5 Wings + Papas",      price:6.00,  category:"crujientes", image:"img/5wings.png",    emoji:"🍗", badge:"", desc:"5 Alitas crujientes acompañadas de papas fritas" },
   { id:24, name:"10 Wings + Papas",     price:8.00,  category:"crujientes", image:"img/10wings.png",   emoji:"🍗", badge:"", desc:"10 Alitas crujientes acompañadas de papas fritas" },
   { id:25, name:"15 Wings + Papas",     price:12.00, category:"crujientes", image:"img/15wings.png",   emoji:"🍗", badge:"", desc:"15 Alitas crujientes acompañadas de papas fritas" },
@@ -808,26 +621,21 @@ const products = [
   { id:28, name:"16 Chunks + Papas",    price:8.00,  category:"crujientes", image:"img/chunks2.png",   emoji:"🍖", badge:"", desc:"16 Chunks de pollo crujiente acompañados de papas fritas" },
   { id:29, name:"25 Chunks + Papas",    price:15.00, category:"crujientes", image:"img/chunks3.png",   emoji:"🍖", badge:"", desc:"25 Chunks de pollo crujiente acompañados de papas fritas" },
   { id:30, name:"Nuggets",              price:4.50,  category:"crujientes", image:"img/nuggets.png",   emoji:"🍗", badge:"new", desc:"6 Nuggets bañados en tu salsa preferida (Barbacoa, Chipotle o Buffalo) acompañados de papas fritas" },
-  // LAS PAPONAS
   { id:31, name:"Papas Mexicanas",      price:6.00, category:"paponas",    image:"img/paponas1.png",   emoji:"🌮", badge:"top", desc:"Papas Fritas con Carne de Res Asada, Chirimol, Aguacate, Jalapeños, Aderezo, Queso y Salsa de la Casa" },
   { id:32, name:"Salchipapa",           price:5.50, category:"paponas",    image:"img/paponas2.png",   emoji:"🌭", badge:"", desc:"Papas Fritas con Salchicha, Queso y Aderezo" },
   { id:33, name:"Papas Bacon",          price:5.50, category:"paponas",    image:"img/paponas3.png",   emoji:"🥓", badge:"", desc:"Papas fritas con queso y tocino" },
   { id:34, name:"Papas Chicken",        price:5.50, category:"paponas",    image:"img/paponas4.png",   emoji:"🍗", badge:"", desc:"Papas Fritas con Pechuga de Pollo Empanizado, Queso y Aderezo de la Casa" },
   { id:35, name:"Papas Chili",          price:5.50, category:"paponas",    image:"img/paponas5.png",   emoji:"🌶️", badge:"", desc:"Papas Fritas con Chili de la Casa, Queso y Jalapeños" },
-  // ALGO LEVE
   { id:36, name:"Chili Dog",            price:4.00, category:"leve",       image:"img/leve3.png",      emoji:"🌭", badge:"", desc:"Pan Artesanal, Salchicha, Chili de la Casa, Queso y Jalapeños" },
   { id:37, name:"Bacon Dog",            price:4.00, category:"leve",       image:"img/leve1.png",      emoji:"🥓", badge:"", desc:"Pan Artesanal, Salchicha, Aderezo, Queso y Baño de Tocino" },
   { id:38, name:"Mexican Dog",          price:4.50, category:"leve",       image:"img/leve2.png",      emoji:"🌮", badge:"", desc:"Pan Artesanal, Salchicha Envuelta en Tocino, Aderezo, Cebolla Morada, Aguacate y Jalapeños" },
-  // PARA COMPARTIR
   { id:39, name:"Pa' Uno",              price:5.50,  category:"combos",    image:"img/pa1.png",        emoji:"🤝", badge:"", desc:"1 Hamburguesa (Facilota, Cheese o Pió) + 1 Soda · Válido Lun–Jue" },
   { id:40, name:"Pa' Dos",              price:15.00, category:"combos",    image:"img/pa2.png",        emoji:"🤝", badge:"", desc:"2 Hamburguesas + Papas Preparadas + 2 Sodas · Válido Lun–Jue" },
   { id:41, name:"Pa' Todos",            price:25.00, category:"combos",    image:"img/pa3.png",        emoji:"🎉", badge:"top", desc:"4 Hamburguesas + 4 Papas + 1 Chunks + Dedos de Queso + Coca 1.5L · Válido Lun–Jue" },
-  // PA' CALENTAR MOTORES
   { id:42, name:"Pan con Ajo",          price:2.50, category:"motores",    image:"img/calentar1.png",  emoji:"🧄", badge:"popular", desc:"Pan Artesanal Tostado con Mantequilla y Ajo Fresco, Sazonado con Hierbas (4 piezas)" },
   { id:43, name:"Papas Sazonadas",      price:2.50, category:"motores",    image:"img/calentar2.png",  emoji:"🍟", badge:"", desc:"Crujientes Papas Fritas Sazonadas a la Perfección con Mezcla Especial" },
   { id:44, name:"Dedos de Queso",       price:3.00, category:"motores",    image:"img/calentar3.png",  emoji:"🧀", badge:"", desc:"Dedos de Queso Empanizados y Crujientes (5 piezas)" },
   { id:45, name:"Aros de Cebolla",      price:2.50, category:"motores",    image:"img/calentar4.png",  emoji:"🧅", badge:"", desc:"Aros de Cebolla Empanizados, Crujientes por Fuera y Tiernos por Dentro (8 piezas)" },
-  // BEBIDAS
   { id:46, name:"Frozen",              price:2.50, category:"bebidas",    image:"img/frozen.png",     emoji:"🍧", badge:"", desc:"Fresa · Piña · Maracuyá · Limón" },
   { id:47, name:"Malteada",            price:3.50, category:"bebidas",    image:"img/malteadas.png",  emoji:"🥛", badge:"", desc:"Fresa · Oreo · Chocolate · Café · Coco" },
   { id:48, name:"Limonada con Boba",   price:3.50, category:"bebidas",    image:"img/limonada.png",   emoji:"🍋", badge:"", desc:"Fresa · Hierbabuena · Piña · Cherry · Azul · Maracuyá (con bobas)" },
@@ -837,13 +645,12 @@ const products = [
   { id:52, name:"Iced Coffee",         price:2.50, category:"bebidas",    image:"img/cafe_ice.png",   emoji:"🧊", badge:"", desc:"Café helado con jellys de café" },
   { id:53, name:"Soda",               price:1.25, category:"bebidas",    image:"img/sodas.png",      emoji:"🥤", badge:"", desc:"Coca Cola · Coca Cola 0 · Uva · Fanta · Sprite · Té de Frambuesa · Té de Durazno" },
   { id:54, name:"Agua",               price:1.00, category:"bebidas",    image:"img/agua.png",       emoji:"💧", badge:"", desc:"Botella de agua natural" },
-  // EXTRAS
   { id:55, name:"Carne Extra",         price:1.50, category:"extras",     image:"img/extra1.png",     emoji:"🥩", badge:"", desc:"Porción extra de carne de res" },
   { id:56, name:"Aderezo Extra",       price:0.50, category:"extras",     image:"img/extra2.png",     emoji:"🍶", badge:"", desc:"Porción extra de aderezo de la casa" },
   { id:57, name:"Queso Cheddar Extra", price:1.50, category:"extras",     image:"img/extra3.png",     emoji:"🧀", badge:"", desc:"Porción extra de queso cheddar" },
   { id:58, name:"Agrandado de Papas",  price:1.50, category:"extras",     image:"img/extra4.png",     emoji:"🍟", badge:"", desc:"Agrandado de papas fritas en tu orden" },
   { id:59, name:"Papas Preparadas",    price:1.50, category:"extras",     image:"img/calentar2.png",  emoji:"🍟", badge:"", desc:"Cambio de papas normales a papas preparadas" },
-  { id:60, name:"Tocino Extra",        price:0.50, category:"extras",     image:"img/extra5.png",     emoji:"🥓", badge:"", desc:"Porción extra de tocino crujiente" },
+  { id:60, name:"Tocino Extra",        price:0.50, category:"extras",     image:"img/extra5.png",     emoji:"🥓", desc:"Porción extra de tocino crujiente" },
 ];
 
 const categoryConfig = {
@@ -863,22 +670,17 @@ const categoryConfig = {
 
 const catOrder = ['carnudas','mar','joyitas','bestias','pechugonas','crujientes','paponas','leve','combos','motores','bebidas','extras'];
 
-// ── RENDER ──
 function renderMenu(filter = 'all') {
   const container = document.getElementById('menuContainer');
   container.innerHTML = '';
-
   const cats = filter === 'all' ? catOrder : [filter];
-
   cats.forEach(cat => {
     const items = products.filter(p => p.category === cat);
     if (!items.length) return;
     const cfg = categoryConfig[cat];
-
     const sec = document.createElement('section');
     sec.className = 'menu-section fade-s';
     sec.dataset.category = cat;
-
     sec.innerHTML = `
       <div class="section-label">
         <span class="section-emoji">${cfg.emoji}</span>
@@ -891,7 +693,6 @@ function renderMenu(filter = 'all') {
         ${cfg.note ? `<div class="note">${cfg.note}</div>` : ''}
       </div>
     `;
-
     container.appendChild(sec);
     setTimeout(() => sec.classList.add('visible'), 50);
   });
@@ -902,7 +703,6 @@ function buildCard(p) {
     : p.badge === 'new' ? '<span class="badge badge-new">Nuevo</span>'
     : p.badge === 'top' ? '<span class="badge badge-top">Top</span>'
     : '';
-
   return `
     <div class="product-card" onclick="addToCart(${p.id})">
       ${badgeHTML}
@@ -924,7 +724,6 @@ function buildCard(p) {
   `;
 }
 
-// ── FILTERS ──
 document.querySelectorAll('.filter-pill').forEach(pill => {
   pill.addEventListener('click', () => {
     document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
@@ -933,134 +732,96 @@ document.querySelectorAll('.filter-pill').forEach(pill => {
   });
 });
 
-// ── CART ──
-let cart = [];
+/* ══════════════════════════════════════════
+   CARRITO — guarda en localStorage compartido
+   Formato compatible con Ordenar.html:
+   { id, name, price, category, image, description, quantity }
+   ══════════════════════════════════════════ */
+function loadCart() {
+  try {
+    const saved = localStorage.getItem('flamasCart');
+    return saved ? JSON.parse(saved) : [];
+  } catch(e) { return []; }
+}
+
+function saveCart(cart) {
+  localStorage.setItem('flamasCart', JSON.stringify(cart));
+}
 
 function addToCart(id) {
   const p = products.find(x => x.id === id);
+  if (!p) return;
+
+  let cart = loadCart();
   const ex = cart.find(x => x.id === id);
-  if (ex) ex.qty++;
-  else cart.push({ ...p, qty: 1 });
-  updateCartUI();
-  showToast('🔥 ' + p.name + ' agregado');
-}
-
-function updateCartUI() {
-  const total = cart.reduce((s,i) => s + i.price * i.qty, 0);
-  const count = cart.reduce((s,i) => s + i.qty, 0);
-  const badge = document.getElementById('cartCount');
-  badge.textContent = count;
-  badge.classList.add('bump');
-  setTimeout(() => badge.classList.remove('bump'), 300);
-
-  const body = document.getElementById('cartBody');
-  const footer = document.getElementById('cartFooter');
-
-  if (!cart.length) {
-    body.innerHTML = '<div class="cart-empty"><div class="cart-empty-icon">🍔</div><span>Tu carrito está vacío</span><small style="color:var(--mist);font-size:0.75rem;margin-top:4px">Agrega algo delicioso</small></div>';
-    footer.style.display = 'none'; return;
+  if (ex) {
+    ex.quantity++;
+  } else {
+    cart.push({
+      id: p.id,
+      name: p.name,
+      price: p.price,
+      category: p.category,
+      image: p.image,
+      description: p.desc,
+      quantity: 1
+    });
   }
-
-  footer.style.display = 'block';
-  body.innerHTML = cart.map((item, idx) => `
-    <div class="cart-item">
-      <div class="cart-item-thumb">
-        <img src="${item.image}" alt="${item.name}" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\\'font-size:1.6rem\\'>${item.emoji}</span>'">
-      </div>
-      <div class="cart-item-info">
-        <div class="cart-item-name">${item.name}</div>
-        <div class="cart-item-price">$${(item.price * item.qty).toFixed(2)}</div>
-        <div class="cart-item-controls">
-          <button class="qty-btn" onclick="changeQty(${idx},-1)">−</button>
-          <span class="qty-num">${item.qty}</span>
-          <button class="qty-btn" onclick="changeQty(${idx},1)">+</button>
-          <button class="cart-item-remove" onclick="removeItem(${idx})">✕</button>
-        </div>
-      </div>
-    </div>
-  `).join('');
-
-  document.getElementById('cartSubtotal').textContent = '$' + total.toFixed(2);
-  document.getElementById('cartTotal').textContent = '$' + total.toFixed(2);
+  saveCart(cart);
+  updateCountBadge();
+  showToast('🔥 ' + p.name + ' agregado — <a href="Ordenar.html" style="color:var(--ember);text-decoration:underline">Ver pedido</a>');
 }
 
-function changeQty(idx, delta) {
-  cart[idx].qty += delta;
-  if (cart[idx].qty <= 0) cart.splice(idx, 1);
-  updateCartUI();
-}
-function removeItem(idx) { cart.splice(idx, 1); updateCartUI(); }
-function openCart() {
-  document.getElementById('cartOverlay').classList.add('open');
-  document.getElementById('cartPanel').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeCart() {
-  document.getElementById('cartOverlay').classList.remove('open');
-  document.getElementById('cartPanel').classList.remove('open');
-  document.body.style.overflow = '';
-}
-function checkout() {
-  if (!cart.length) return;
-  window.location.href = 'Ordenar.html';
-}
-function orderWhatsApp() {
-  if (!cart.length) return;
-  const lines = cart.map(i => `• ${i.qty}x ${i.name} - $${(i.price * i.qty).toFixed(2)}`).join('%0A');
-  const total = cart.reduce((s,i) => s + i.price * i.qty, 0).toFixed(2);
-  const msg = ` *Pedido Flama's SV*%0A%0A${lines}%0A%0A*Total: $${total}*`;
-  window.open(`https://wa.me/50375416644?text=${msg}`, '_blank');
+function updateCountBadge() {
+  const cart = loadCart();
+  const count = cart.reduce((s, i) => s + (i.quantity || 0), 0);
+  const badge = document.getElementById('cartCount');
+  if (badge) {
+    badge.textContent = count;
+    badge.classList.add('bump');
+    setTimeout(() => badge.classList.remove('bump'), 300);
+  }
 }
 
-// ── TOAST ──
 let toastTimer;
-function showToast(msg) {
+function showToast(html) {
   const t = document.getElementById('toast');
-  document.getElementById('toastMsg').textContent = msg;
+  document.getElementById('toastMsg').innerHTML = html;
   t.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
 }
 
-// ── NAV MOBILE ──
 function toggleMenu() {
-  const links = document.getElementById('navLinks');
-  const toggle = document.getElementById('menuToggle');
-  const overlay = document.getElementById('navOverlay');
-  links.classList.toggle('active');
-  toggle.classList.toggle('active');
-  overlay.classList.toggle('active');
+  document.getElementById('navLinks').classList.toggle('active');
+  document.querySelector('.menu-toggle').classList.toggle('active');
 }
 document.querySelectorAll('.nav-links a').forEach(link => {
   link.addEventListener('click', () => {
     document.getElementById('navLinks').classList.remove('active');
-    document.getElementById('menuToggle').classList.remove('active');
-    document.getElementById('navOverlay').classList.remove('active');
+    document.querySelector('.menu-toggle').classList.remove('active');
   });
 });
 
-// ── LOADER ──
 window.addEventListener('load', () => {
   setTimeout(() => document.getElementById('loader').classList.add('hidden'), 1000);
 });
 
-// ── NAV SCROLL ──
 window.addEventListener('scroll', () => {
   document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
 });
 
-// ── SCROLL ANIMATIONS ──
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.05 });
+
 const observeFadeIns = () => {
   document.querySelectorAll('.fade-s, .fade-in').forEach(el => observer.observe(el));
 };
 
-// ── INIT ──
 renderMenu();
 observeFadeIns();
-updateCartUI();
+updateCountBadge();
 </script>
 </body>
 </html>
